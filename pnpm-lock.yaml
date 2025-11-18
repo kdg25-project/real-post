@@ -11,9 +11,6 @@ importers:
       '@neondatabase/serverless':
         specifier: ^1.0.2
         version: 1.0.2
-      drizzle-kit:
-        specifier: ^0.31.7
-        version: 0.31.7
       drizzle-orm:
         specifier: ^0.44.7
         version: 0.44.7(@neondatabase/serverless@1.0.2)(@types/pg@8.15.6)
@@ -39,6 +36,9 @@ importers:
       '@types/react-dom':
         specifier: ^19
         version: 19.2.3(@types/react@19.2.6)
+      drizzle-kit:
+        specifier: ^0.31.7
+        version: 0.31.7
       eslint:
         specifier: ^9
         version: 9.39.1(jiti@2.6.1)
