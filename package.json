@@ -9,6 +9,9 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@neondatabase/serverless": "^1.0.2",
+    "drizzle-kit": "^0.31.7",
+    "drizzle-orm": "^0.44.7",
     "next": "16.0.3",
     "react": "19.2.0",
     "react-dom": "19.2.0"
