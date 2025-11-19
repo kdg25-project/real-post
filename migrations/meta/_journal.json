@@ -15,6 +15,13 @@
       "when": 1763534811717,
       "tag": "0001_lonely_sister_grimm",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1763537531412,
+      "tag": "0002_illegal_molten_man",
+      "breakpoints": true
     }
   ]
 }
