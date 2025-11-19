@@ -43,6 +43,20 @@
       "when": 1763542569238,
       "tag": "0005_chubby_morg",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1763545753972,
+      "tag": "0006_luxuriant_manta",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1763545894198,
+      "tag": "0007_tranquil_old_lace",
+      "breakpoints": true
     }
   ]
 }

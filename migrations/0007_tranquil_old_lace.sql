@@ -1,0 +1,1 @@
+ALTER TABLE "survey_token" ALTER COLUMN "expired_at" DROP DEFAULT;
