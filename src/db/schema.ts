@@ -6,7 +6,7 @@ export const survey = pgTable("survey", {
   id: uuid("id").primaryKey(),
   description: text("description"),
   thumbnailUrl: text("thumbnail_url"),
-  imagesUrls: text("images_urls").array(),
+  imageUrls: text("image_urls").array(),
   gender: text("gender", { enum: ["male", "female", "other"] }),
   ageGroup: text("age_group", { enum: ["18-24", "25-34", "35-44", "45-54", "55+"] }),
   satisfactionLevel: integer("satisfaction_level"),
