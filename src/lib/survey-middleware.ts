@@ -113,7 +113,8 @@ export async function checkSurveyTokenValidity(request: NextRequest, companyId: 
     };
   }
   
-  return { error: null, isValid: Boolean(survey) };
+  const isValid = survey.expiredAt > new Date() && survey.remainingCount > 0;
+  return { error: null, isValid };
 }
 
 export async function decrementSurveyTokenCount(request: NextRequest) {
