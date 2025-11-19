@@ -17,10 +17,13 @@
     "next": "16.0.3",
     "react": "19.2.0",
     "react-dom": "19.2.0",
-    "zod": "^4.1.12"
+    "zod": "^4.1.12",
+    "crypto-js": "^4.2.0",
+    "@types/crypto-js": "^4.2.2"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
+    "@types/crypto-js": "^4.2.2",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",

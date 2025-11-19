@@ -71,6 +71,13 @@
       "when": 1763550196317,
       "tag": "0009_amazing_carnage",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1763552029644,
+      "tag": "0010_fancy_stellaris",
+      "breakpoints": true
     }
   ]
 }
