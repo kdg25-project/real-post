@@ -18,7 +18,7 @@ export const survey = pgTable("survey", {
 });
 
 export const surveyToken = pgTable("survey_token", {
-  id: uuid("id").primaryKey(),
+  id: uuid("id").primaryKey().defaultRandom(),
   companyId: uuid("company_id")
     .notNull()
     .references(() => user.id, { onDelete: "cascade" }),
