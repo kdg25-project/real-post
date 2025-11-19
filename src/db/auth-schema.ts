@@ -6,8 +6,8 @@ export const user = pgTable("user", {
   email: text("email").notNull().unique(),
   emailVerified: boolean("email_verified").default(false).notNull(),
   image: text("image"),
-  createdAt: timestamp({ mode: "date" }).defaultNow().notNull(),
-  updatedAt: timestamp({ mode: "date" })
+  createdAt: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
+  updatedAt: timestamp("updated_at", { mode: "date" })
     .defaultNow()
     .$onUpdate(() => /* @__PURE__ */ new Date())
     .notNull(),
@@ -16,10 +16,10 @@ export const user = pgTable("user", {
 
 export const session = pgTable("session", {
   id: uuid("id").primaryKey().defaultRandom(),
-  expiresAt: timestamp({ mode: "date" }).notNull(),
+  expiresAt: timestamp("expires_at", { mode: "date" }).notNull(),
   token: text("token").notNull().unique(),
-  createdAt: timestamp({ mode: "date" }).defaultNow().notNull(),
-  updatedAt: timestamp({ mode: "date" })
+  createdAt: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
+  updatedAt: timestamp("updated_at", { mode: "date" })
     .$onUpdate(() => /* @__PURE__ */ new Date())
     .notNull(),
   ipAddress: text("ip_address"),
@@ -43,8 +43,8 @@ export const account = pgTable("account", {
   refreshTokenExpiresAt: timestamp({ mode: "date" }),
   scope: text("scope"),
   password: text("password"),
-  createdAt: timestamp({ mode: "date" }).defaultNow().notNull(),
-  updatedAt: timestamp({ mode: "date" })
+  createdAt: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
+  updatedAt: timestamp("updated_at", { mode: "date" })
     .$onUpdate(() => /* @__PURE__ */ new Date())
     .notNull(),
 });
@@ -53,9 +53,9 @@ export const verification = pgTable("verification", {
   id: uuid("id").primaryKey().defaultRandom(),
   identifier: text("identifier").notNull(),
   value: text("value").notNull(),
-  expiresAt: timestamp({ mode: "date" }).notNull(),
-  createdAt: timestamp({ mode: "date" }).defaultNow().notNull(),
-  updatedAt: timestamp({ mode: "date" })
+  expiresAt: timestamp("expires_at", { mode: "date" }).notNull(),
+  createdAt: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
+  updatedAt: timestamp("updated_at", { mode: "date" })
     .defaultNow()
     .$onUpdate(() => /* @__PURE__ */ new Date())
     .notNull(),
@@ -69,8 +69,8 @@ export const companyProfile = pgTable("company_profile", {
     .unique()
     .references(() => user.id, { onDelete: "cascade" }),
   companyName: text("company_name").notNull(),
-  createdAt: timestamp({ mode: "date" }).defaultNow().notNull(),
-  updatedAt: timestamp({ mode: "date" })
+  createdAt: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
+  updatedAt: timestamp("updated_at", { mode: "date" })
     .defaultNow()
     .$onUpdate(() => /* @__PURE__ */ new Date())
     .notNull(),
@@ -82,8 +82,8 @@ export const userProfile = pgTable("user_profile", {
     .notNull()
     .unique()
     .references(() => user.id, { onDelete: "cascade" }),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-  updatedAt: timestamp("updated_at")
+  createdAt: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
+  updatedAt: timestamp("updated_at", { mode: "date" })
     .defaultNow()
     .$onUpdate(() => /* @__PURE__ */ new Date())
     .notNull(),
