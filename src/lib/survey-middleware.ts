@@ -78,6 +78,49 @@ export async function authSurveyToken(request: NextRequest, companyId: string) {
   return { error: null, survey };
 }
 
+export async function checkSurveyTokenValidity(request: NextRequest, companyId: string) {
+  const encryptedHeader = request.headers.get("Authorization")?.replace("Bearer ", "");
+  if (!encryptedHeader) {
+    return {
+      error: NextResponse.json({ error: "Unauthorized: Missing survey token" }, { status: 401 }),
+      survey: null,
+    };
+  }
+  
+  let tokenHash: string | null = null;
+  try {
+    tokenHash = AES.decrypt(encryptedHeader, SURVEY_TOKEN_SECRET).toString(encUtf8);
+  } catch {
+    return {
+      error: NextResponse.json({ error: "Unauthorized: Invalid survey token" }, { status: 401 }),
+      survey: null,
+    };
+  }
+  
+  if (!tokenHash) {
+    return {
+      error: NextResponse.json({ error: "Unauthorized: Invalid survey token" }, { status: 401 }),
+      survey: null,
+    };
+  }
+  
+  const survey = await db
+    .select()
+    .from(surveyTable)
+    .where(and(eq(surveyTable.companyId, companyId), eq(surveyTable.token, tokenHash)))
+    .limit(1)
+    .then((res) => res[0]);
+  
+  if (!survey) {
+    return {
+      error: NextResponse.json({ error: "Unauthorized: Invalid survey token" }, { status: 401 }),
+      survey: null,
+    };
+  }
+  
+  return { error: null, isValid: Boolean(survey) };
+}
+
 export async function decrementSurveyTokenCount(request: NextRequest) {
   const encryptedHeader = request.headers.get("Authorization")?.replace("Bearer ", "");
   if (!encryptedHeader) return;
@@ -95,5 +138,11 @@ export async function decrementSurveyTokenCount(request: NextRequest) {
     .set({
       remainingCount: sql`${surveyTable.remainingCount} - 1`,
     })
-    .where(eq(surveyTable.token, tokenHash));
+    .where(
+      and(
+        eq(surveyTable.token, tokenHash),
+        sql`${surveyTable.remainingCount} > 0`,
+        sql`${surveyTable.expiredAt} > ${new Date()}`
+      )
+    );
 }
