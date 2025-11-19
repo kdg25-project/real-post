@@ -14,7 +14,23 @@ export const survey = pgTable("survey", {
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });
 
-export const surverImage = pgTable("survey_image", {
+export const surveyToken = pgTable("survey_token", {
+  id: uuid("id").primaryKey(),
+  surveyId: uuid("survey_id")
+    .notNull()
+    .references(() => survey.id, { onDelete: "cascade" }),
+  token: text("token").notNull().unique(),
+  remainingCount: integer("remaining_count").notNull(),
+  expiredAt: timestamp("expired_at").notNull().$default(() => {
+    const date = new Date();
+    date.setDate(date.getDate() + 1);
+    return date;
+  }),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+});
+
+export const surveyImage = pgTable("survey_image", {
   id: uuid("id").primaryKey(),
   surveyId: uuid("survey_id")
     .notNull()
