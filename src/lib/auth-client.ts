@@ -59,11 +59,11 @@ export async function updateCompanyProfile(data: {
   });
 
   if (!res.ok) {
-    const err = await res.json().catch(() => ({}));
+    const error = await res.json().catch(() => ({}));
     if (res.status === 401) {
-      throw new Error(err.error || "Unauthorized");
+      throw new Error(error.error || "Unauthorized");
     }
-    throw new Error(err.error || "Failed to update company profile");
+    throw new Error(error.error || "Failed to update company profile");
   }
 
   return res.json();
