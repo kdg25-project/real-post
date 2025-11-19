@@ -9,7 +9,7 @@ import encUtf8 from "crypto-js/enc-utf8";
 const SURVEY_TOKEN_SECRET = process.env.SURVEY_TOKEN_SECRET ?? "dev-survey-secret";
 
 export async function generateSurveyToken(companyId: string, maxUses: number) {
-  const randomString = Math.random().toString(36).substring(2, 15);
+  const randomString = crypto.getRandomValues(new Uint32Array(16)).join("-");
   const tokenHash = SHA256(randomString).toString();
   await db
     .insert(surveyTable)
