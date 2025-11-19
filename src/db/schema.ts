@@ -10,8 +10,8 @@ export const survey = pgTable("survey", {
   ageGroup: text("age_group", { enum: ["18-24", "25-34", "35-44", "45-54", "55+"] }),
   satisfactionLevel: integer("satisfaction_level"),
   country: varchar("country", { length: 100 }),
-  createdAt: timestamp("created_at").notNull().defaultNow(),
-  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+  createdAt: timestamp({ mode: "date" }).notNull().defaultNow(),
+  updatedAt: timestamp({ mode: "date" }).notNull().defaultNow(),
 });
 
 export const surveyToken = pgTable("survey_token", {
@@ -21,13 +21,13 @@ export const surveyToken = pgTable("survey_token", {
     .references(() => survey.id, { onDelete: "cascade" }),
   token: text("token").notNull().unique(),
   remainingCount: integer("remaining_count").notNull(),
-  expiredAt: timestamp("expired_at").notNull().$default(() => {
+  expiredAt: timestamp({ mode: "date" }).notNull().$default(() => {
     const date = new Date();
     date.setDate(date.getDate() + 1);
     return date;
   }),
-  createdAt: timestamp("created_at").notNull().defaultNow(),
-  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+  createdAt: timestamp({ mode: "date" }).notNull().defaultNow(),
+  updatedAt: timestamp({ mode: "date" }).notNull().defaultNow(),
 });
 
 export const surveyImage = pgTable("survey_image", {
@@ -36,8 +36,8 @@ export const surveyImage = pgTable("survey_image", {
     .notNull()
     .references(() => survey.id, { onDelete: "cascade" }),
   imageUrl: text("image_url").notNull(),
-  createdAt: timestamp("created_at").notNull().defaultNow(),
-  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+  createdAt: timestamp({ mode: "date" }).notNull().defaultNow(),
+  updatedAt: timestamp({ mode: "date" }).notNull().defaultNow(),
 });
 
 export const favorite = pgTable("favorite", {
@@ -48,8 +48,8 @@ export const favorite = pgTable("favorite", {
   surveyId: uuid("survey_id")
     .notNull()
     .references(() => survey.id, { onDelete: "cascade" }),
-  createdAt: timestamp("created_at").notNull().defaultNow(),
-  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+  createdAt: timestamp({ mode: "date" }).notNull().defaultNow(),
+  updatedAt: timestamp({ mode: "date" }).notNull().defaultNow(),
 });
 
 export const goods = pgTable("goods", {
@@ -59,8 +59,8 @@ export const goods = pgTable("goods", {
     .references(() => user.id, { onDelete: "cascade" }),
   name: varchar("name", { length: 255 }).notNull(),
   description: text("description"),
-  createdAt: timestamp("created_at").notNull().defaultNow(),
-  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+  createdAt: timestamp({ mode: "date" }).notNull().defaultNow(),
+  updatedAt: timestamp({ mode: "date" }).notNull().defaultNow(),
 });
 
 export const goodsImage = pgTable("goods_image", {
