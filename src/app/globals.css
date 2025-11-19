@@ -10,6 +10,9 @@
   --color-gray: #C1C1C1;
   --color-gray-light: #EAEBEB;
   --color-gray-more-light: #F4F6F8;
+
+  /* === シャドウ === */
+  --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 @theme inline {
@@ -33,4 +36,8 @@
 body {
   background: var(--color-gray-more-light);
   color: var(--color-black);
+}
+
+.shadow-base {
+  box-shadow: 0 0px 12px rgba(0, 0, 0, 0.1);
 }
