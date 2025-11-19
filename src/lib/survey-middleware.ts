@@ -1,7 +1,7 @@
 import { db } from "@/db";
 import { NextResponse, NextRequest } from "next/server";
 import { surveyToken as surveyTable } from "@/db/schema";
-import { eq, and, sql } from "drizzle-orm";
+import { eq, and, sql, gt } from "drizzle-orm";
 import { SHA256 } from "crypto-js";
 import AES from "crypto-js/aes";
 import encUtf8 from "crypto-js/enc-utf8";
@@ -138,7 +138,7 @@ export async function decrementSurveyTokenCount(request: NextRequest) {
       and(
         eq(surveyTable.token, tokenHash),
         sql`${surveyTable.remainingCount} > 0`,
-        sql`${surveyTable.expiredAt} > ${new Date()}`
+        gt(surveyTable.expiredAt, new Date())
       )
     );
 }
