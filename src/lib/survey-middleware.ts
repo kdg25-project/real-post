@@ -11,14 +11,9 @@ const SURVEY_TOKEN_SECRET = process.env.SURVEY_TOKEN_SECRET ?? "dev-survey-secre
 export async function generateSurveyToken(companyId: string, maxUses: number) {
   const randomString = Math.random().toString(36).substring(2, 15);
   const tokenHash = SHA256(randomString).toString();
-  const id =
-    typeof crypto !== "undefined" && typeof (crypto as Crypto & { randomUUID?: () => string }).randomUUID === "function"
-      ? (crypto as Crypto & { randomUUID?: () => string }).randomUUID!()
-      : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
   await db
     .insert(surveyTable)
     .values({
-      id,
       companyId,
       token: tokenHash,
       remainingCount: maxUses,
