@@ -29,7 +29,7 @@ export const favorite = pgTable("favorite", {
 
 export const goods = pgTable("goods", {
   id: uuid("id").primaryKey(),
-  componeyId: text("company_id")
+  companyId: text("company_id")
     .notNull()
     .references(() => user.id, { onDelete: "cascade" }),
   name: varchar("name", { length: 255 }).notNull(),
