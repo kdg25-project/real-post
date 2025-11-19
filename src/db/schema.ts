@@ -6,11 +6,20 @@ export const survey = pgTable("survey", {
   id: uuid("id").primaryKey(),
   description: text("description"),
   thumbnailUrl: text("thumbnail_url"),
-  imageUrls: text("image_urls").array(),
   gender: text("gender", { enum: ["male", "female", "other"] }),
   ageGroup: text("age_group", { enum: ["18-24", "25-34", "35-44", "45-54", "55+"] }),
   satisfactionLevel: integer("satisfaction_level"),
   country: varchar("country", { length: 100 }),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+});
+
+export const surverImage = pgTable("survey_image", {
+  id: uuid("id").primaryKey(),
+  surveyId: uuid("survey_id")
+    .notNull()
+    .references(() => survey.id, { onDelete: "cascade" }),
+  imageUrl: text("image_url").notNull(),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });
@@ -34,7 +43,16 @@ export const goods = pgTable("goods", {
     .references(() => user.id, { onDelete: "cascade" }),
   name: varchar("name", { length: 255 }).notNull(),
   description: text("description"),
-  imageUrl: text("image_url"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });
+
+export const goodsImage = pgTable("goods_image", {
+  id: uuid("id").primaryKey(),
+  goodsId: uuid("goods_id")
+    .notNull()
+    .references(() => goods.id, { onDelete: "cascade" }),
+  imageUrl: text("image_url").notNull(),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+}); 
