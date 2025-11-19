@@ -16,9 +16,9 @@ export const survey = pgTable("survey", {
 
 export const surveyToken = pgTable("survey_token", {
   id: uuid("id").primaryKey(),
-  surveyId: uuid("survey_id")
+  companyId: uuid("company_id")
     .notNull()
-    .references(() => survey.id, { onDelete: "cascade" }),
+    .references(() => user.id, { onDelete: "cascade" }),
   token: text("token").notNull().unique(),
   remainingCount: integer("remaining_count").notNull(),
   expiredAt: timestamp("expired_at", { mode: "date" }).notNull().$default(
