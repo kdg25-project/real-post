@@ -21,7 +21,13 @@ export const surveyToken = pgTable("survey_token", {
     .references(() => survey.id, { onDelete: "cascade" }),
   token: text("token").notNull().unique(),
   remainingCount: integer("remaining_count").notNull(),
-  expiredAt: timestamp("expired_at", { mode: "date" }).notNull().defaultNow(),
+  expiredAt: timestamp("expired_at", { mode: "date" }).notNull().$default(
+    () => {
+      const date = new Date();
+      date.setDate(date.getDate() + 1);
+      return date;
+    }
+  ),
   createdAt: timestamp("created_at", { mode: "date" }).notNull().defaultNow(),
   updatedAt: timestamp("updated_at", { mode: "date" }).notNull().defaultNow(),
 });
