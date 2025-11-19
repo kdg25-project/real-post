@@ -44,3 +44,27 @@ export async function getSessionWithProfile() {
 
   return response.json();
 }
+
+export async function updateCompanyProfile(data: {
+  companyName?: string;
+  companyCategory?: "food" | "culture" | "activity" | "shopping" | "other";
+}) {
+  const res = await fetch("/api/auth/me", {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+    body: JSON.stringify(data),
+  });
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    if (res.status === 401) {
+      throw new Error(err.error || "Unauthorized");
+    }
+    throw new Error(err.error || "Failed to update company profile");
+  }
+
+  return res.json();
+}
