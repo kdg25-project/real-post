@@ -46,7 +46,7 @@ export const surveyImage = pgTable("survey_image", {
 });
 
 export const favorite = pgTable("favorite", {
-  id: uuid("id").primaryKey(),
+  id: uuid("id").primaryKey().defaultRandom(),
   userId: text("user_id")
     .notNull()
     .references(() => user.id, { onDelete: "cascade" }),
