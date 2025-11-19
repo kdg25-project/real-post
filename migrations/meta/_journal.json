@@ -43,6 +43,13 @@
       "when": 1763542569238,
       "tag": "0005_chubby_morg",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1763545753972,
+      "tag": "0006_luxuriant_manta",
+      "breakpoints": true
     }
   ]
 }
