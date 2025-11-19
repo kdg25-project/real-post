@@ -4,6 +4,9 @@ import { user } from "./auth-schema";
 
 export const survey = pgTable("survey", {
   id: uuid("id").primaryKey(),
+  companyId: uuid("company_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
   description: text("description"),
   thumbnailUrl: text("thumbnail_url"),
   gender: text("gender", { enum: ["male", "female", "other"] }),
