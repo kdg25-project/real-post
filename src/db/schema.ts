@@ -4,6 +4,9 @@ import { user } from "./auth-schema";
 
 export const survey = pgTable("survey", {
   id: uuid("id").primaryKey(),
+  companyId: uuid("company_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
   description: text("description"),
   thumbnailUrl: text("thumbnail_url"),
   gender: text("gender", { enum: ["male", "female", "other"] }),
@@ -16,11 +19,11 @@ export const survey = pgTable("survey", {
 
 export const surveyToken = pgTable("survey_token", {
   id: uuid("id").primaryKey(),
-  surveyId: uuid("survey_id")
+  companyId: uuid("company_id")
     .notNull()
-    .references(() => survey.id, { onDelete: "cascade" }),
+    .references(() => user.id, { onDelete: "cascade" }),
   token: text("token").notNull().unique(),
-  remainingCount: integer("remaining_count").notNull(),
+  remainingCount: integer("remaining_count").notNull().default(1),
   expiredAt: timestamp("expired_at", { mode: "date" }).notNull().$default(
     () => {
       const date = new Date();
