@@ -50,6 +50,7 @@ export async function POST(request: NextRequest) {
         await db.insert(companyProfile).values({
           userId: signUpResult.user.id,
           companyName,
+          companyCategory: body.companyCategory,
         });
       } else {
         await db.insert(userProfile).values({
