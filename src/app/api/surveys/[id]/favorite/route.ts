@@ -11,6 +11,36 @@ type Params = {
   }>;
 };
 
+export async function GET(request: NextRequest, { params }: Params) {
+  try {
+    const { id } = await params;
+
+    const result = await db
+      .select()
+      .from(favorite)
+      .where(eq(favorite.surveyId, id))
+      .then((res) => res);
+
+    return NextResponse.json(
+      {
+        success: true,
+        message: "Favorites fetched successfully",
+        data: result,
+      }
+    );
+  } catch (error) {
+    console.error("Error fetching favorites by survey ID:", error);
+    return NextResponse.json(
+      {
+        success: false,
+        message: "Failed to fetch favorites",
+        data: null,
+      },
+      { status: 500 }
+    );
+  }
+}
+
 export async function PATCH(request: NextRequest, { params }: Params) {
   try {
     const { id } = await params;
