@@ -27,6 +27,16 @@ export async function POST(request: NextRequest) {
     }
 
     const { maxUses } = await request.json();
+    if(!maxUses || typeof maxUses !== "number" || maxUses <= 0) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Bad Request: Invalid maxUses",
+          data: null,
+        },
+        { status: 400 }
+      );
+    }
     const token = await generateSurveyToken(companyId, maxUses);
 
     return NextResponse.json(
