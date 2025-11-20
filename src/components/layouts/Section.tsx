@@ -10,7 +10,7 @@ export default function Section({ title, children, className = "" }: SectionProp
     return (
         <section className={`flex flex-col ${className}`}>
             <h2 className="text-[20px] font-bold">{title}</h2>
-            <div className="space-y-4">
+            <div className="flex flex-col gap-[16px]">
                 {children}
             </div>
         </section>
