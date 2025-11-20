@@ -4,7 +4,7 @@ import { auth } from "@/lib/auth";
 export async function proxy(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
 
-  if (pathname.startsWith("/admin/auth") || pathname.startsWith("/user/auth") || pathname.startsWith("/user/home")) {
+  if (pathname.startsWith("/admin/auth") || pathname.startsWith("/user/auth")) {
     return NextResponse.next();
   }
   try {
