@@ -3,7 +3,7 @@ import { db } from "@/db";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { survey, surveyImage, companyProfile, favorite, user } from "@/db/schema";
-import { eq, like, and, inArray } from "drizzle-orm";
+import { eq, like, and, inArray, desc } from "drizzle-orm";
 
 type CompanyCategory = "other" | "food" | "culture" | "activity" | "shopping";
 type AgeGroup = "18-24" | "25-34" | "35-44" | "45-54" | "55+";
@@ -30,7 +30,27 @@ export async function GET(request: NextRequest) {
 
     const offset = (page - 1) * limit;
 
-    // 1) surveys を取得(必要なら where 条件を追加)
+    // 1) 各companyIdにつき、最新のsurveyを1つ取得
+    const latestSurveyIds = await db
+      .selectDistinctOn([survey.companyId], {
+        id: survey.id,
+        companyId: survey.companyId,
+        createdAt: survey.createdAt,
+      })
+      .from(survey)
+      .orderBy(survey.companyId, desc(survey.createdAt));
+
+    const latestIds = latestSurveyIds.map((s) => s.id);
+
+    if (latestIds.length === 0) {
+      return NextResponse.json({
+        success: true,
+        message: "No surveys",
+        data: [],
+      });
+    }
+
+    // 2) surveys を取得(必要なら where 条件を追加)
     const surveys = await db
       .select({
         id: survey.id,
@@ -50,6 +70,7 @@ export async function GET(request: NextRequest) {
       .leftJoin(companyProfile, eq(companyProfile.userId, survey.companyId))
       .leftJoin(user, eq(user.id, survey.companyId))
       .where(and(
+        inArray(survey.id, latestIds),
         categoryVal ? eq(companyProfile.companyCategory, categoryVal) : undefined,
         query ? like(survey.description, `%${query}%`) : undefined,
         ageGroup ? eq(survey.ageGroup, ageGroup as AgeGroup) : undefined,
@@ -59,16 +80,8 @@ export async function GET(request: NextRequest) {
       .limit(limit)
       .offset(offset);
 
+    // 3) 画像をまとめて取得
     const surveyIds = surveys.map((s) => s.id);
-    if (surveyIds.length === 0) {
-      return NextResponse.json({
-        success: true,
-        message: "No surveys",
-        data: [],
-      });
-    }
-
-    // 2) 画像をまとめて取得
     const images = await db
       .select({
         surveyId: surveyImage.surveyId,

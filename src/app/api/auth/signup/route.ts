@@ -2,11 +2,18 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { db } from "@/db";
 import { companyProfile, userProfile } from "@/db/schema";
+import { uploadFileToR2 } from "@/lib/r2";
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
-    const { email, password, accountType, companyName } = body;
+    const formData = await request.formData();
+    
+    const email = formData.get('email') as string;
+    const password = formData.get('password') as string;
+    const accountType = formData.get('accountType') as string;
+    const companyName = formData.get('companyName') as string | null;
+    const companyCategory = formData.get('companyCategory') as string | null;
+    const imageFile = formData.get('image') as File | null;
 
     if (!email || !password || !accountType) {
       return NextResponse.json(
@@ -22,19 +29,26 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (accountType === "company" && !companyName) {
-      return NextResponse.json(
-        { error: "Company name is required for company accounts" },
+    if (accountType === "company" && (!companyName || !companyCategory || !imageFile)) {
+      return NextResponse.json (
+        { error: "Company name, category, and image are required for company accounts" },
         { status: 400 }
       );
+    }
+
+    // 画像をR2にアップロード
+    let imageUrl: string | null = null;
+    if (imageFile && imageFile.size > 0) {
+      imageUrl = await uploadFileToR2(imageFile, 'profiles');
     }
 
     const signUpResult = await auth.api.signUpEmail({
       body: {
         email,
         password,
-        name: accountType === "company" ? companyName : email,
+        name: accountType === "company" ? (companyName || email) : email,
         accountType,
+        image: imageUrl || undefined,
       },
     });
 
@@ -46,12 +60,12 @@ export async function POST(request: NextRequest) {
     }
 
     try {
-      if (accountType === "company") {
+      if (accountType === "company" && companyName && companyCategory) {
         await db.insert(companyProfile).values({
           id: crypto.randomUUID(),
           userId: signUpResult.user.id,
           companyName,
-          companyCategory: body.companyCategory,
+          companyCategory: companyCategory as "food" | "culture" | "activity" | "shopping" | "other",
         });
       } else {
         await db.insert(userProfile).values({
