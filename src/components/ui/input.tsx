@@ -24,7 +24,7 @@ function Input({ className, type, ...props }: React.ComponentProps<"input">) {
     <input
       type={type}
       data-slot="input"
-      className={`w-full px-[20px] py-[15px] rounded-[14px] bg-white shadow-base focus:outline-none ${className}`}
+      className={`w-full px-[20px] py-[15px] rounded-[14px] bg-white shadow-base focus:outline-none ${className || ""}`}
       {...props}
     />
   )
