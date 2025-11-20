@@ -1,1 +1,0 @@
-ALTER TABLE "survey" RENAME COLUMN "images_urls" TO "image_urls";
