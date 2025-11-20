@@ -1,24 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/db';
-import { survey } from '@/db/schema';
+import { survey, surveyImage } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 import { checkSurveyTokenValidity, decrementSurveyTokenCount } from '@/lib/survey-middleware';
+import { uploadFileToR2 } from '@/lib/r2';
 
 type Params = {
   params: Promise<{
     id: string;
   }>;
 };
-
-type Props = {
-  description: string;
-  thumbnailUrl?: string;
-  imageUrls?: Array<string>;
-  gender: "male" | "female" | "other" | null;
-  ageGroup: "18-24" | "25-34" | "35-44" | "45-54" | "55+" | null;
-  satisfactionLevel: number; // 1から5を想定
-  country: string;
-}
 
 export async function GET(
   request: NextRequest,
@@ -85,8 +76,17 @@ export async function POST(
       );
     }
     const { id } = await params;
-    const body: Props = await request.json();
-    if (!body.description ||  body.satisfactionLevel === undefined || !body.country) {
+    const formData = await request.formData();
+    
+    const description = formData.get('description') as string;
+    const gender = formData.get('gender') as "male" | "female" | "other" | null;
+    const ageGroup = formData.get('ageGroup') as "18-24" | "25-34" | "35-44" | "45-54" | "55+" | null;
+    const satisfactionLevel = parseInt(formData.get('satisfactionLevel') as string);
+    const country = formData.get('country') as string;
+    const thumbnail = formData.get('thumbnail') as File | null;
+    const images = formData.getAll('images') as File[];
+
+    if (!description || isNaN(satisfactionLevel) || !country) {
       return NextResponse.json(
         {
           success: false,
@@ -97,13 +97,43 @@ export async function POST(
       );
     }
 
+    // サムネイルをR2にアップロード
+    let thumbnailUrl: string | null = null;
+    if (thumbnail && thumbnail.size > 0) {
+      thumbnailUrl = await uploadFileToR2(thumbnail, 'surveys/thumbnails');
+    }
+
+    // サーベイデータを作成
+    const surveyId = crypto.randomUUID();
     const insertData = {
-      ...body,
+      id: surveyId,
       companyId: id,
-      id: crypto.randomUUID(),
+      description,
+      thumbnailUrl,
+      gender,
+      ageGroup,
+      satisfactionLevel,
+      country,
     };
 
     await db.insert(survey).values(insertData);
+
+    // 追加画像をR2にアップロードしてsurveyImageテーブルに保存
+    if (images && images.length > 0) {
+      const imageUploads = images.filter(img => img.size > 0).map(async (image) => {
+        const imageUrl = await uploadFileToR2(image, 'surveys/images');
+        return {
+          id: crypto.randomUUID(),
+          surveyId,
+          imageUrl,
+        };
+      });
+
+      const imageRecords = await Promise.all(imageUploads);
+      if (imageRecords.length > 0) {
+        await db.insert(surveyImage).values(imageRecords);
+      }
+    }
 
     await decrementSurveyTokenCount(request);
     return NextResponse.json(
