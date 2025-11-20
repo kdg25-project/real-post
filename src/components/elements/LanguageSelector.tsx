@@ -31,10 +31,28 @@ export function LanguageSelector() {
     // ----------------------------
     React.useEffect(() => {
         const saved = Cookies.get("lang");
+
         if (saved) {
             setValue(saved);
+            return;
         }
+
+        // ------- ブラウザの言語を取得 -------
+        const browserLang = navigator.language.toLowerCase();
+
+        // ------- 対応言語一覧 -------
+        const supported = languages.map((l) => l.value);
+
+        // ------- マッチする言語を探す（部分一致も許可） -------
+        const matched = supported.find((lang) => browserLang.startsWith(lang));
+
+        // ------- 対応していればその言語、なければ en -------
+        const initial = matched ? matched : "en";
+
+        Cookies.set("lang", initial, { expires: 365 });
+        setValue(initial);
     }, []);
+
 
     // ----------------------------
     // 言語変更 → Cookie に保存
