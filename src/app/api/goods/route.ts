@@ -1,7 +1,7 @@
 import { db } from "@/db";
 import { goods } from "@/db/schema";
 import { requireCompanyAccount } from "@/lib/auth-middleware";
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { sql } from "drizzle-orm";
 
 export async function GET(req: NextRequest) {
@@ -18,7 +18,7 @@ export async function GET(req: NextRequest) {
       db.select({ count: sql`count(*)` }).from(goods),
     ]);
     const count = Number(totalCount[0].count);
-    return Response.json({
+    return NextResponse.json({
       success: true,
       message: "Goods fetched successfully",
       data: allGoods,
@@ -30,7 +30,7 @@ export async function GET(req: NextRequest) {
       },
     });
   } catch (error) {
-    return Response.json(
+    return NextResponse.json(
       {
         success: false,
         message:

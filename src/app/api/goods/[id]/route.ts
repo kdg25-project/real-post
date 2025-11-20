@@ -1,7 +1,8 @@
 import { db } from "@/db";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
-  _req: Request,
+  _req: NextRequest,
   { params }: { params: Promise<{ id: string }> },
 ) {
   const { id } = await params;
@@ -13,7 +14,7 @@ export async function GET(
       where: (table, { eq }) => eq(table.id, id),
     });
     if (!goodsfromid) {
-      return Response.json(
+      return NextResponse.json(
         {
           success: false,
           message: "Not Found",
@@ -21,13 +22,13 @@ export async function GET(
         { status: 404 },
       );
     }
-    return Response.json({
+    return NextResponse.json({
       success: true,
       message: "Goods fetched successfully",
       data: goodsfromid,
     });
   } catch (error) {
-    return Response.json(
+    return NextResponse.json(
       {
         success: false,
         message:

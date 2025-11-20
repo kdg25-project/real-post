@@ -1,6 +1,6 @@
 import { db } from "@/db";
 import { goods } from "@/db/schema";
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { sql } from "drizzle-orm";
 
 export async function GET(
@@ -23,7 +23,7 @@ export async function GET(
     ]);
     const count = Number(totalCount[0].count);
     if (goodsfromid.length === 0) {
-      return Response.json(
+      return NextResponse.json(
         {
           success: false,
           message: "Not Found",
@@ -31,7 +31,7 @@ export async function GET(
         { status: 404 },
       );
     }
-    return Response.json({
+    return NextResponse.json({
       success: true,
       message: "Goods fetched successfully",
       data: goodsfromid,
@@ -43,7 +43,7 @@ export async function GET(
       },
     });
   } catch (error) {
-    return Response.json(
+    return NextResponse.json(
       {
         success: false,
         message:
