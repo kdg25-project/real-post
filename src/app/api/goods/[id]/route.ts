@@ -13,7 +13,13 @@ export async function GET(
       where: (table, { eq }) => eq(table.id, id),
     });
     if (!goodsfromid) {
-      return new Response("Not Found", { status: 404 });
+      return Response.json(
+        {
+          success: false,
+          message: "Not Found",
+        },
+        { status: 404 },
+      );
     }
     return Response.json({
       success: true,
