@@ -36,7 +36,7 @@ export async function GET(
   return NextResponse.json(
     {
       success: true,
-      message: "Surveys fetched successfully",
+      message: "Survey fetched successfully",
       data: result[0],
     }
   );
