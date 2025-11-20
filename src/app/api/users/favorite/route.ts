@@ -18,25 +18,11 @@ export async function GET(request: NextRequest) {
         { status: 401 }
       );
     }
-    const session = await auth.api.getSession({
-      headers: request.headers,
-    });
-    const userId = session?.user?.id;
-    if (!userId) {
-      return NextResponse.json(
-        {
-          success: false,
-          message: "Unauthorized: Missing user session",
-          data: null,
-        },
-        { status: 401 }
-      );
-    }
 
     const result = await db
       .select()
       .from(favorite)
-      .where(eq(favorite.userId, userId))
+      .where(eq(favorite.userId, user.id))
       .then((res) => res);
 
     return NextResponse.json(
