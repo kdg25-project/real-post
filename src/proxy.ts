@@ -16,14 +16,6 @@ export async function proxy(request: NextRequest) {
     return NextResponse.redirect(new URL("/user/auth/login", request.url));
   }
 
-  if (!(session.user.accountType == "company") && request.nextUrl.pathname.startsWith("/admin")) {
-    return NextResponse.redirect(new URL("/admin/auth/login", request.url));
-  }
-
-  if (!(session.user.accountType == "user") && request.nextUrl.pathname.startsWith("/user")) {
-    return NextResponse.redirect(new URL("/user/auth/login", request.url));
-  }
-
   return NextResponse.next();
 }
 
