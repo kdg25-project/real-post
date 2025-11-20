@@ -4,7 +4,7 @@ import { Heart } from "lucide-react";
 
 export default function PostCard() {
     return (
-        <div className="flex flex-col gap-[8px] bg-white p-[10px] rounded-[15px]">
+        <div className="flex flex-col gap-[8px] bg-white p-[10px] rounded-[15px] shadow-base">
             <div className="relative w-full h-[140px] rounded-[5px]">
                 <Image
                     src="/images/image1.jpg"

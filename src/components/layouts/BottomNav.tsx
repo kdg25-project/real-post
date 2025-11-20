@@ -8,7 +8,7 @@ export default function BottomNav() {
     const pathname = usePathname();
 
     return (
-        <nav className='fixed items-center bottom-0 left-0 flex w-full h-[70px] bg-white px-[10px] shadow-base'>
+        <nav className='fixed items-center bottom-0 left-0 flex w-full h-[70px] bg-white px-[10px] shadow-base z-[10]'>
             <Link href="/user/home" className={`w-full text-center ${pathname === "/user/home" ? "text-primary" : "text-gray-dark"}`}>
                 <Home size={28} className='mx-auto'></Home>
                 <p className='text-[12px] font-medium'>Home</p>

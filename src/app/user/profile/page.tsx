@@ -1,5 +1,9 @@
+import TextForm from "@/components/layouts/TextForm";
+
 export default function ProfilePage() {
     return (
-        <div>Profile</div>
+        <div>
+            <TextForm label="Email" type="email" placeholder="email" />
+        </div>
     );
 }
