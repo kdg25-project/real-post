@@ -41,7 +41,7 @@ export async function GET(
     }
   );
   } catch (error) {
-    console.error("Error fetching surveys by company ID:", error);
+    console.error("Error fetching survey by ID:", error);
     return NextResponse.json(
       {
         success: false,
