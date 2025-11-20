@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/db';
-import { survey } from '@/db/schema';
+import { survey, user } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 
 type Params = {
@@ -17,8 +17,21 @@ export async function GET(
     const { id } = await params;
 
   const result = await db
-    .select()
+    .select({
+      id: survey.id,
+      companyId: survey.companyId,
+      description: survey.description,
+      thumbnailUrl: survey.thumbnailUrl,
+      gender: survey.gender,
+      ageGroup: survey.ageGroup,
+      satisfactionLevel: survey.satisfactionLevel,
+      country: survey.country,
+      createdAt: survey.createdAt,
+      updatedAt: survey.updatedAt,
+      companyImage: user.image,
+    })
     .from(survey)
+    .leftJoin(user, eq(user.id, survey.companyId))
     .where(eq(survey.id, id))
     .then((res) => res);
 
@@ -33,11 +46,17 @@ export async function GET(
     );
   }
 
+  const surveyData = result[0];
+  const { companyImage, ...responseData } = surveyData;
+  
   return NextResponse.json(
     {
       success: true,
       message: "Survey fetched successfully",
-      data: result[0],
+      data: {
+        ...responseData,
+        thumbnailUrl: surveyData.thumbnailUrl ?? companyImage ?? null,
+      },
     }
   );
   } catch (error) {

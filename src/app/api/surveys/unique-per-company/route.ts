@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/db";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
-import { survey, surveyImage, companyProfile, favorite } from "@/db/schema";
+import { survey, surveyImage, companyProfile, favorite, user } from "@/db/schema";
 import { eq, like, and, inArray, desc } from "drizzle-orm";
 
 type CompanyCategory = "other" | "food" | "culture" | "activity" | "shopping";
@@ -56,6 +56,7 @@ export async function GET(request: NextRequest) {
         id: survey.id,
         description: survey.description,
         thumbnailUrl: survey.thumbnailUrl,
+        companyId: survey.companyId,
         gender: survey.gender,
         ageGroup: survey.ageGroup,
         satisfactionLevel: survey.satisfactionLevel,
@@ -63,9 +64,11 @@ export async function GET(request: NextRequest) {
         createdAt: survey.createdAt,
         updatedAt: survey.updatedAt,
         companyCategory: companyProfile.companyCategory,
+        companyImage: user.image,
       })
       .from(survey)
       .leftJoin(companyProfile, eq(companyProfile.userId, survey.companyId))
+      .leftJoin(user, eq(user.id, survey.companyId))
       .where(and(
         inArray(survey.id, latestIds),
         categoryVal ? eq(companyProfile.companyCategory, categoryVal) : undefined,
@@ -111,7 +114,7 @@ export async function GET(request: NextRequest) {
     const data = surveys.map((s) => ({
       id: String(s.id),
       description: s.description ?? "",
-      thumbnailUrl: s.thumbnailUrl ?? null,
+      thumbnailUrl: s.thumbnailUrl ?? s.companyImage ?? null,
       imageUrls: imagesBySurvey[String(s.id)] ?? [],
       gender: s.gender ?? null,
       ageGroup: s.ageGroup ?? null,

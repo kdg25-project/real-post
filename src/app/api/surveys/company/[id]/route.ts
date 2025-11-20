@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/db';
-import { survey, surveyImage } from '@/db/schema';
+import { survey, surveyImage, user } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 import { checkSurveyTokenValidity, decrementSurveyTokenCount } from '@/lib/survey-middleware';
 import { uploadFileToR2 } from '@/lib/r2';
@@ -19,16 +19,37 @@ export async function GET(
     const { id } = await params;
 
   const result = await db
-    .select()
+    .select({
+      id: survey.id,
+      companyId: survey.companyId,
+      description: survey.description,
+      thumbnailUrl: survey.thumbnailUrl,
+      gender: survey.gender,
+      ageGroup: survey.ageGroup,
+      satisfactionLevel: survey.satisfactionLevel,
+      country: survey.country,
+      createdAt: survey.createdAt,
+      updatedAt: survey.updatedAt,
+      companyImage: user.image,
+    })
     .from(survey)
+    .leftJoin(user, eq(user.id, survey.companyId))
     .where(eq(survey.companyId, id))
     .then((res) => res);
+
+  const surveysWithFallback = result.map((s) => {
+    const { companyImage, ...rest } = s;
+    return {
+      ...rest,
+      thumbnailUrl: s.thumbnailUrl ?? companyImage ?? null,
+    };
+  });
 
   return NextResponse.json(
     {
       success: true,
       message: "Surveys fetched successfully",
-      data: result,
+      data: surveysWithFallback,
     }
   );
   } catch (error) {
