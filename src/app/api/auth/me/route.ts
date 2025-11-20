@@ -3,6 +3,7 @@ import { auth } from "@/lib/auth";
 import { db } from "@/db";
 import { companyProfile, userProfile, user } from "@/db/schema";
 import { eq } from "drizzle-orm";
+import { uploadFileToR2 } from "@/lib/r2";
 
 export async function GET(request: NextRequest) {
   try {
@@ -57,20 +58,29 @@ export async function PATCH(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const body = await request.json();
+    const formData = await request.formData();
+
+    const name = formData.get('name') as string | null;
+    const imageFile = formData.get('image') as File | null;
 
     const userUpdates: Record<string, unknown> = {};
-    if (typeof body.name === "string" && body.name.trim() !== "") {
-      userUpdates.name = body.name.trim();
+    if (typeof name === "string" && name.trim() !== "") {
+      userUpdates.name = name.trim();
     }
-    if (typeof body.image === "string") {
-      userUpdates.image = body.image;
+    
+    // 画像ファイルがアップロードされた場合、R2にアップロード
+    if (imageFile && imageFile.size > 0) {
+      const imageUrl = await uploadFileToR2(imageFile, 'profiles');
+      userUpdates.image = imageUrl;
     }
 
     if (session.user.accountType === "company") {
+      const companyName = formData.get('companyName') as string | null;
+      const companyCategory = formData.get('companyCategory') as string | null;
+
       const profileUpdates: Record<string, unknown> = {};
-      if (typeof body.companyName === "string" && body.companyName.trim() !== "") {
-        profileUpdates.companyName = body.companyName.trim();
+      if (typeof companyName === "string" && companyName.trim() !== "") {
+        profileUpdates.companyName = companyName.trim();
       }
 
       const allowedCats = [
@@ -80,14 +90,14 @@ export async function PATCH(request: NextRequest) {
         "shopping",
         "other",
       ];
-      if (typeof body.companyCategory === "string") {
-        if (!allowedCats.includes(body.companyCategory)) {
+      if (typeof companyCategory === "string") {
+        if (!allowedCats.includes(companyCategory)) {
           return NextResponse.json(
             { error: "Invalid companyCategory" },
             { status: 400 }
           );
         }
-        profileUpdates.companyCategory = body.companyCategory;
+        profileUpdates.companyCategory = companyCategory;
       }
 
       if (Object.keys(userUpdates).length > 0) {
