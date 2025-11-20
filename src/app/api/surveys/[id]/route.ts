@@ -22,6 +22,17 @@ export async function GET(
     .where(eq(survey.id, id))
     .then((res) => res);
 
+  if (!result || result.length === 0) {
+    return NextResponse.json(
+      {
+        success: false,
+        message: "Survey not found",
+        data: null,
+      },
+      { status: 404 }
+    );
+  }
+
   return NextResponse.json(
     {
       success: true,
