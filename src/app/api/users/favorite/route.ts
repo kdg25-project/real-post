@@ -2,7 +2,6 @@ import { NextRequest, NextResponse} from "next/server";
 import { db } from "@/db";
 import { favorite } from "@/db/schema";
 import { eq } from "drizzle-orm";
-import { auth } from "@/lib/auth";
 import { requireUserAccount } from "@/lib/auth-middleware";
 
 export async function GET(request: NextRequest) {
