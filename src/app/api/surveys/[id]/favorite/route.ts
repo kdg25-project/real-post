@@ -4,6 +4,7 @@ import { favorite } from "@/db/schema";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { eq, and } from "drizzle-orm";
+import { requireUserAccount } from "@/lib/auth-middleware";
 
 type Params = {
   params: Promise<{
@@ -43,6 +44,17 @@ export async function GET(request: NextRequest, { params }: Params) {
 
 export async function PATCH(request: NextRequest, { params }: Params) {
   try {
+    const { error, user } = await requireUserAccount(request);
+    if (error || !user) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: error,
+          data: null,
+        },
+        { status: 401 }
+      );
+    }
     const { id } = await params;
     const session = await auth.api.getSession({
       headers: await headers(),
