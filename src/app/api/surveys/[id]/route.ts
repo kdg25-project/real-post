@@ -36,12 +36,12 @@ export async function GET(
   return NextResponse.json(
     {
       success: true,
-      message: "Surveys fetched successfully",
+      message: "Survey fetched successfully",
       data: result[0],
     }
   );
   } catch (error) {
-    console.error("Error fetching surveys by company ID:", error);
+    console.error("Error fetching survey by ID:", error);
     return NextResponse.json(
       {
         success: false,
