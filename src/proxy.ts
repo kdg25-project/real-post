@@ -8,15 +8,20 @@ export async function proxy(request: NextRequest) {
   if (pathname.startsWith("/admin/auth") || pathname.startsWith("/user/auth")) {
     return NextResponse.next();
   }
-  const session = await auth.api.getSession({
-    headers: await headers()
-  })
+  try {
+    const session = await auth.api.getSession({
+      headers: await headers()
+    });
 
-  if (!session) {
+    if (!session) {
+      return NextResponse.redirect(new URL("/user/auth/login", request.url));
+    }
+
+    return NextResponse.next();
+  } catch (error) {
+    console.error("Authentication error:", error);
     return NextResponse.redirect(new URL("/user/auth/login", request.url));
   }
-
-  return NextResponse.next();
 }
 
 export const config = {
