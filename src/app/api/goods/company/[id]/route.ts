@@ -12,7 +12,7 @@ export async function GET(
       },
       where: (table, { eq }) => eq(table.companyId, id),
     });
-    if (!goodsfromid) {
+    if (goodsfromid.length === 0) {
       return new Response("Not Found", { status: 404 });
     }
     return Response.json({
