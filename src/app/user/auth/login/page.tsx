@@ -15,8 +15,8 @@ export default function LoginPage() {
         <div>
             <Header searchArea={false} />
             <Spacer size="sm" />
-            <TextForm label="Email" type="email" placeholder="example@gmail.com" />
-            <TextForm label="Password" type="password" placeholder="password" />
+            <TextForm label="Email" type="email" placeholder="example@gmail.com" onChange={(e) => setEmail(e.target.value)} />
+            <TextForm label="Password" type="password" placeholder="password" onChange={(e) => setPassword(e.target.value)} />
             <PrimaryButton
                 text="Login"
                 onClick={async () => {
