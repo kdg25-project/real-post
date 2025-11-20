@@ -77,7 +77,14 @@ export async function GET(request: NextRequest) {
 
       const { error, survey } = await authSurveyToken(request, companyId);
       if (error) {
-        return error;
+        return NextResponse.json(
+          {
+            success: false,
+            message: error,
+            data: null,
+          },
+          { status: 401 }
+        );
       }
 
       if (!survey || survey.remainingCount <= 0) {
