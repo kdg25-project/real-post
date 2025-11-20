@@ -1,1 +1,0 @@
-ALTER TABLE "survey_token" ALTER COLUMN "id" SET DEFAULT gen_random_uuid();

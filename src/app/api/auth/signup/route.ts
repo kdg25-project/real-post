@@ -48,12 +48,14 @@ export async function POST(request: NextRequest) {
     try {
       if (accountType === "company") {
         await db.insert(companyProfile).values({
+          id: crypto.randomUUID(),
           userId: signUpResult.user.id,
           companyName,
           companyCategory: body.companyCategory,
         });
       } else {
         await db.insert(userProfile).values({
+          id: crypto.randomUUID(),
           userId: signUpResult.user.id,
         });
       }
