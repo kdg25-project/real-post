@@ -3,6 +3,11 @@ import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 
 export async function middleware(request: NextRequest) {
+  const pathname = request.nextUrl.pathname;
+
+  if (pathname.startsWith("/admin/auth") || pathname.startsWith("/user/auth")) {
+    return NextResponse.next();
+  }
   const session = await auth.api.getSession({
     headers: await headers()
   })
@@ -25,7 +30,9 @@ export async function middleware(request: NextRequest) {
 export const config = {
   runtime: "nodejs",
   matcher: [
-    '/admin((?!/auth)(/.*)?)',
-    '/user((?!/auth)(/.*)?)',
+    '/admin',
+    '/admin/:path*',
+    '/user',
+    '/user/:path*',
   ],
 };
