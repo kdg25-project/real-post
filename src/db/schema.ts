@@ -1,5 +1,6 @@
 export * from "./auth-schema";
 import { pgTable, text, varchar, integer, timestamp } from "drizzle-orm/pg-core";
+import { relations } from "drizzle-orm";
 import { user } from "./auth-schema";
 
 export const survey = pgTable("survey", {
@@ -76,4 +77,61 @@ export const goodsImage = pgTable("goods_image", {
   imageUrl: text("image_url").notNull(),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
-}); 
+});
+
+// Relations
+export const userRelations = relations(user, ({ many }) => ({
+  surveys: many(survey),
+  surveyTokens: many(surveyToken),
+  favorites: many(favorite),
+  goods: many(goods),
+}));
+
+export const surveyRelations = relations(survey, ({ one, many }) => ({
+  company: one(user, {
+    fields: [survey.companyId],
+    references: [user.id],
+  }),
+  images: many(surveyImage),
+  favorites: many(favorite),
+}));
+
+export const surveyTokenRelations = relations(surveyToken, ({ one }) => ({
+  company: one(user, {
+    fields: [surveyToken.companyId],
+    references: [user.id],
+  }),
+}));
+
+export const surveyImageRelations = relations(surveyImage, ({ one }) => ({
+  survey: one(survey, {
+    fields: [surveyImage.surveyId],
+    references: [survey.id],
+  }),
+}));
+
+export const favoriteRelations = relations(favorite, ({ one }) => ({
+  user: one(user, {
+    fields: [favorite.userId],
+    references: [user.id],
+  }),
+  survey: one(survey, {
+    fields: [favorite.surveyId],
+    references: [survey.id],
+  }),
+}));
+
+export const goodsRelations = relations(goods, ({ one, many }) => ({
+  company: one(user, {
+    fields: [goods.companyId],
+    references: [user.id],
+  }),
+  images: many(goodsImage),
+}));
+
+export const goodsImageRelations = relations(goodsImage, ({ one }) => ({
+  goods: one(goods, {
+    fields: [goodsImage.goodsId],
+    references: [goods.id],
+  }),
+})); 
