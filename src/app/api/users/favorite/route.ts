@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse} from "next/server";
 import { db } from "@/db";
-import { favorite } from "@/db/schema";
+import { favorite, survey, user } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { requireUserAccount } from "@/lib/auth-middleware";
 
 export async function GET(request: NextRequest) {
   try {
-    const { error, user } = await requireUserAccount(request);
-    if (error || !user) {
+    const { error, user: currentUser } = await requireUserAccount(request);
+    if (error || !currentUser) {
       return NextResponse.json(
         {
           success: false,
@@ -19,16 +19,57 @@ export async function GET(request: NextRequest) {
     }
 
     const result = await db
-      .select()
+      .select({
+        id: favorite.id,
+        userId: favorite.userId,
+        surveyId: favorite.surveyId,
+        createdAt: favorite.createdAt,
+        updatedAt: favorite.updatedAt,
+        survey: {
+          id: survey.id,
+          companyId: survey.companyId,
+          description: survey.description,
+          thumbnailUrl: survey.thumbnailUrl,
+          gender: survey.gender,
+          ageGroup: survey.ageGroup,
+          satisfactionLevel: survey.satisfactionLevel,
+          country: survey.country,
+          createdAt: survey.createdAt,
+          updatedAt: survey.updatedAt,
+          companyImage: user.image,
+        },
+      })
       .from(favorite)
-      .where(eq(favorite.userId, user.id))
+      .leftJoin(survey, eq(survey.id, favorite.surveyId))
+      .leftJoin(user, eq(user.id, survey.companyId))
+      .where(eq(favorite.userId, currentUser.id))
       .then((res) => res);
+
+    const favoritesWithFallback = result.map((f) => ({
+      id: f.id,
+      userId: f.userId,
+      surveyId: f.surveyId,
+      createdAt: f.createdAt,
+      updatedAt: f.updatedAt,
+      survey: f.survey ? {
+        id: f.survey.id,
+        companyId: f.survey.companyId,
+        description: f.survey.description,
+        thumbnailUrl: f.survey.thumbnailUrl ?? f.survey.companyImage ?? null,
+        gender: f.survey.gender,
+        ageGroup: f.survey.ageGroup,
+        satisfactionLevel: f.survey.satisfactionLevel,
+        country: f.survey.country,
+        createdAt: f.survey.createdAt,
+        updatedAt: f.survey.updatedAt,
+      } : null,
+    }));
 
     return NextResponse.json(
       {
         success: true,
         message: "Favorites fetched successfully",
-        data: result,
+        data: favoritesWithFallback,
       }
     );
   } catch (error) {
