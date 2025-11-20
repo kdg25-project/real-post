@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 
 export async function proxy(request: NextRequest) {
@@ -10,8 +9,8 @@ export async function proxy(request: NextRequest) {
   }
   try {
     const session = await auth.api.getSession({
-      headers: await headers()
-    });
+      headers: request.headers
+    })
 
     if (!session) {
       return NextResponse.redirect(new URL("/user/auth/login", request.url));
