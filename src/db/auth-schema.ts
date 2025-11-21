@@ -70,6 +70,7 @@ export const companyProfile = pgTable("company_profile", {
     .unique()
     .references(() => user.id, { onDelete: "cascade" }),
   companyName: text("company_name").notNull(),
+  imageUrl: text("image_url"),
   companyCategory: text("company_category", { enum: ["food", "culture", "activity", "shopping", "other"] }).notNull(),
   createdAt: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
   updatedAt: timestamp("updated_at", { mode: "date" })
