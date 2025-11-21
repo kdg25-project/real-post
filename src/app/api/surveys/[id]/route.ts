@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/db';
-import { survey, user } from '@/db/schema';
-import { eq } from 'drizzle-orm';
+import { survey, user, favorite } from '@/db/schema';
+import { eq, sql } from 'drizzle-orm';
 
 type Params = {
   params: Promise<{
@@ -29,10 +29,13 @@ export async function GET(
       createdAt: survey.createdAt,
       updatedAt: survey.updatedAt,
       companyImage: user.image,
+      favoriteCount: sql<number>`count(${favorite.id})`.mapWith(Number),
     })
     .from(survey)
     .leftJoin(user, eq(user.id, survey.companyId))
+    .leftJoin(favorite, eq(favorite.surveyId, survey.id))
     .where(eq(survey.id, id))
+    .groupBy(survey.id, user.image)
     .then((res) => res);
 
   if (!result || result.length === 0) {

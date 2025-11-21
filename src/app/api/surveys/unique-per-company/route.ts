@@ -3,7 +3,7 @@ import { db } from "@/db";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { survey, surveyImage, companyProfile, favorite, user } from "@/db/schema";
-import { eq, like, and, inArray, desc } from "drizzle-orm";
+import { eq, like, and, inArray, desc, sql } from "drizzle-orm";
 
 type CompanyCategory = "other" | "food" | "culture" | "activity" | "shopping";
 type AgeGroup = "18-24" | "25-34" | "35-44" | "45-54" | "55+";
@@ -65,10 +65,12 @@ export async function GET(request: NextRequest) {
         updatedAt: survey.updatedAt,
         companyCategory: companyProfile.companyCategory,
         companyImage: user.image,
+        favoriteCount: sql<number>`count(${favorite.id})`.mapWith(Number),
       })
       .from(survey)
       .leftJoin(companyProfile, eq(companyProfile.userId, survey.companyId))
       .leftJoin(user, eq(user.id, survey.companyId))
+      .leftJoin(favorite, eq(favorite.surveyId, survey.id))
       .where(and(
         inArray(survey.id, latestIds),
         categoryVal ? eq(companyProfile.companyCategory, categoryVal) : undefined,
@@ -77,6 +79,7 @@ export async function GET(request: NextRequest) {
         country ? eq(survey.country, country) : undefined,
         gender ? eq(survey.gender, gender as "male" | "female" | "other") : undefined
       ))
+      .groupBy(survey.id, companyProfile.companyCategory, user.image)
       .limit(limit)
       .offset(offset);
 
@@ -124,6 +127,7 @@ export async function GET(request: NextRequest) {
       updatedAt: s.updatedAt ? new Date(s.updatedAt).toISOString() : null,
       isFavorite: userId ? favoriteSet.has(String(s.id)) : null,
       companyCategory: (s.companyCategory as CompanyCategory) ?? "other",
+      favoriteCount: s.favoriteCount,
     }));
 
     return NextResponse.json({
