@@ -3,7 +3,6 @@ import { auth } from "@/lib/auth";
 import { db } from "@/db";
 import { companyProfile, userProfile, user } from "@/db/schema";
 import { eq } from "drizzle-orm";
-import { uploadFileToR2 } from "@/lib/r2";
 
 export async function GET(request: NextRequest) {
   try {
