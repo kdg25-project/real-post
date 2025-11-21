@@ -44,7 +44,6 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   type Body = {
     name: string;
-    description: string;
     images: Array<Blob>;
   };
   const { error, user } = await requireCompanyAccount(req);
@@ -62,7 +61,6 @@ export async function POST(req: NextRequest) {
     id: crypto.randomUUID(),
     companyId: user.id,
     name: body.name,
-    description: body.description,
   });
   return NextResponse.json({
     success: true,
