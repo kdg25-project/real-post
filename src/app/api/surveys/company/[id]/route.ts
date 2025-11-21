@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/db';
-import { survey, surveyImage, user, favorite } from '@/db/schema';
+import { survey, surveyImage, user, favorite, companyProfile } from '@/db/schema';
 import { eq, sql } from 'drizzle-orm';
 import { checkSurveyTokenValidity, decrementSurveyTokenCount } from '@/lib/survey-middleware';
 import { uploadFileToR2 } from '@/lib/r2';
@@ -31,13 +31,15 @@ export async function GET(
       createdAt: survey.createdAt,
       updatedAt: survey.updatedAt,
       companyImage: user.image,
+      companyName: companyProfile.companyName,
       favoriteCount: sql<number>`count(${favorite.id})`.mapWith(Number),
     })
     .from(survey)
     .leftJoin(user, eq(user.id, survey.companyId))
+    .leftJoin(companyProfile, eq(companyProfile.userId, survey.companyId))
     .leftJoin(favorite, eq(favorite.surveyId, survey.id))
     .where(eq(survey.companyId, id))
-    .groupBy(survey.id, user.image)
+    .groupBy(survey.id, user.image, companyProfile.companyName)
     .then((res) => res);
 
   const surveysWithFallback = result.map((s) => {

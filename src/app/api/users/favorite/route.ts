@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse} from "next/server";
 import { db } from "@/db";
-import { favorite, survey, user } from "@/db/schema";
+import { favorite, survey, user, companyProfile } from "@/db/schema";
 import { eq, sql } from "drizzle-orm";
 import { requireUserAccount } from "@/lib/auth-middleware";
 
@@ -37,12 +37,14 @@ export async function GET(request: NextRequest) {
           createdAt: survey.createdAt,
           updatedAt: survey.updatedAt,
           companyImage: user.image,
+          companyName: companyProfile.companyName,
           favoriteCount: sql<number>`(select count(*) from ${favorite} where ${favorite.surveyId} = ${survey.id})`.mapWith(Number),
         },
       })
       .from(favorite)
       .leftJoin(survey, eq(survey.id, favorite.surveyId))
       .leftJoin(user, eq(user.id, survey.companyId))
+      .leftJoin(companyProfile, eq(companyProfile.userId, survey.companyId))
       .where(eq(favorite.userId, currentUser.id))
       .then((res) => res);
 
@@ -63,6 +65,7 @@ export async function GET(request: NextRequest) {
         country: f.survey.country,
         createdAt: f.survey.createdAt,
         updatedAt: f.survey.updatedAt,
+        companyName: f.survey.companyName ?? "",
         favoriteCount: f.survey.favoriteCount,
       } : null,
     }));

@@ -44,6 +44,7 @@ export async function GET(request: NextRequest) {
         createdAt: survey.createdAt,
         updatedAt: survey.updatedAt,
         companyCategory: companyProfile.companyCategory,
+        companyName: companyProfile.companyName,
         companyImage: user.image,
         favoriteCount: sql<number>`count(${favorite.id})`.mapWith(Number),
       })
@@ -58,7 +59,7 @@ export async function GET(request: NextRequest) {
         country ? eq(survey.country, country) : undefined,
         gender ? eq(survey.gender, gender as "male" | "female" | "other") : undefined
       ))
-      .groupBy(survey.id, companyProfile.companyCategory, user.image)
+      .groupBy(survey.id, companyProfile.companyCategory, companyProfile.companyName, user.image)
       .limit(limit)
       .offset(offset);
 
@@ -114,6 +115,7 @@ export async function GET(request: NextRequest) {
       updatedAt: s.updatedAt ? new Date(s.updatedAt).toISOString() : null,
       isFavorite: userId ? favoriteSet.has(String(s.id)) : null,
       companyCategory: (s.companyCategory as CompanyCategory) ?? "other",
+      companyName: s.companyName ?? "",
       favoriteCount: s.favoriteCount,
     }));
 
