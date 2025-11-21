@@ -8,12 +8,25 @@ export const { useSession, signIn, signOut } = authClient;
 
 export type { Session, User } from "./auth";
 
+type SignUpResponse = {
+  success: boolean;
+  message: string;
+  user: {
+    id: string;
+    email: string;
+    name: string;
+    accountType: "company" | "user";
+    createdAt: string;
+    updatedAt: string;
+  };
+}
+
 export async function signUp(data: {
   email: string;
   password: string;
   accountType: "company" | "user";
   companyName?: string;
-}) {
+}): Promise<SignUpResponse> {
   const response = await fetch("/api/auth/signup", {
     method: "POST",
     headers: {
