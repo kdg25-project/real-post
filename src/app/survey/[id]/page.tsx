@@ -136,7 +136,6 @@ export default function Survey() {
             onClick={async () => {
                 if (!isChecked) return;
                 await SurveyCreate(form, id as string, token);
-                console.log(form)
             }} />
         </div>
     ))
