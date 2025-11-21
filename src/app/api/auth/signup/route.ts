@@ -9,6 +9,7 @@ export async function POST(request: NextRequest) {
     
     const { email, password, accountType, name, country } = body;
 
+    // バリデーションエラー
     if (!email || !password || !accountType) {
       return NextResponse.json(
         { error: "Email, password, and account type are required" },
@@ -16,21 +17,58 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (!["company", "user"].includes(accountType)) {
+    // メールアドレスの形式チェック
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
       return NextResponse.json(
-        { error: "Invalid account type" },
+        { error: "Invalid email format" },
         { status: 400 }
       );
     }
 
-    const signUpResult = await auth.api.signUpEmail({
-      body: {
-        email,
-        password,
-        name: name || email,
-        accountType,
-      },
-    });
+    // パスワードの長さチェック
+    if (password.length < 8) {
+      return NextResponse.json(
+        { error: "Password must be at least 8 characters long" },
+        { status: 400 }
+      );
+    }
+
+    // アカウントタイプのバリデーション
+    if (!["company", "user"].includes(accountType)) {
+      return NextResponse.json(
+        { error: "Invalid account type. Must be 'company' or 'user'" },
+        { status: 400 }
+      );
+    }
+
+    let signUpResult;
+    try {
+      signUpResult = await auth.api.signUpEmail({
+        body: {
+          email,
+          password,
+          name: name || email,
+          accountType,
+        },
+      });
+    } catch (authError) {
+      // 認証関連のエラー処理
+      const errorMessage = authError instanceof Error ? authError.message : String(authError);
+      if (errorMessage.includes("duplicate") || errorMessage.includes("unique") || errorMessage.includes("already exists")) {
+        return NextResponse.json(
+          { error: "Email already exists" },
+          { status: 409 }
+        );
+      }
+      if (errorMessage.includes("invalid") || errorMessage.includes("validation")) {
+        return NextResponse.json(
+          { error: errorMessage || "Invalid input data" },
+          { status: 400 }
+        );
+      }
+      throw authError;
+    }
 
     if (!signUpResult || !signUpResult.user) {
       return NextResponse.json(
