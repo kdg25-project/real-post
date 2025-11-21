@@ -3,7 +3,6 @@ import { auth } from "@/lib/auth";
 import { db } from "@/db";
 import { companyProfile, userProfile, user } from "@/db/schema";
 import { eq } from "drizzle-orm";
-import { uploadFileToR2 } from "@/lib/r2";
 
 export async function GET(request: NextRequest) {
   try {
@@ -58,68 +57,24 @@ export async function PATCH(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const formData = await request.formData();
+    const body = await request.json();
+    const { email, country } = body;
 
-    const name = formData.get('name') as string | null;
-    const imageFile = formData.get('image') as File | null;
-
-    const userUpdates: Record<string, unknown> = {};
-    if (typeof name === "string" && name.trim() !== "") {
-      userUpdates.name = name.trim();
-    }
-    
-    // 画像ファイルがアップロードされた場合、R2にアップロード
-    if (imageFile && imageFile.size > 0) {
-      const imageUrl = await uploadFileToR2(imageFile, 'profiles');
-      userUpdates.image = imageUrl;
+    if (email) {
+      await db
+        .update(user)
+        .set({ email })
+        .where(eq(user.id, session.user.id));
     }
 
-    if (session.user.accountType === "company") {
-      const companyName = formData.get('companyName') as string | null;
-      const companyCategory = formData.get('companyCategory') as string | null;
-
-      const profileUpdates: Record<string, unknown> = {};
-      if (typeof companyName === "string" && companyName.trim() !== "") {
-        profileUpdates.companyName = companyName.trim();
-      }
-
-      const allowedCats = [
-        "food",
-        "culture",
-        "activity",
-        "shopping",
-        "other",
-      ];
-      if (typeof companyCategory === "string") {
-        if (!allowedCats.includes(companyCategory)) {
-          return NextResponse.json(
-            { error: "Invalid companyCategory" },
-            { status: 400 }
-          );
-        }
-        profileUpdates.companyCategory = companyCategory;
-      }
-
-      if (Object.keys(userUpdates).length > 0) {
-        await db.update(user).set(userUpdates).where(eq(user.id, session.user.id));
-      }
-
-      if (Object.keys(profileUpdates).length > 0) {
-        await db
-          .update(companyProfile)
-          .set(profileUpdates)
-          .where(eq(companyProfile.userId, session.user.id));
-      }
-    } else {
-      // regular user: allow updating user.name and user.image
-      if (Object.keys(userUpdates).length === 0) {
-        return NextResponse.json({ error: "No valid fields to update" }, { status: 400 });
-      }
-
-      await db.update(user).set(userUpdates).where(eq(user.id, session.user.id));
+    if (country !== undefined && session.user.accountType === "user") {
+      await db
+        .update(userProfile)
+        .set({ country })
+        .where(eq(userProfile.userId, session.user.id));
     }
 
-    return NextResponse.json({ message: "Profile updated" });
+    return NextResponse.json({ success: true, message: "Profile updated successfully" });
   } catch (error) {
     console.error("Profile update error:", error);
     return NextResponse.json(

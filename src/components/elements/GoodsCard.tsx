@@ -15,7 +15,7 @@ export default function GoodsCard() {
                 >
                 </Image>
             </div>
-            <PostInfo size="lg" titleOnly isCenter />
+            {/* <PostInfo size="lg" titleOnly isCenter /> */}
         </div>
     )
 }

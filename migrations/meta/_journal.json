@@ -15,6 +15,13 @@
       "when": 1763698054402,
       "tag": "0001_superb_puff_adder",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1763710571963,
+      "tag": "0002_big_plazm",
+      "breakpoints": true
     }
   ]
 }

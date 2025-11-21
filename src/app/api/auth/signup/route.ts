@@ -7,7 +7,7 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     
-    const { email, password, accountType, companyName, companyCategory } = body;
+    const { email, password, accountType, companyName, companyCategory, country } = body;
 
     if (!email || !password || !accountType) {
       return NextResponse.json(
@@ -58,6 +58,7 @@ export async function POST(request: NextRequest) {
         await db.insert(userProfile).values({
           id: crypto.randomUUID(),
           userId: signUpResult.user.id,
+          country: country || null,
         });
       }
     } catch (profileError) {
