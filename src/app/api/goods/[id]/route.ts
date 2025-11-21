@@ -121,15 +121,12 @@ export async function PATCH(
         );
       }
       if (imageUrls.length > 0) {
-        await Promise.all(
-          imageUrls.map((url) =>
-            tx.insert(goodsImage).values({
-              id: crypto.randomUUID(),
-              goodsId: id,
-              imageUrl: url,
-            }),
-          ),
-        );
+        const newGoodsImages = imageUrls.map((url) => ({
+          id: crypto.randomUUID(),
+          goodsId: id,
+          imageUrl: url,
+        }));
+        await tx.insert(goodsImage).values(newGoodsImages);
       }
     });
 
