@@ -186,7 +186,7 @@ await updateCompanyProfile({
         "description": "...",
         "thumbnailUrl": "...", // 最初の画像または企業画像
         "images": ["url1", "url2"], // 関連画像一覧
-        "isFavorite": boolean, // ログインユーザーがお気に入りにしているか
+        "isFavorited": boolean, // ログインユーザーがお気に入りにしているか
         ...
       }
     ]
