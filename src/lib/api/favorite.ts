@@ -20,3 +20,19 @@ export async function toggleFavorite(surveyId: string) {
     }
 }
 
+export async function getFavoriteSurveys(): Promise<any[]> {
+    try {
+      const res = await fetch("/api/users/favorite", {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      });
+  
+      if (!res.ok) throw new Error("Failed to fetch favorites");
+  
+      const json: { success: boolean; message: string; data: any[] } = await res.json();
+      return json.data ?? []; // 必ず配列を返す
+    } catch (err) {
+      console.error(err);
+      return []; // エラー時も空配列を返す
+    }
+}
