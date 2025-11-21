@@ -38,6 +38,7 @@ export async function GET(
       updatedAt: survey.updatedAt,
       companyImage: user.image,
       companyName: companyProfile.companyName,
+      companyCategory: companyProfile.companyCategory,
       favoriteCount: sql<number>`count(${favorite.id})`.mapWith(Number),
     })
     .from(survey)
@@ -45,7 +46,7 @@ export async function GET(
     .leftJoin(companyProfile, eq(companyProfile.userId, survey.companyId))
     .leftJoin(favorite, eq(favorite.surveyId, survey.id))
     .where(eq(survey.id, id))
-    .groupBy(survey.id, user.image, companyProfile.companyName)
+    .groupBy(survey.id, user.image, companyProfile.companyName, companyProfile.companyCategory)
     .then((res) => res);
 
   if (!result || result.length === 0) {
