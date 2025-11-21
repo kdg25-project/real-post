@@ -1,15 +1,16 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import {useQRCode} from "next-qrcode";
 
-export default function QrCode() {
+export default function QrCode({url}: {url: string}) {
     const { Image } = useQRCode()
 
     return (
         <div className="flex flex-col items-center justify-center h-screen gap-10">
             <Image
-                text={"https://zenn.dev/kate0418/articles/db4eecb906ba58#dockerfile"}
+                key={url}
+                text={url}
                 options={{
                 type: 'image/jpeg',
                 quality: 0.3,
