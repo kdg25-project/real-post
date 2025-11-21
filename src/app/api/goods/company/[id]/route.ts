@@ -2,6 +2,10 @@ import { db } from "@/db";
 import { goods } from "@/db/schema";
 import { NextRequest, NextResponse } from "next/server";
 import { sql } from "drizzle-orm";
+import { z } from "zod";
+
+const pageScheme = z.coerce.number().min(1).default(1);
+const limitScheme = z.coerce.number().min(1).max(100).default(10);
 
 export async function GET(
   req: NextRequest,
@@ -10,8 +14,8 @@ export async function GET(
   const { id } = await params;
   try {
     const { searchParams } = new URL(req.url);
-    const page = Number(searchParams.get("page") || "1");
-    const pageSize = Number(searchParams.get("limit") || "10");
+    const page = pageScheme.parse(searchParams.get("page") ?? undefined);
+    const pageSize = limitScheme.parse(searchParams.get("limit") ?? undefined);
     const [goodsfromid, totalCount] = await Promise.all([
       db.query.goods.findMany({
         with: { images: true },
@@ -26,7 +30,7 @@ export async function GET(
       return NextResponse.json(
         {
           success: false,
-          message: "Not Found",
+          message: "CompanyId Not Found",
         },
         { status: 404 },
       );
