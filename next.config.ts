@@ -1,7 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  images: {
+    domains: [process.env.NEXT_PUBLIC_R2_PUBLIC_URL || "localhost"],
+  },
 };
 
 export default nextConfig;
