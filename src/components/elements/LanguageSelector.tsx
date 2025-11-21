@@ -1,38 +1,67 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { Check, ChevronDown, Globe } from "lucide-react"
+import * as React from "react";
+import Cookies from "js-cookie";
+import { Check, ChevronDown, Globe } from "lucide-react";
 
-import { cn } from "@/lib/utils"
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { cn } from "@/lib/utils";
+import {
+    Command,
+    CommandEmpty,
+    CommandGroup,
+    CommandItem,
+    CommandList,
+} from "@/components/ui/command";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 const languages = [
-    {
-        value: "en",
-        label: "English",
-    },
-    {
-        value: "ja",
-        label: "日本語",
-    },
-    {
-        value: "zh-cn",
-        label: "简体中文",
-    },
-    {
-        value: "zh-tw",
-        label: "繁體中文",
-    },
-    {
-        value: "ko",
-        label: "한국어",
-    },
-]
+    { value: "en", label: "English" },
+    { value: "ja", label: "日本語" },
+    { value: "zh-cn", label: "简体中文" },
+    { value: "zh-tw", label: "繁體中文" },
+    { value: "ko", label: "한국어" },
+];
 
 export function LanguageSelector() {
-    const [open, setOpen] = React.useState(false)
-    const [value, setValue] = React.useState("")
+    const [open, setOpen] = React.useState(false);
+    const [value, setValue] = React.useState("");
+
+    // ----------------------------
+    // 初期値：Cookie があれば読み込む
+    // ----------------------------
+    React.useEffect(() => {
+        const saved = Cookies.get("lang");
+
+        if (saved) {
+            setValue(saved);
+            return;
+        }
+
+        // ------- ブラウザの言語を取得 -------
+        const browserLang = navigator.language.toLowerCase();
+
+        // ------- 対応言語一覧 -------
+        const supported = languages.map((l) => l.value);
+
+        // ------- マッチする言語を探す（部分一致も許可） -------
+        const matched = supported.find((lang) => browserLang.startsWith(lang));
+
+        // ------- 対応していればその言語、なければ en -------
+        const initial = matched ? matched : "en";
+
+        Cookies.set("lang", initial, { expires: 365 });
+        setValue(initial);
+    }, []);
+
+
+    // ----------------------------
+    // 言語変更 → Cookie に保存
+    // ----------------------------
+    const changeLang = (lang: string) => {
+        setValue(lang);
+        Cookies.set("lang", lang, { expires: 365 });
+        console.log("クッキーに保存されました。")
+    };
 
     return (
         <Popover open={open} onOpenChange={setOpen}>
@@ -40,31 +69,33 @@ export function LanguageSelector() {
                 <button className="flex items-center gap-[10px] px-[16px] py-[8px] bg-white rounded-full shadow-base">
                     <Globe size={32} />
                     {value
-                        ? languages.find((framework) => framework.value === value)?.label
+                        ? languages.find((l) => l.value === value)?.label
                         : "language"}
-                    <ChevronDown className="" />
+                    <ChevronDown />
                 </button>
             </PopoverTrigger>
+
             <PopoverContent className="w-[175px] p-0">
                 <Command>
-                    {/* <CommandInput placeholder="Search..." className="h-9" /> */}
                     <CommandList>
-                        <CommandEmpty>No framework found.</CommandEmpty>
+                        <CommandEmpty>No language found.</CommandEmpty>
                         <CommandGroup>
                             {languages.map((language) => (
                                 <CommandItem
                                     key={language.value}
                                     value={language.value}
-                                    onSelect={(currentValue) => {
-                                        setValue(currentValue === value ? "" : currentValue)
-                                        setOpen(false)
+                                    onSelect={() => {
+                                        changeLang(language.value);
+                                        setOpen(false);
                                     }}
                                 >
                                     {language.label}
                                     <Check
                                         className={cn(
                                             "ml-auto",
-                                            value === language.value ? "opacity-100" : "opacity-0"
+                                            value === language.value
+                                                ? "opacity-100"
+                                                : "opacity-0"
                                         )}
                                     />
                                 </CommandItem>
@@ -74,5 +105,5 @@ export function LanguageSelector() {
                 </Command>
             </PopoverContent>
         </Popover>
-    )
+    );
 }

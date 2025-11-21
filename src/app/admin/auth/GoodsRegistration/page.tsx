@@ -1,0 +1,26 @@
+'use client';
+
+import { useState } from "react";
+import TextForm from "@/components/layouts/TextForm";
+import ImageUpload from "@/components/layouts/ImageUpload";
+
+export default function GoodsRegistration() {
+    const [preview1, setPreview1] = useState<string | null>(null);
+
+    return (
+        <div className="flex flex-col justify-center gap-6">
+            
+            <h1 className="flex justify-center font-bold text-2xl py-5">グッズ登録</h1>
+            <TextForm label="グッズ名" type="text" placeholder="例 ご飯大好き缶バッチ" />
+            <ImageUpload
+                label="グッズ画像"
+                preview={preview1 ?? undefined}
+                onChange={(file) => {
+                    if (!file) return;
+                    const url = URL.createObjectURL(file);
+                    setPreview1(url);
+                }}
+            />
+        </div>
+    )
+}
