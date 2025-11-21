@@ -4,16 +4,14 @@ import { useState } from "react";
 import TextForm from "@/components/layouts/TextForm";
 import ImageUpload from "@/components/layouts/ImageUpload";
 import { CategoryForm,NativeSelectOption, NativeSelectOptGroup } from "@/components/layouts/CategoryForm";
-
-export default function EditPage() {
+export default function StoreInformationCreationPage() {
     const [preview1, setPreview1] = useState<string | null>(null);
     const [preview2, setPreview2] = useState<string | null>(null);
 
     return (
-        <div className="flex flex-col justify-center gap-6 pb-[104px] pt-10">
-            <div className="flex items-center justify-between w-full h-[292px] bg-gray">
-                <h1>仮</h1>
-            </div>
+        <div className="flex flex-col justify-center gap-6">
+            
+            <h1 className="flex justify-center font-bold text-2xl py-5">店舗登録</h1>
             <TextForm label="店舗名" type="text" placeholder="例 ご飯大好きの会" />
             <TextForm label="住所" type="text" placeholder="例 名古屋市中村区日本橋1-1" />
             <CategoryForm>
@@ -25,7 +23,6 @@ export default function EditPage() {
                     <NativeSelectOption value="5">その他</NativeSelectOption>
                 </NativeSelectOptGroup>
             </CategoryForm>
-            <TextForm label="SNS" type="text" placeholder="例 https://example.com/" />
             <ImageUpload
                 label="店舗画像"
                 preview={preview1 ?? undefined}
