@@ -1,11 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/db";
-import { favorite } from "@/db/schema";
-import { and, eq } from "drizzle-orm";
-import { auth } from "@/lib/auth";
+import { eq } from "drizzle-orm";
 import { requireCompanyAccount } from "@/lib/auth-middleware";
 import { companyProfile } from "@/db/schema";
-import { headers } from "next/headers";
 import { uploadFileToR2 } from "@/lib/r2";
 
 export async function POST(request: NextRequest) {
