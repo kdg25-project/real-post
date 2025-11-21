@@ -25,6 +25,7 @@ export async function POST(request: NextRequest) {
     const companyName = formData.get("companyName");
     const companyCategory = formData.get("companyCategory");
     const imageFile = formData.get("image");
+    const placeUrl = formData.get("placeUrl");
 
     let imageUrl: string | null = null;
     if (imageFile && imageFile instanceof File) {
@@ -62,6 +63,7 @@ export async function POST(request: NextRequest) {
           | "shopping"
           | "other",
         imageUrl: imageUrl,
+        placeUrl: placeUrl ? String(placeUrl) : null,
       })
       .returning();
 

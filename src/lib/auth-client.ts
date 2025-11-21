@@ -67,14 +67,29 @@ export async function getSessionWithProfile() {
 export async function updateCompanyProfile(data: {
   companyName?: string;
   companyCategory?: "food" | "culture" | "activity" | "shopping" | "other";
+  placeUrl?: string;
+  image?: Blob | File;
 }) {
-  const res = await fetch("/api/auth/me", {
+  const formData = new FormData();
+  if (data.companyName) {
+    formData.append("companyName", data.companyName);
+  }
+  if (data.companyCategory) {
+    formData.append("companyCategory", data.companyCategory);
+  }
+  if (data.placeUrl) {
+    formData.append("placeUrl", data.placeUrl);
+  }
+  if (data.image) {
+    formData.append("image", data.image);
+  }
+  const res = await fetch("/api/company", {
     method: "PATCH",
     headers: {
-      "Content-Type": "application/json",
+      "Content-Type": "multipart/form-data",
     },
     credentials: "include",
-    body: JSON.stringify(data),
+    body: formData,
   });
 
   if (!res.ok) {
@@ -83,6 +98,39 @@ export async function updateCompanyProfile(data: {
       throw new Error(error.error || "Unauthorized");
     }
     throw new Error(error.error || "Failed to update company profile");
+  }
+
+  return res.json();
+}
+
+export async function createCompanyProfile(data: {
+  companyName: string;
+  companyCategory: "food" | "culture" | "activity" | "shopping" | "other";
+  placeUrl?: string;
+  image: Blob | File;
+}) {
+  const formData = new FormData();
+  formData.append("companyName", data.companyName);
+  formData.append("companyCategory", data.companyCategory);
+  if (data.placeUrl) {
+    formData.append("placeUrl", data.placeUrl);
+  }
+  formData.append("image", data.image);
+
+  const res = await fetch("/api/company", {
+    method: "POST",
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+    credentials: "include",
+    body: formData,
+  });
+  if (!res.ok) {
+    const error = await res.json().catch(() => ({}));
+    if (res.status === 401) {
+      throw new Error(error.error || "Unauthorized");
+    }
+    throw new Error(error.error || "Failed to create company profile");
   }
 
   return res.json();
