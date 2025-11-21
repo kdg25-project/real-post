@@ -66,6 +66,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(
       {
+        success: true,
         message: "User created successfully",
         user: signUpResult.user,
       },
