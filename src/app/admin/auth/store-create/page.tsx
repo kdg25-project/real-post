@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import PrimaryButton from "@/components/elements/PrimaryButton"
 export default function StoreInformationCreationPage() {
     const [preview, setPreview] = useState<string | null>(null);
+    const [imageFile, setImageFile] = useState<File | null>(null);
 
     const router = useRouter();
 
@@ -34,6 +35,7 @@ export default function StoreInformationCreationPage() {
                     if (!file) return;
                     const url = URL.createObjectURL(file);
                     setPreview(url);
+                    setImageFile(file);
                 }}
             />
             <PrimaryButton

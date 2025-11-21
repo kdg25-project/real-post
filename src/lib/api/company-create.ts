@@ -40,7 +40,7 @@ export function companyCreate(req: CompanyCreateRequest): Promise<CompanyCreateR
         .catch((err: Error) => {
             console.warn(err);
             return {
-                sucsess: false,
+                success: false,
                 message: "Failed to create company",
             }
         });
