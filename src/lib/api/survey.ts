@@ -96,6 +96,7 @@ export async function getSurveyDetail(id: string) {
     }
 
     const json = await res.json();
+    console.log(json)
     return json;
   } catch (err) {
     console.error(err);
