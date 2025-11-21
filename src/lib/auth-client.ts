@@ -26,6 +26,7 @@ export async function signUp(data: {
   password: string;
   accountType: "company" | "user";
   companyName?: string;
+  country?: string;
 }): Promise<SignUpResponse> {
   const response = await fetch("/api/auth/signup", {
     method: "POST",
@@ -77,6 +78,30 @@ export async function updateCompanyProfile(data: {
       throw new Error(error.error || "Unauthorized");
     }
     throw new Error(error.error || "Failed to update company profile");
+  }
+
+  return res.json();
+}
+
+export async function updateUserProfile(data: {
+  email?: string;
+  country?: string;
+}) {
+  const res = await fetch("/api/auth/me", {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+    body: JSON.stringify(data),
+  });
+
+  if (!res.ok) {
+    const error = await res.json().catch(() => ({}));
+    if (res.status === 401) {
+      throw new Error(error.error || "Unauthorized");
+    }
+    throw new Error(error.error || "Failed to update user profile");
   }
 
   return res.json();

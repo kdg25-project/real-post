@@ -57,14 +57,24 @@ export async function PATCH(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { email } = await request.json();
-    const result = await db
-      .update(user)
-      .set({ email })
-      .where(eq(user.id, session.user.id))
-      .returning();
+    const body = await request.json();
+    const { email, country } = body;
 
-    return NextResponse.json({ success: true, message: "Profile updated successfully", data: result  });
+    if (email) {
+      await db
+        .update(user)
+        .set({ email })
+        .where(eq(user.id, session.user.id));
+    }
+
+    if (country !== undefined && session.user.accountType === "user") {
+      await db
+        .update(userProfile)
+        .set({ country })
+        .where(eq(userProfile.userId, session.user.id));
+    }
+
+    return NextResponse.json({ success: true, message: "Profile updated successfully" });
   } catch (error) {
     console.error("Profile update error:", error);
     return NextResponse.json(

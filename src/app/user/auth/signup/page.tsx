@@ -11,7 +11,7 @@ import { CategoryForm, NativeSelectOptGroup, NativeSelectOption } from "@/compon
 export default function SignUpPage() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [country, setCountry] = useState("JP"); // デフォルト値を設定
+    const [country, setCountry] = useState("");
 
     return (
         <div>
@@ -20,31 +20,6 @@ export default function SignUpPage() {
             <div className="flex flex-col gap-[24px]">
                 <TextForm label="Email" type="email" placeholder="example@gmail.com" onChange={(e) => setEmail(e.target.value)} />
                 <TextForm label="Password" type="password" placeholder="password" onChange={(e) => setPassword(e.target.value)} />
-
-                {/* <CategoryForm>
-                    <NativeSelectOptGroup label="国">
-                        <NativeSelectOption value="Japan">Japan: 日本</NativeSelectOption>
-                        <NativeSelectOption value="Korea">Korea: 한국</NativeSelectOption>
-                        <NativeSelectOption value="USA">USA: English</NativeSelectOption>
-                        <NativeSelectOption value="China">China: 中国</NativeSelectOption>
-                        <NativeSelectOption value="France">France: Français</NativeSelectOption>
-                        <NativeSelectOption value="Germany">Germany: Deutsch</NativeSelectOption>
-                        <NativeSelectOption value="Spain">Spain: Español</NativeSelectOption>
-                        <NativeSelectOption value="Italy">Italy: Italiano</NativeSelectOption>
-                        <NativeSelectOption value="Russia">Russia: Русский</NativeSelectOption>
-                        <NativeSelectOption value="Thailand">Thailand: ไทย</NativeSelectOption>
-                        <NativeSelectOption value="Vietnam">Vietnam: Tiếng Việt</NativeSelectOption>
-                        <NativeSelectOption value="India">India: हिन्दी</NativeSelectOption>
-                        <NativeSelectOption value="Brazil">Brazil: Português</NativeSelectOption>
-                        <NativeSelectOption value="Egypt">Egypt: العربية</NativeSelectOption>
-                        <NativeSelectOption value="SaudiArabia">Saudi Arabia: العربية</NativeSelectOption>
-                        <NativeSelectOption value="Sweden">Sweden: Svenska</NativeSelectOption>
-                        <NativeSelectOption value="Norway">Norway: Norsk</NativeSelectOption>
-                        <NativeSelectOption value="Finland">Finland: Suomi</NativeSelectOption>
-                        <NativeSelectOption value="Netherlands">Netherlands: Nederlands</NativeSelectOption>
-                        <NativeSelectOption value="Belgium">Belgium: Nederlands / Français</NativeSelectOption>
-                    </NativeSelectOptGroup>
-                </CategoryForm> */}
 
                 <select
                     value={country}
@@ -95,7 +70,7 @@ export default function SignUpPage() {
                             email: email,
                             password: password,
                             accountType: "user",
-                            // country: country, // ここで国も送信
+                            country: country
                         })
                     }}
                 />

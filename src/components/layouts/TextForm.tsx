@@ -16,6 +16,7 @@ export default function TextForm({ label, type = "text", placeholder = "", value
             <input
                 type={type}
                 placeholder={placeholder}
+                value={value}
                 className="w-full px-[20px] py-[15px] rounded-[14px] bg-white shadow-base focus:outline-none"
                 value={value}
                 onChange={onChange}
