@@ -40,7 +40,7 @@ export async function GET(
       updatedAt: survey.updatedAt,
       companyImage: user.image,
       companyName: companyProfile.companyName,
-      favoriteCount: sxql<number>`count(${favorite.id})`.mapWith(Number),
+      favoriteCount: sql<number>`count(${favorite.id})`.mapWith(Number),
     })
     .from(survey)
     .leftJoin(user, eq(user.id, survey.companyId))
