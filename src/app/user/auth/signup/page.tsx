@@ -95,7 +95,7 @@ export default function SignUpPage() {
                             email: email,
                             password: password,
                             accountType: "user",
-                            country: country, // ここで国も送信
+                            // country: country, // ここで国も送信
                         })
                     }}
                 />
