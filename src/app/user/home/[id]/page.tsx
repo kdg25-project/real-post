@@ -35,7 +35,7 @@ export default function DetailPage() {
                 </Image>
             </div>
             <div className="flex flex-col gap-[16px] px-[24px]">
-                <PostInfo size="lg" />
+                {/* <PostInfo size="lg" /> */}
                 <div className="px-[12px] py-[16px] rounded-[15px] bg-white">
                     <p className="text-[14px] font-regular text-gray-dark leading-[1.7]">Here you go ✨📘
                         As the lines of text flow endlessly, a gentle rhythm starts to appear 🌊. The words themselves mean little, yet they create a strangely soothing atmosphere ✨. Before you know it, you’re carried along by the stream of simple phrases— light, quiet, and drifting like a soft breeze 🌬️💭.</p>
@@ -43,11 +43,11 @@ export default function DetailPage() {
             </div>
             <Section title="Other Posts" className="px-[24px]">
                 <div className="flex flex-col gap-[20px]">
+                    {/* <PostCard />
                     <PostCard />
                     <PostCard />
                     <PostCard />
-                    <PostCard />
-                    <PostCard />
+                    <PostCard /> */}
                 </div>
             </Section>
         </motion.div>
