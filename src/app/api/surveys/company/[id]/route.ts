@@ -1,9 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/db';
 import { survey, surveyImage, user, favorite, companyProfile } from '@/db/schema';
-import { eq, sql } from 'drizzle-orm';
+import { eq, sql, and, inArray } from 'drizzle-orm';
 import { checkSurveyTokenValidity, decrementSurveyTokenCount } from '@/lib/survey-middleware';
 import { uploadFileToR2 } from '@/lib/r2';
+import { auth } from '@/lib/auth';
+import { headers } from 'next/headers';
 
 type Params = {
   params: Promise<{
@@ -17,6 +19,12 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
+
+    // セッション情報を取得
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
+    const userId = session?.user?.id ?? null;
 
   const result = await db
     .select({
@@ -33,7 +41,6 @@ export async function GET(
       companyImage: user.image,
       companyName: companyProfile.companyName,
       favoriteCount: sql<number>`count(${favorite.id})`.mapWith(Number),
-      isFavorited: sql<boolean>`bool_or(${favorite.id} IS NOT NULL)`,
     })
     .from(survey)
     .leftJoin(user, eq(user.id, survey.companyId))
@@ -43,11 +50,23 @@ export async function GET(
     .groupBy(survey.id, user.image, companyProfile.companyName)
     .then((res) => res);
 
+  // ログインユーザーのお気に入り状態を取得
+  const favoriteSet = new Set<string>();
+  if (userId && result.length > 0) {
+    const surveyIds = result.map((s) => s.id);
+    const favs = await db
+      .select({ surveyId: favorite.surveyId })
+      .from(favorite)
+      .where(and(eq(favorite.userId, userId), inArray(favorite.surveyId, surveyIds)));
+    favs.forEach((f) => favoriteSet.add(String(f.surveyId)));
+  }
+
   const surveysWithFallback = result.map((s) => {
     const { companyImage, ...rest } = s;
     return {
       ...rest,
       thumbnailUrl: s.thumbnailUrl ?? companyImage ?? null,
+      isFavorited: userId ? favoriteSet.has(String(s.id)) : null,
     };
   });
 

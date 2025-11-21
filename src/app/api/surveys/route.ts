@@ -113,7 +113,7 @@ export async function GET(request: NextRequest) {
       country: s.country ?? "",
       createdAt: s.createdAt ? new Date(s.createdAt).toISOString() : null,
       updatedAt: s.updatedAt ? new Date(s.updatedAt).toISOString() : null,
-      isFavorite: userId ? favoriteSet.has(String(s.id)) : null,
+      isFavorited: userId ? favoriteSet.has(String(s.id)) : null,
       companyCategory: (s.companyCategory as CompanyCategory) ?? "other",
       companyName: s.companyName ?? "",
       favoriteCount: s.favoriteCount,
