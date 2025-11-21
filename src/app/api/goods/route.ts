@@ -40,3 +40,33 @@ export async function GET(req: NextRequest) {
     );
   }
 }
+
+export async function POST(req: NextRequest) {
+  type Body = {
+    name: string;
+    description: string;
+    images: Array<Blob>;
+  };
+  const { error, user } = await requireCompanyAccount(req);
+  if (error) {
+    return NextResponse.json(
+      {
+        success: false,
+        message: "User is not authenticated or does not have a company account",
+      },
+      { status: 401 },
+    );
+  }
+  const body: Body = await req.json();
+  const res = await db.insert(goods).values({
+    id: crypto.randomUUID(),
+    companyId: user.id,
+    name: body.name,
+    description: body.description,
+  });
+  return NextResponse.json({
+    success: true,
+    message: "Goods created successfully",
+    data: res,
+  });
+}
