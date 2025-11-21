@@ -47,13 +47,24 @@ export async function GET(
       },
     });
   } catch (error) {
-    return NextResponse.json(
-      {
-        success: false,
-        message:
-          error instanceof Error ? error.message : "Failed to fetch goods",
-      },
-      { status: 500 },
-    );
+    if (error instanceof z.ZodError) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Invalid query parameters",
+          errors: error.issues,
+        },
+        { status: 400 },
+      );
+    } else {
+      return NextResponse.json(
+        {
+          success: false,
+          message:
+            error instanceof Error ? error.message : "Failed to fetch goods",
+        },
+        { status: 500 },
+      );
+    }
   }
 }
