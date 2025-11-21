@@ -12,24 +12,14 @@ import { getSurveysForTop } from "@/lib/api/survey";
 export default function HomePage() {
     const categories = ["All", "Web", "Mobile", "Design", "aiueo", "kakikukeko"];
     const [selectedCategory, setSelectedCategory] = React.useState("All");
-    // const [surveys, setSurveys] = React.useState([]);
     const [surveys, setSurveys] = React.useState<any[]>([]);
-
-    // 🔥 ページ表示時に一覧取得して console へ
-    // useEffect(() => {
-    //     async function fetchData() {
-    //         const res = await getSurveysForTop();
-    //         console.log("Top Surveys:", res);
-    //     }
-    //     fetchData();
-    // }, []);
 
     useEffect(() => {
         async function fetchData() {
-            const res = await getSurveysForTop();
+            const res = await getSurveysForTop(1, 10);
             if (res.success) {
                 console.log(res)
-                setSurveys(res.data); // ← ここで state に保存
+                setSurveys(res.data);
             }
         }
         fetchData();
@@ -55,15 +45,11 @@ export default function HomePage() {
             <Section title="Posts" className="gap-[16px]">
                 <div className="flex flex-col gap-[20px] mb-[94px]">
                     <PostCard />
-                    <PostCard />
-                    <PostCard />
-                    <PostCard />
-                    <PostCard />
-                    {surveys.map((item) => (
+                    {/* {surveys.map((item) => (
                         <div key={item.id} className="p-2 border rounded">
                             {item.id}
                         </div>
-                    ))}
+                    ))} */}
                 </div>
             </Section>
         </div>

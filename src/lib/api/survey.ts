@@ -1,50 +1,26 @@
-// トップページ専用
-export async function getSurveysForTop() {
-    try {
-      const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
-      const url = `${baseUrl}/api/surveys?limit=2`;
-  
-      const res = await fetch(url, {
+const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
+export async function getSurveysForTop(page: number, limit: number) {
+  try {
+    const res = await fetch(
+      `${BASE_URL}/api/surveys/unique-per-company?page=${page}&limit=${limit}`,
+      {
         method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-  
-      const json = await res.json();
-  
-      if (!json.success) {
-        return {
-          success: false,
-          message: json.message || "Failed to fetch surveys",
-          data: [],
-        };
+        headers: { "Content-Type": "application/json" },
       }
-  
-      // 必要なデータだけ抽出
-      const formatted = json.data.map((item: any) => ({
-        id: item.id,
-        thumbnailUrl: item.thumbnailUrl,
-        satisfactionLevel: item.satisfactionLevel,
-        country: item.country,
-        // user_favorite: item.user_favorite, // API 実装後に追加
-        isFavorite: item.isFavorite,
-      }));
-  
-      return {
-        success: true,
-        message: "success",
-        data: formatted,
-      };
-    } catch (err) {
-      return {
-        success: false,
-        message: "Network error",
-        data: [],
-      };
+    );
+
+    if (!res.ok) {
+      throw new Error("Failed to fetch surveys");
     }
+
+    const json = await res.json();
+    return json;
+  } catch (err) {
+    console.error(err);
+    return null;
+  }
 }
-  
 
 // 検索・フィルタ付き一覧
 export async function getSurveys() {}
