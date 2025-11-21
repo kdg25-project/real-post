@@ -70,11 +70,11 @@ export async function PATCH(request: NextRequest, { params }: Params) {
         { status: 401 }
       );
     }
-    const { isFavorite } = await request.json();
+    const { isFavorited } = await request.json();
     let result;
 
-    if(!isFavorite === undefined) {
-      if (isFavorite) {
+    if(!isFavorited === undefined) {
+      if (isFavorited) {
         result = await db.insert(favorite).values({
           id: crypto.randomUUID(),
           userId,
