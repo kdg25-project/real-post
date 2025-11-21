@@ -12,7 +12,6 @@ export default function TextForm({ label, type = "text", placeholder = "", value
     return (
         <div className="flex flex-col gap-[12px] m-0">
             <label htmlFor="" className="text-[16px] font-bold">{label}</label>
-            {/* <Input type={type} placeholder={placeholder} /> */}
             <input
                 type={type}
                 placeholder={placeholder}
