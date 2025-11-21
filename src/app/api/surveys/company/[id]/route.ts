@@ -33,6 +33,7 @@ export async function GET(
       companyImage: user.image,
       companyName: companyProfile.companyName,
       favoriteCount: sql<number>`count(${favorite.id})`.mapWith(Number),
+      isFavorited: sql<boolean>`bool_or(${favorite.id} IS NOT NULL)`,
     })
     .from(survey)
     .leftJoin(user, eq(user.id, survey.companyId))
