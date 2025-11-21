@@ -30,7 +30,7 @@ export type SurveyCreateResponse = {
         message: string;
     }
 
-export function SurveyCreate(req: SurveyCreateRequest): Promise<SurveyCreateResponse> {
+export function SurveyCreate(req: SurveyCreateRequest, id: string, token: string | null): Promise<SurveyCreateResponse> {
     const formData = new FormData();
     formData.append("description", req.description);
     formData.append("country", req.country);
@@ -40,10 +40,11 @@ export function SurveyCreate(req: SurveyCreateRequest): Promise<SurveyCreateResp
     formData.append("thumbnail", req.thumbnail ?? "");
     formData.append("images", JSON.stringify(req.images ?? []));
 
-
-
-    return fetch(`/api/survey/token`, {
+    return fetch(`/api/surveys/company/${id}`, {
         method: "POST",
+        headers: {
+            'Authorization': `Bearer ${token}`,
+        },
         body: formData,
     })
         .then((res) => res.json())
