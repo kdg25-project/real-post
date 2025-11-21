@@ -44,12 +44,18 @@ export default function HomePage() {
             </Section>
             <Section title="Posts" className="gap-[16px]">
                 <div className="flex flex-col gap-[20px] mb-[94px]">
-                    <PostCard />
-                    {/* {surveys.map((item) => (
-                        <div key={item.id} className="p-2 border rounded">
-                            {item.id}
-                        </div>
-                    ))} */}
+                    {surveys.map((item) => (
+                        <PostCard
+                            key={item.id}
+                            id={item.id}
+                            thumbnailUrl={item.thumbnailUrl ?? null}
+                            companyName={item.companyName}
+                            country={item.country}
+                            satisfactionLevel={item.satisfactionLevel}
+                            favoriteCount={item.favoriteCount}
+                            isFavorite={item.isFavorite}
+                        />
+                    ))}
                 </div>
             </Section>
         </div>
