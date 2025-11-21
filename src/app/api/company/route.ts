@@ -25,6 +25,7 @@ export async function POST(request: NextRequest) {
     const companyName = formData.get("companyName");
     const companyCategory = formData.get("companyCategory");
     const imageFile = formData.get("image");
+    const placeUrl = formData.get("placeUrl");
 
     let imageUrl: string | null = null;
     if (imageFile && imageFile instanceof File) {
@@ -62,6 +63,7 @@ export async function POST(request: NextRequest) {
           | "shopping"
           | "other",
         imageUrl: imageUrl,
+        placeUrl: placeUrl ? String(placeUrl) : null,
       })
       .returning();
 
@@ -159,6 +161,19 @@ export async function PATCH(
     const companyName = formData.get("companyName") ?? undefined;
     const companyCategory = formData.get("companyCategory") ?? undefined;
     const imageFile = formData.get("image") ?? undefined;
+    let placeUrl = formData.get("placeUrl") ?? undefined;
+
+    if (placeUrl && typeof placeUrl === "string" && placeUrl.includes("maps.app.goo.gl")) {
+      try {
+        const response = await fetch(placeUrl, {
+          method: "HEAD",
+          redirect: "follow",
+        });
+        placeUrl = response.url;
+      } catch (err) {
+        console.error("Error resolving placeUrl redirect:", err);
+      }
+    }
 
     let imageUrl: string | null = null;
     if (imageFile && imageFile instanceof File) {
@@ -175,6 +190,9 @@ export async function PATCH(
     }
     if (imageUrl) {
       updates.imageUrl = imageUrl;
+    }
+    if (placeUrl && typeof placeUrl === "string") {
+      updates.placeUrl = placeUrl;
     }
 
     const result = await db

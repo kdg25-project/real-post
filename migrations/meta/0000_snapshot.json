@@ -1,5 +1,5 @@
 {
-  "id": "4f3cf12b-6069-4270-be74-6e354d93d95e",
+  "id": "ae8a2d51-2882-4f77-977d-9f48fb033ec0",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -97,12 +97,6 @@
           "type": "varchar(255)",
           "primaryKey": false,
           "notNull": true
-        },
-        "description": {
-          "name": "description",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
         },
         "created_at": {
           "name": "created_at",
@@ -556,6 +550,12 @@
           "primaryKey": false,
           "notNull": true
         },
+        "image_url": {
+          "name": "image_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
         "company_category": {
           "name": "company_category",
           "type": "text",
@@ -778,6 +778,12 @@
           "type": "text",
           "primaryKey": false,
           "notNull": true
+        },
+        "country": {
+          "name": "country",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
         },
         "created_at": {
           "name": "created_at",

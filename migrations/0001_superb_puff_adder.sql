@@ -1,1 +1,0 @@
-ALTER TABLE "company_profile" ADD COLUMN "image_url" text;

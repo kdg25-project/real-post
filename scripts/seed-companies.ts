@@ -6,9 +6,22 @@
  * 2. 別ターミナルで実行: npx tsx scripts/seed-companies.ts
  */
 
+import { readFileSync } from "fs";
+import { join } from "path";
+
 const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
 const NUM_COMPANIES = 5; // 作成するカンパニー数
 const SURVEYS_PER_COMPANY = 5; // 各カンパニーが作成するサーベイ数
+
+// 画像ファイルのパス
+const COMPANY_IMAGE_PATH = join(__dirname, "company-image.png");
+const SURVEY_IMAGE_PATH = join(__dirname, "survey-image.png");
+
+// ランダムに使用するplaceUrl
+const PLACE_URLS = [
+  "https://www.google.com/maps/place/%E3%83%9E%E3%82%AF%E3%83%89%E3%83%8A%E3%83%AB%E3%83%89+%EF%BC%AA%EF%BC%B2%E5%90%8D%E5%8F%A4%E5%B1%8B%E9%A7%85%E5%BA%97/@35.1692422,136.8435633,6709m/data=!3m1!1e3!4m6!3m5!1s0x600376e6335e5d4d:0x632e9cb3154fd755!8m2!3d35.1692422!4d136.8816721!16s%2Fg%2F1tdz9btv?entry=ttu&g_ep=EgoyMDI1MTExNy4wIKXMDSoASAFQAw%3D%3D",
+  "https://maps.app.goo.gl/ur2mqTTWdEdNxVdr9",
+];
 
 type CompanyCategory = "food" | "culture" | "activity" | "shopping" | "other";
 type Gender = "male" | "female" | "other";
@@ -32,31 +45,31 @@ interface SurveyData {
 // カンパニーデータの定義
 const companies: CompanyData[] = [
   {
-    email: "ramen.tokyo@example.com",
+    email: `test-ramen-${Date.now()}@example.com`,
     password: "Password123!",
     companyName: "Tokyo Ramen House",
     companyCategory: "food",
   },
   {
-    email: "kyoto.temple@example.com",
+    email: `test-kyoto-${Date.now() + 1}@example.com`,
     password: "Password123!",
     companyName: "Kyoto Cultural Experience",
     companyCategory: "culture",
   },
   {
-    email: "osaka.adventure@example.com",
+    email: `test-osaka-${Date.now() + 2}@example.com`,
     password: "Password123!",
     companyName: "Osaka Adventure Tours",
     companyCategory: "activity",
   },
   {
-    email: "shibuya.shop@example.com",
+    email: `test-shibuya-${Date.now() + 3}@example.com`,
     password: "Password123!",
     companyName: "Shibuya Fashion Mall",
     companyCategory: "shopping",
   },
   {
-    email: "hokkaido.experience@example.com",
+    email: `test-hokkaido-${Date.now() + 4}@example.com`,
     password: "Password123!",
     companyName: "Hokkaido Experience Center",
     companyCategory: "other",
@@ -109,7 +122,7 @@ async function createCompanyUser(companyData: CompanyData): Promise<{ userId: st
   try {
     console.log(`Creating company: ${companyData.companyName}...`);
     
-    // サインアップ
+    // サインアップ (accountTypeのみ指定、プロフィールは後で作成)
     const signupResponse = await fetch(`${BASE_URL}/api/auth/signup`, {
       method: "POST",
       headers: {
@@ -119,8 +132,7 @@ async function createCompanyUser(companyData: CompanyData): Promise<{ userId: st
         email: companyData.email,
         password: companyData.password,
         accountType: "company",
-        companyName: companyData.companyName,
-        companyCategory: companyData.companyCategory,
+        name: companyData.companyName,
       }),
     });
 
@@ -131,7 +143,7 @@ async function createCompanyUser(companyData: CompanyData): Promise<{ userId: st
     }
 
     const signupResult = await signupResponse.json();
-    console.log(`✓ Company created: ${companyData.companyName}`);
+    console.log(`✓ Company account created: ${companyData.companyName}`);
 
     // ログイン（セッショントークンを取得）
     const loginResponse = await fetch(`${BASE_URL}/api/auth/sign-in/email`, {
@@ -160,6 +172,44 @@ async function createCompanyUser(companyData: CompanyData): Promise<{ userId: st
       }
     }
 
+    if (!token) {
+      console.error(`Failed to get session token for ${companyData.companyName}`);
+      return null;
+    }
+
+    // カンパニープロフィールを作成（画像含む）
+    console.log(`Creating company profile with image...`);
+    const imageBuffer = readFileSync(COMPANY_IMAGE_PATH);
+    const blob = new Blob([imageBuffer], { type: "image/png" });
+    const file = new File([blob], "company-image.png", {
+      type: "image/png",
+    });
+
+    // ランダムにplaceUrlを選択
+    const randomPlaceUrl = PLACE_URLS[Math.floor(Math.random() * PLACE_URLS.length)];
+
+    const formData = new FormData();
+    formData.append("companyName", companyData.companyName);
+    formData.append("companyCategory", companyData.companyCategory);
+    formData.append("placeUrl", randomPlaceUrl);
+    formData.append("image", file);
+
+    const profileResponse = await fetch(`${BASE_URL}/api/company`, {
+      method: "POST",
+      headers: {
+        Cookie: `better-auth.session_token=${token}`,
+      },
+      body: formData,
+    });
+
+    if (!profileResponse.ok) {
+      const error = await profileResponse.json();
+      console.error(`Failed to create company profile:`, error);
+      return null;
+    }
+
+    console.log(`✓ Company profile created with image`);
+
     return {
       userId: signupResult.user.id,
       token,
@@ -179,13 +229,27 @@ async function createSurvey(
   surveyData: SurveyData
 ): Promise<boolean> {
   try {
+    // サーベイ画像をBlobとしてFormDataに追加
+    const imageBuffer = readFileSync(SURVEY_IMAGE_PATH);
+    const blob = new Blob([imageBuffer], { type: "image/png" });
+    const file = new File([blob], "survey-image.png", {
+      type: "image/png",
+    });
+
+    const formData = new FormData();
+    formData.append("description", surveyData.description);
+    formData.append("gender", surveyData.gender);
+    formData.append("ageGroup", surveyData.ageGroup);
+    formData.append("satisfactionLevel", surveyData.satisfactionLevel.toString());
+    formData.append("country", surveyData.country);
+    formData.append("thumbnail", file);
+
     const response = await fetch(`${BASE_URL}/api/surveys`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
         Cookie: `better-auth.session_token=${token}`,
       },
-      body: JSON.stringify(surveyData),
+      body: formData,
     });
 
     if (!response.ok) {

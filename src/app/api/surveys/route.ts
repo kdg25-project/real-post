@@ -159,38 +159,41 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const body = await request.json();
-    const {
-      description,
-      thumbnailUrl,
-      gender,
-      ageGroup,
-      satisfactionLevel,
-      country,
-      imageUrls,
-    } = body;
+    // FormDataで受け取る
+    const formData = await request.formData();
+    const description = formData.get("description");
+    const gender = formData.get("gender");
+    const ageGroup = formData.get("ageGroup");
+    const satisfactionLevel = formData.get("satisfactionLevel");
+    const country = formData.get("country");
+    const thumbnailFile = formData.get("thumbnail");
+
+    // サムネイル画像をアップロード
+    let thumbnailUrl: string | null = null;
+    if (thumbnailFile && thumbnailFile instanceof File) {
+      const { uploadFileToR2 } = await import("@/lib/r2");
+      thumbnailUrl = await uploadFileToR2(thumbnailFile, "surveys");
+    }
 
     // サーベイを作成
     const newSurvey = await db.insert(survey).values({
       id: crypto.randomUUID(),
       companyId: session.user.id,
-      description: description || null,
-      thumbnailUrl: thumbnailUrl || null,
-      gender: gender || null,
-      ageGroup: ageGroup || null,
-      satisfactionLevel: satisfactionLevel || null,
-      country: country || null,
+      description: description ? String(description) : null,
+      thumbnailUrl: thumbnailUrl,
+      gender: gender ? String(gender) as "male" | "female" | "other" : null,
+      ageGroup: ageGroup ? String(ageGroup) as AgeGroup : null,
+      satisfactionLevel: satisfactionLevel ? parseInt(String(satisfactionLevel)) : null,
+      country: country ? String(country) : null,
     }).returning();
 
-    // 画像URLがある場合は画像を追加
-    if (imageUrls && Array.isArray(imageUrls) && imageUrls.length > 0) {
-      const imageValues = imageUrls.map((url: string) => ({
+    // サムネイルを画像としても追加
+    if (thumbnailUrl) {
+      await db.insert(surveyImage).values({
         id: crypto.randomUUID(),
         surveyId: newSurvey[0].id,
-        imageUrl: url,
-      }));
-
-      await db.insert(surveyImage).values(imageValues);
+        imageUrl: thumbnailUrl,
+      });
     }
 
     return NextResponse.json(
