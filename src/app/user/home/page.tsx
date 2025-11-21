@@ -7,23 +7,46 @@ import Slider from "@/components/layouts/SliderArea";
 import Section from "@/components/layouts/Section";
 import CategoryButton from "@/components/elements/CategoryButton";
 import PostCard from "@/components/elements/PostCard";
-import { getSurveysForTop } from "@/lib/api/survey";
+import { getSurveysForTop, getSurveys } from "@/lib/api/survey";
 
 export default function HomePage() {
-    const categories = ["All", "Web", "Mobile", "Design", "aiueo", "kakikukeko"];
+    const categories = ["All", "Food", "Culture", "Activity", "Shopping", "Other"];
     const [selectedCategory, setSelectedCategory] = React.useState("All");
     const [surveys, setSurveys] = React.useState<any[]>([]);
+    const [isFilteredMode, setIsFilteredMode] = React.useState(false);
 
+    // -----------------------------
+    // 初回トップ一覧
+    // -----------------------------
     useEffect(() => {
         async function fetchData() {
             const res = await getSurveysForTop(1, 10);
-            if (res.success) {
-                console.log(res)
+            if (res?.success) {
                 setSurveys(res.data);
             }
         }
         fetchData();
     }, []);
+
+    // -----------------------------
+    // カテゴリ変更時（条件付き一覧モード）
+    // -----------------------------
+    useEffect(() => {
+        if (!isFilteredMode) return;
+
+        async function fetchFiltered() {
+            // 現在はカテゴリのみ対応。検索・絞り込みは後で追加
+            const res = await getSurveys({
+                page: 1,
+                limit: 10,
+                category: selectedCategory !== "All" ? selectedCategory : undefined,
+            });
+
+            if (res?.success) setSurveys(res.data);
+        }
+
+        fetchFiltered();
+    }, [isFilteredMode, selectedCategory]);
 
     return (
         <div>
@@ -38,6 +61,10 @@ export default function HomePage() {
                             key={cat}
                             name={cat}
                             selected={selectedCategory === cat}
+                        // onClick={() => {
+                        //     setSelectedCategory(cat);
+                        //     setIsFilteredMode(true); // ← 絞り込みモードに切り替え
+                        // }}
                         />
                     ))}
                 </div>
