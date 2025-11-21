@@ -28,39 +28,23 @@ export async function getSurveysForTop(page: number, limit: number) {
 // ------------------------------
 // 検索 + 絞り込み一覧
 // ------------------------------
-export async function getSurveys({
-  page,
-  limit,
-  category,
-  query,
-  ageGroup,
-  country,
-  gender,
-}: {
-  page: number;
-  limit: number;
-  category?: string;
-  query?: string;
-  ageGroup?: string;
-  country?: string;
-  gender?: string;
-}) {
+export async function getSurveys(params: { page: any; limit: any; category?: any; query?: any; ageGroup?: any; country?: any; gender?: any; }) {
   try {
-    const url = new URL(`/api/surveys`);
+    let query = new URLSearchParams();
 
-    url.searchParams.set("page", String(page));
-    url.searchParams.set("limit", String(limit));
+    query.set("page", String(params.page));
+    query.set("limit", String(params.limit));
+    if (params.category) query.set("category", params.category);
+    if (params.query) query.set("query", params.query);
+    if (params.ageGroup) query.set("age_group", params.ageGroup);
+    if (params.country) query.set("country", params.country);
+    if (params.gender) query.set("gender", params.gender);
 
-    if (category) url.searchParams.set("category", category);
-    if (query) url.searchParams.set("query", query);
-    if (ageGroup) url.searchParams.set("age_group", ageGroup);
-    if (country) url.searchParams.set("country", country);
-    if (gender) url.searchParams.set("gender", gender);
+    const url = `/api/surveys?${query.toString()}`;
 
-    // ← ここでURLをログ
-    console.log("[getSurveys] Fetch URL:", url.toString());
+    console.log("[getSurveys] URL:", url);
 
-    const res = await fetch(url.toString(), {
+    const res = await fetch(url, {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     });
@@ -73,6 +57,7 @@ export async function getSurveys({
     return null;
   }
 }
+
 
 // お気に入り一覧専用
 export async function getFavoriteSurveys() {}
