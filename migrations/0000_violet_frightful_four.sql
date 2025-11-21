@@ -10,7 +10,6 @@ CREATE TABLE "goods" (
 	"id" text PRIMARY KEY NOT NULL,
 	"company_id" text NOT NULL,
 	"name" varchar(255) NOT NULL,
-	"description" text,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp DEFAULT now() NOT NULL
 );
@@ -75,6 +74,7 @@ CREATE TABLE "company_profile" (
 	"id" text PRIMARY KEY NOT NULL,
 	"user_id" text NOT NULL,
 	"company_name" text NOT NULL,
+	"image_url" text,
 	"company_category" text NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp DEFAULT now() NOT NULL,
@@ -108,6 +108,7 @@ CREATE TABLE "user" (
 CREATE TABLE "user_profile" (
 	"id" text PRIMARY KEY NOT NULL,
 	"user_id" text NOT NULL,
+	"country" text,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp DEFAULT now() NOT NULL,
 	CONSTRAINT "user_profile_user_id_unique" UNIQUE("user_id")

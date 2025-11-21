@@ -1,6 +1,6 @@
 {
-  "id": "da582ab0-53a8-4ac1-930f-80fafa9f5a7f",
-  "prevId": "4f3cf12b-6069-4270-be74-6e354d93d95e",
+  "id": "9a277ff6-eae3-4a53-b9db-40213d57c5d2",
+  "prevId": "ae8a2d51-2882-4f77-977d-9f48fb033ec0",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -97,12 +97,6 @@
           "type": "varchar(255)",
           "primaryKey": false,
           "notNull": true
-        },
-        "description": {
-          "name": "description",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
         },
         "created_at": {
           "name": "created_at",
@@ -562,6 +556,12 @@
           "primaryKey": false,
           "notNull": false
         },
+        "place_url": {
+          "name": "place_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
         "company_category": {
           "name": "company_category",
           "type": "text",
@@ -784,6 +784,12 @@
           "type": "text",
           "primaryKey": false,
           "notNull": true
+        },
+        "country": {
+          "name": "country",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
         },
         "created_at": {
           "name": "created_at",
