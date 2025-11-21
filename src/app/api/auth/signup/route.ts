@@ -2,18 +2,12 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { db } from "@/db";
 import { companyProfile, userProfile } from "@/db/schema";
-import { uploadFileToR2 } from "@/lib/r2";
 
 export async function POST(request: NextRequest) {
   try {
-    const formData = await request.formData();
+    const body = await request.json();
     
-    const email = formData.get('email') as string;
-    const password = formData.get('password') as string;
-    const accountType = formData.get('accountType') as string;
-    const companyName = formData.get('companyName') as string | null;
-    const companyCategory = formData.get('companyCategory') as string | null;
-    const imageFile = formData.get('image') as File | null;
+    const { email, password, accountType, companyName, companyCategory } = body;
 
     if (!email || !password || !accountType) {
       return NextResponse.json(
@@ -29,17 +23,11 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (accountType === "company" && (!companyName || !companyCategory || !imageFile)) {
-      return NextResponse.json (
-        { error: "Company name, category, and image are required for company accounts" },
+    if (accountType === "company" && (!companyName || !companyCategory)) {
+      return NextResponse.json(
+        { error: "Company name and category are required for company accounts" },
         { status: 400 }
       );
-    }
-
-    // 画像をR2にアップロード
-    let imageUrl: string | null = null;
-    if (imageFile && imageFile.size > 0) {
-      imageUrl = await uploadFileToR2(imageFile, 'profiles');
     }
 
     const signUpResult = await auth.api.signUpEmail({
@@ -48,7 +36,6 @@ export async function POST(request: NextRequest) {
         password,
         name: accountType === "company" ? (companyName || email) : email,
         accountType,
-        image: imageUrl || undefined,
       },
     });
 
