@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
     let imageUrl: string | null = null;
     if (imageFile && imageFile instanceof File) {
       // R2にアップロード
-      imageUrl = await uploadFileToR2("company-profiles", imageFile);
+      imageUrl = await uploadFileToR2(imageFile, "company-profiles");
     }
 
     const [existingProfile] = await db
@@ -55,6 +55,7 @@ export async function POST(request: NextRequest) {
     const result = await db
       .insert(companyProfile)
       .values({
+        id: crypto.randomUUID(),
         userId: user.id,
         companyName: String(companyName),
         companyCategory: String(companyCategory) as
