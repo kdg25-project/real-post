@@ -58,6 +58,9 @@ export async function getSurveys({
     if (country) url.searchParams.set("country", country);
     if (gender) url.searchParams.set("gender", gender);
 
+    // ← ここでURLをログ
+    console.log("[getSurveys] Fetch URL:", url.toString());
+
     const res = await fetch(url.toString(), {
       method: "GET",
       headers: { "Content-Type": "application/json" },

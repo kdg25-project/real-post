@@ -10,8 +10,8 @@ import PostCard from "@/components/elements/PostCard";
 import { getSurveysForTop, getSurveys } from "@/lib/api/survey";
 
 export default function HomePage() {
-    const categories = ["All", "Food", "Culture", "Activity", "Shopping", "Other"];
-    const [selectedCategory, setSelectedCategory] = React.useState("All");
+    const categories = ["all", "food", "cluture", "activity", "shopping", "other"];
+    const [selectedCategory, setSelectedCategory] = React.useState("all");
     const [surveys, setSurveys] = React.useState<any[]>([]);
     const [isFilteredMode, setIsFilteredMode] = React.useState(false);
 
@@ -20,7 +20,7 @@ export default function HomePage() {
     // -----------------------------
     useEffect(() => {
         async function fetchData() {
-            const res = await getSurveysForTop(1, 10);
+            const res = await getSurveysForTop(1, 3);
             if (res?.success) {
                 setSurveys(res.data);
             }
@@ -35,12 +35,16 @@ export default function HomePage() {
         if (!isFilteredMode) return;
 
         async function fetchFiltered() {
-            // 現在はカテゴリのみ対応。検索・絞り込みは後で追加
-            const res = await getSurveys({
-                page: 1,
-                limit: 10,
-                category: selectedCategory !== "All" ? selectedCategory : undefined,
-            });
+            let res;
+            if (selectedCategory === "all") {
+                res = await getSurveysForTop(1, 10);
+            } else {
+                res = await getSurveys({
+                    page: 1,
+                    limit: 10,
+                    category: selectedCategory,
+                });
+            }
 
             if (res?.success) setSurveys(res.data);
         }
@@ -50,7 +54,21 @@ export default function HomePage() {
 
     return (
         <div>
-            <Header searchArea={true} />
+            <Header
+                searchArea={true}
+                onSearch={(keyword) => {
+                    setIsFilteredMode(true);
+                    async function fetchSearch() {
+                        const res = await getSurveys({
+                            page: 1,
+                            limit: 10,
+                            query: keyword,
+                        });
+                        if (res?.success) setSurveys(res.data);
+                    }
+                    fetchSearch();
+                }}
+            />
 
             <Spacer size="lg" />
             <Slider />
@@ -61,10 +79,10 @@ export default function HomePage() {
                             key={cat}
                             name={cat}
                             selected={selectedCategory === cat}
-                        // onClick={() => {
-                        //     setSelectedCategory(cat);
-                        //     setIsFilteredMode(true); // ← 絞り込みモードに切り替え
-                        // }}
+                            onClick={() => {
+                                setSelectedCategory(cat);
+                                setIsFilteredMode(true);
+                            }}
                         />
                     ))}
                 </div>
