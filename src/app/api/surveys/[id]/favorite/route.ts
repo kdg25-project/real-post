@@ -70,10 +70,20 @@ export async function PATCH(request: NextRequest, { params }: Params) {
         { status: 401 }
       );
     }
-    const { isFavorite } = await request.json();
+    
+    // リクエストボディの取得と検証
+    let isFavorite: boolean | undefined;
+    try {
+      const body = await request.json();
+      isFavorite = body.isFavorite;
+    } catch {
+      // ボディが空の場合は、トグル処理を実行
+      isFavorite = undefined;
+    }
+    
     let result;
 
-    if(!isFavorite === undefined) {
+    if(isFavorite !== undefined) {
       if (isFavorite) {
         result = await db.insert(favorite).values({
           id: crypto.randomUUID(),
