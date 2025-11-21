@@ -4,9 +4,13 @@ import { useState } from "react";
 import TextForm from "@/components/layouts/TextForm";
 import ImageUpload from "@/components/layouts/ImageUpload";
 import { CategoryForm,NativeSelectOption, NativeSelectOptGroup } from "@/components/layouts/CategoryForm";
+import { companyCreate } from "@/lib/api/company-create"
+import { useRouter } from "next/navigation";
+import PrimaryButton from "@/components/elements/PrimaryButton"
 export default function StoreInformationCreationPage() {
-    const [preview1, setPreview1] = useState<string | null>(null);
-    const [preview2, setPreview2] = useState<string | null>(null);
+    const [preview, setPreview] = useState<string | null>(null);
+
+    const router = useRouter();
 
     return (
         <div className="flex flex-col justify-center gap-6">
@@ -25,11 +29,24 @@ export default function StoreInformationCreationPage() {
             </CategoryForm>
             <ImageUpload
                 label="店舗画像"
-                preview={preview1 ?? undefined}
+                preview={preview ?? undefined}
                 onChange={(file) => {
                     if (!file) return;
                     const url = URL.createObjectURL(file);
-                    setPreview1(url);
+                    setPreview(url);
+                }}
+            />
+            <PrimaryButton
+                text="登録"
+                onClick={async () => {
+                    const result = await companyCreate({
+                        companyName: "name",
+                        companyCategory: "category",
+                        imageFile: new Blob(),
+                    })
+                    if (result.success) {
+                        router.push("/admin/auth/goods-register")
+                    }
                 }}
             />
         </div>

@@ -38,6 +38,10 @@ export default function SignUpPage() {
                         }
                     }}
                 />
+                <button className="flex justify-start w-fit text-[12px] text-gray-500 border-b-1 border-gray-500" 
+                    onClick={() => router.push("/admin/auth/login") }>
+                    <p>すでにアカウントをお持ちですか? ログイン</p>
+                </button>
             </div>
         </div>
     )

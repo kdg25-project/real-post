@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from "react";
+import { link } from "fs";
 import { useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client"
 import TextForm from "@/components/layouts/TextForm"
@@ -39,6 +40,10 @@ export default function LoginPage() {
                         })
                     }}
                 />
+                <button className="flex justify-start w-fit  text-[12px] text-gray-500 border-b-1 border-gray-500"
+                    onClick={() => router.push("/admin/auth/signup") }>
+                    <p>アカウントを持っていませんか ? 新規作成</p>
+                </button>
             </div>
         </div>
     )
