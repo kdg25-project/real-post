@@ -1,5 +1,3 @@
-import { methods } from "better-auth/react";
-
 export type SurveyCreateRequest = {
     description: string;
     thumbnail?: Blob | File;
@@ -39,8 +37,8 @@ export function SurveyCreate(req: SurveyCreateRequest): Promise<SurveyCreateResp
     formData.append("satisfactionLevel", req.satisfactionLevel.toString());
     formData.append("gender", req.gender ?? "");
     formData.append("ageGroup", req.ageGroup ?? "");
-    formData.append("thumbnailUrl", req.thumbnailUrl ?? "");
-    formData.append("imageUrls", JSON.stringify(req.imageUrls ?? []));
+    formData.append("thumbnail", req.thumbnail ?? "");
+    formData.append("images", JSON.stringify(req.images ?? []));
 
 
 
