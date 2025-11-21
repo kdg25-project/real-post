@@ -25,13 +25,12 @@ export default function DetailPage() {
     // -----------------------------
     // データ取得
     // -----------------------------
-    // ほんとはここカテゴリー別に取得したい
     useEffect(() => {
         async function fetchData() {
             if (!id) return;
             setIsLoading(true);
 
-            // 詳細情報取得
+            // 詳細情報
             const result = await getSurveyDetail(id);
             if (result?.success) {
                 setData(result.data);
@@ -39,8 +38,14 @@ export default function DetailPage() {
                 setCount(result.data.favoriteCount);
             }
 
-            // 他の投稿も取得
-            const other = await getSurveys({ page: 1, limit: 5 });
+            const category = result?.data?.companyCategory;
+            const other = await getSurveys({
+                page: 1,
+                limit: 5,
+                category: category,
+            });
+            // -------------------------
+
             if (other?.success) setOtherPosts(other.data);
 
             setIsLoading(false);
