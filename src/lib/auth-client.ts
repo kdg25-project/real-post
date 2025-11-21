@@ -41,6 +41,11 @@ export async function signUp(data: {
     throw new Error(error.error || "Signup failed");
   }
 
+  await signIn.email({
+    email: data.email,
+    password: data.password,
+  });
+
   return response.json();
 }
 
