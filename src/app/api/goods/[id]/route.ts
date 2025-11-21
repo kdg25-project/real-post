@@ -1,5 +1,6 @@
 import { db } from "@/db";
 import { NextRequest, NextResponse } from "next/server";
+import type { ApiResponse } from "@/types";
 
 export async function GET(
   _req: NextRequest,
@@ -14,7 +15,7 @@ export async function GET(
       where: (table, { eq }) => eq(table.id, id),
     });
     if (!goodsfromid) {
-      return NextResponse.json(
+      return NextResponse.json<ApiResponse<never>>(
         {
           success: false,
           message: "Not Found",
@@ -22,13 +23,13 @@ export async function GET(
         { status: 404 },
       );
     }
-    return NextResponse.json({
+    return NextResponse.json<ApiResponse<typeof goodsfromid>>({
       success: true,
       message: "Goods fetched successfully",
       data: goodsfromid,
     });
   } catch (error) {
-    return NextResponse.json(
+    return NextResponse.json<ApiResponse<never>>(
       {
         success: false,
         message:

@@ -4,6 +4,7 @@ import { db } from "@/db";
 import { goods } from "@/db/schema";
 import { sql, eq } from "drizzle-orm";
 import { uploadFileToR2 } from "@/lib/r2";
+import type { ApiResponse } from "@/types";
 
 // ================== スキーマ定義 ==================
 export const pageSchema = z.coerce.number().min(1).default(1);
@@ -63,7 +64,7 @@ export async function uploadGoodsImages(images: Blob[]): Promise<string[]> {
 // ================== エラーハンドリング ==================
 export function handleGoodsError(error: unknown, defaultMessage: string) {
   if (error instanceof z.ZodError) {
-    return NextResponse.json(
+    return NextResponse.json<ApiResponse<never>>(
       {
         success: false,
         message: "Invalid parameters",
@@ -72,7 +73,7 @@ export function handleGoodsError(error: unknown, defaultMessage: string) {
       { status: 400 },
     );
   }
-  return NextResponse.json(
+  return NextResponse.json<ApiResponse<never>>(
     {
       success: false,
       message: error instanceof Error ? error.message : defaultMessage,

@@ -5,6 +5,7 @@ import {
   getPaginationParams,
   handleGoodsError,
 } from "../../utils";
+import type { ApiResponse } from "@/types";
 
 export async function GET(
   req: NextRequest,
@@ -24,7 +25,7 @@ export async function GET(
       }),
       getGoodsCount(id),
     ]);
-    return NextResponse.json({
+    return NextResponse.json<ApiResponse<typeof goodsfromid>>({
       success: true,
       message: "Goods fetched successfully",
       data: goodsfromid,

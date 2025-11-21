@@ -9,6 +9,7 @@ import {
   goodsFormDataSchema,
   uploadGoodsImages,
 } from "./utils";
+import type { ApiResponse } from "@/types";
 
 export async function GET(req: NextRequest) {
   try {
@@ -24,7 +25,7 @@ export async function GET(req: NextRequest) {
       getGoodsCount(),
     ]);
 
-    return NextResponse.json({
+    return NextResponse.json<ApiResponse<typeof allGoods>>({
       success: true,
       message: "Goods fetched successfully",
       data: allGoods,
@@ -43,7 +44,7 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   const { error, user } = await requireCompanyAccount(req);
   if (error) {
-    return NextResponse.json(
+    return NextResponse.json<ApiResponse<never>>(
       {
         success: false,
         message: "User is not authenticated or does not have a company account",
@@ -77,7 +78,9 @@ export async function POST(req: NextRequest) {
       await tx.insert(goodsImage).values(newGoodsImages);
     });
 
-    return NextResponse.json({
+    return NextResponse.json<
+      ApiResponse<{ id: string; name: string; image_urls: string[] }>
+    >({
       success: true,
       message: "Goods created successfully",
       data: {
