@@ -15,18 +15,20 @@ export default function SignUpPage() {
         <div>
             <Header searchArea={false} />
             <Spacer size="sm" />
-            <TextForm label="Email" type="email" placeholder="example@gmail.com" onChange={(e) => setEmail(e.target.value)} />
-            <TextForm label="Password" type="password" placeholder="password" onChange={(e) => setPassword(e.target.value)} />
-            <PrimaryButton
-                text="SignUp"
-                onClick={async () => {
-                    await signUp({
-                        email: email,
-                        password: password,
-                        accountType: "user",
-                    })
-                }}
-            />
+            <div className="flex flex-col gap-[24px]">
+                <TextForm label="Email" type="email" placeholder="example@gmail.com" onChange={(e) => setEmail(e.target.value)} />
+                <TextForm label="Password" type="password" placeholder="password" onChange={(e) => setPassword(e.target.value)} />
+                <PrimaryButton
+                    text="SignUp"
+                    onClick={async () => {
+                        await signUp({
+                            email: email,
+                            password: password,
+                            accountType: "user",
+                        })
+                    }}
+                />
+            </div>
         </div>
     )
 }
