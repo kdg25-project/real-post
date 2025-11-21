@@ -7,9 +7,10 @@ import TextForm from "@/components/layouts/TextForm"
 import PrimaryButton from "@/components/elements/PrimaryButton"
 
 export default function SignUpPage() {
+    const router = useRouter();
+
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const router = useRouter();
 
     return (
         <div>
@@ -28,14 +29,11 @@ export default function SignUpPage() {
                 <PrimaryButton
                     text="登録"
                     onClick={async () => {
-                        const result = await signUp({
+                        await signUp({
                             email: email,
                             password: password,
-                            accountType: "company"
+                            accountType: "company",
                         })
-                        if (result.success) {
-                            router.push("/admin/auth/store-create")
-                        }
                     }}
                 />
                 <button className="flex justify-start w-fit text-[12px] text-gray-500 border-b-1 border-gray-500" 

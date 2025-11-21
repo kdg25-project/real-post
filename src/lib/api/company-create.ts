@@ -1,10 +1,11 @@
-type CompanyCreateRequest = {
+export type CompanyCreateRequest = {
     companyName: string;
     companyCategory: string;
+    placeUrl: string;
     imageFile: Blob | File;
 }
 
-type CompanyCreateResponse = {
+export type CompanyCreateResponse = {
     success: true,
     message: string,
     data: {
