@@ -20,27 +20,6 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-## Database Seeding
-
-To populate the database with test data (company users and surveys):
-
-1. Make sure the development server is running:
-```bash
-pnpm dev
-```
-
-2. In a separate terminal, install dependencies if you haven't already:
-```bash
-pnpm install
-```
-
-3. Run the seeder script:
-```bash
-pnpm seed
-```
-
-This will create 5 company users with complete profiles and 5 surveys for each company (25 surveys total).
-
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:
