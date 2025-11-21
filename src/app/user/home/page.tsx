@@ -1,16 +1,39 @@
 'use client';
 
-import React from "react";
+import React, { useEffect } from "react";
 import Header from "@/components/layouts/Header";
 import Spacer from "@/components/elements/Spacer";
 import Slider from "@/components/layouts/SliderArea";
 import Section from "@/components/layouts/Section";
 import CategoryButton from "@/components/elements/CategoryButton";
 import PostCard from "@/components/elements/PostCard";
+import { getSurveysForTop } from "@/lib/api/survey";
 
 export default function HomePage() {
     const categories = ["All", "Web", "Mobile", "Design", "aiueo", "kakikukeko"];
     const [selectedCategory, setSelectedCategory] = React.useState("All");
+    // const [surveys, setSurveys] = React.useState([]);
+    const [surveys, setSurveys] = React.useState<any[]>([]);
+
+    // 🔥 ページ表示時に一覧取得して console へ
+    // useEffect(() => {
+    //     async function fetchData() {
+    //         const res = await getSurveysForTop();
+    //         console.log("Top Surveys:", res);
+    //     }
+    //     fetchData();
+    // }, []);
+
+    useEffect(() => {
+        async function fetchData() {
+            const res = await getSurveysForTop();
+            if (res.success) {
+                console.log(res)
+                setSurveys(res.data); // ← ここで state に保存
+            }
+        }
+        fetchData();
+    }, []);
 
     return (
         <div>
@@ -36,6 +59,11 @@ export default function HomePage() {
                     <PostCard />
                     <PostCard />
                     <PostCard />
+                    {surveys.map((item) => (
+                        <div key={item.id} className="p-2 border rounded">
+                            {item.id}
+                        </div>
+                    ))}
                 </div>
             </Section>
         </div>
