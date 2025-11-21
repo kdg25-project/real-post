@@ -18,6 +18,7 @@ export async function getSurveysForTop(page: number, limit: number) {
     }
 
     const json = await res.json();
+    console.log(json)
     return json;
   } catch (err) {
     console.error(err);
