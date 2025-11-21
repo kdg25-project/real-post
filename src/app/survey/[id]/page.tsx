@@ -81,7 +81,7 @@ export default function Survey() {
             </CategoryForm>
             <div className="flex flex-col gap-[12px] m-0">
                 <p>Your Review</p>
-                <textarea className="w-full h-40 bg-white shadow-base rounded-[14px] resize-none" name="Your Review" id="" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })}>
+                <textarea className=" w-full h-40 p-5 bg-white shadow-base rounded-[14px] resize-none" name="Your Review" id="" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })}>
 
                 </textarea>
             </div>
@@ -101,8 +101,9 @@ export default function Survey() {
             </label>
             <PrimaryButton 
             text="submit" 
-            onClick={() => {
+            onClick={async () => {
                 if (!isChecked) return;
+                await SurveyCreate(form);
                 console.log(form)
             }} />
         </div>
