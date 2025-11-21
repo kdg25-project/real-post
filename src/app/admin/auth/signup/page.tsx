@@ -17,7 +17,7 @@ export default function SignUpPage() {
             <div className="flex flex-col justify-center items-center font-bold gap-20 py-5">
                 <div className="flex items-center justify-between">
                     <div>
-                        <p className="text-gray-dark text-[14px] font-semibold">welecome to</p>
+                        <p className="text-gray-dark text-[14px] font-semibold">welcome to</p>
                         <h1 className="text-[26px] font-bold leading-tight">Real Post</h1>
                     </div>
                 </div>
