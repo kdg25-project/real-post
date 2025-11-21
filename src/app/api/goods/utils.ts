@@ -7,27 +7,15 @@ import { uploadFileToR2 } from "@/lib/r2";
 import type { ApiResponse } from "@/types";
 
 // ================== スキーマ定義 ==================
-export const pageSchema = z.coerce.number().min(1).default(1);
-export const limitSchema = z.coerce.number().min(1).max(100).default(10);
-
-export const goodsFormDataSchema = z.object({
-  name: z.string().min(1, "名前は必須です。").max(50, "名前は50文字までです。"),
-  images: z
-    .instanceof(Blob)
-    .refine((blob) => {
-      const validTypes = [
-        "image/jpeg",
-        "image/jpg",
-        "image/png",
-        "image/webp",
-        "image/avif",
-      ];
-      return validTypes.includes(blob.type);
-    }, "画像はJPEG、JPG、PNG、WEBP、AVIF形式である必要があります。")
-    .array()
-    .min(1, "画像は最低1枚必要です。")
-    .max(5, "画像は最大5枚までです。"),
-});
+export const pageSchema = z.coerce
+  .number()
+  .min(1, "pageを1以上の値にしてください。")
+  .default(1);
+export const limitSchema = z.coerce
+  .number()
+  .min(1, "最低1件は取得する必要があります。")
+  .max(100, "最大100件まで取得可能です。")
+  .default(10);
 
 // ================== ユーティリティ関数 ==================
 

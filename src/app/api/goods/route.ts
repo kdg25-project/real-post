@@ -2,11 +2,11 @@ import { db } from "@/db";
 import { goods, goodsImage } from "@/db/schema";
 import { requireCompanyAccount } from "@/lib/auth-middleware";
 import { NextRequest, NextResponse } from "next/server";
+import { z } from "zod";
 import {
   getPaginationParams,
   getGoodsCount,
   handleGoodsError,
-  goodsFormDataSchema,
   uploadGoodsImages,
 } from "./utils";
 import type { ApiResponse } from "@/types";
@@ -42,6 +42,27 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
+  const goodsFormDataSchema = z.object({
+    name: z
+      .string()
+      .min(1, "名前は必須です。")
+      .max(50, "名前は50文字までです。"),
+    images: z
+      .instanceof(Blob)
+      .refine((blob) => {
+        const validTypes = [
+          "image/jpeg",
+          "image/jpg",
+          "image/png",
+          "image/webp",
+          "image/avif",
+        ];
+        return validTypes.includes(blob.type);
+      }, "画像はJPEG、JPG、PNG、WEBP、AVIF形式である必要があります。")
+      .array()
+      .min(1, "画像は最低1枚必要です。")
+      .max(5, "画像は最大5枚までです。"),
+  });
   const { error, user } = await requireCompanyAccount(req);
   if (error) {
     return NextResponse.json<ApiResponse<never>>(
