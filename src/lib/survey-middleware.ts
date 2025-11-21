@@ -29,7 +29,7 @@ export async function authSurveyToken(request: NextRequest, companyId: string) {
   const encryptedHeader = request.headers.get("Authorization")?.replace("Bearer ", "");
   if (!encryptedHeader) {
     return {
-      error: NextResponse.json({ error: "Unauthorized: Missing survey token" }, { status: 401 }),
+      error: "Unauthorized: Missing survey token",
       survey: null,
     };
   }
@@ -39,14 +39,14 @@ export async function authSurveyToken(request: NextRequest, companyId: string) {
     tokenHash = AES.decrypt(encryptedHeader, SURVEY_TOKEN_SECRET).toString(encUtf8);
   } catch {
     return {
-      error: NextResponse.json({ error: "Unauthorized: Invalid survey token" }, { status: 401 }),
+      error: "Unauthorized: Invalid survey token",
       survey: null,
     };
   }
 
   if (!tokenHash) {
     return {
-      error: NextResponse.json({ error: "Unauthorized: Invalid survey token" }, { status: 401 }),
+      error: "Unauthorized: Invalid survey token",
       survey: null,
     };
   }
@@ -60,14 +60,14 @@ export async function authSurveyToken(request: NextRequest, companyId: string) {
 
   if (!survey) {
     return {
-      error: NextResponse.json({ error: "Unauthorized: Invalid survey token" }, { status: 401 }),
+      error: "Unauthorized: Invalid survey token",
       survey: null,
     };
   }
 
   if (survey.expiredAt < new Date() || survey.remainingCount <= 0) {
     return {
-      error: NextResponse.json({ error: "Unauthorized: Survey token expired" }, { status: 401 }),
+      error: "Unauthorized: Survey token expired",
       survey: null,
     };
   }

@@ -58,58 +58,23 @@ export async function PATCH(request: NextRequest) {
     }
 
     const body = await request.json();
+    const { email, country } = body;
 
-    const userUpdates: Record<string, unknown> = {};
-    if (typeof body.name === "string" && body.name.trim() !== "") {
-      userUpdates.name = body.name.trim();
-    }
-    if (typeof body.image === "string") {
-      userUpdates.image = body.image;
-    }
-
-    if (session.user.accountType === "company") {
-      const profileUpdates: Record<string, unknown> = {};
-      if (typeof body.companyName === "string" && body.companyName.trim() !== "") {
-        profileUpdates.companyName = body.companyName.trim();
-      }
-
-      const allowedCats = [
-        "food",
-        "culture",
-        "activity",
-        "shopping",
-        "other",
-      ];
-      if (typeof body.companyCategory === "string") {
-        if (!allowedCats.includes(body.companyCategory)) {
-          return NextResponse.json(
-            { error: "Invalid companyCategory" },
-            { status: 400 }
-          );
-        }
-        profileUpdates.companyCategory = body.companyCategory;
-      }
-
-      if (Object.keys(userUpdates).length > 0) {
-        await db.update(user).set(userUpdates).where(eq(user.id, session.user.id));
-      }
-
-      if (Object.keys(profileUpdates).length > 0) {
-        await db
-          .update(companyProfile)
-          .set(profileUpdates)
-          .where(eq(companyProfile.userId, session.user.id));
-      }
-    } else {
-      // regular user: allow updating user.name and user.image
-      if (Object.keys(userUpdates).length === 0) {
-        return NextResponse.json({ error: "No valid fields to update" }, { status: 400 });
-      }
-
-      await db.update(user).set(userUpdates).where(eq(user.id, session.user.id));
+    if (email) {
+      await db
+        .update(user)
+        .set({ email })
+        .where(eq(user.id, session.user.id));
     }
 
-    return NextResponse.json({ message: "Profile updated" });
+    if (country !== undefined && session.user.accountType === "user") {
+      await db
+        .update(userProfile)
+        .set({ country })
+        .where(eq(userProfile.userId, session.user.id));
+    }
+
+    return NextResponse.json({ success: true, message: "Profile updated successfully" });
   } catch (error) {
     console.error("Profile update error:", error);
     return NextResponse.json(

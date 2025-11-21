@@ -1,4 +1,5 @@
 import { pgTable, text, timestamp, boolean } from "drizzle-orm/pg-core";
+import { relations } from "drizzle-orm";
 
 export const user = pgTable("user", {
   id: text("id").primaryKey(),
@@ -69,6 +70,7 @@ export const companyProfile = pgTable("company_profile", {
     .unique()
     .references(() => user.id, { onDelete: "cascade" }),
   companyName: text("company_name").notNull(),
+  imageUrl: text("image_url"),
   companyCategory: text("company_category", { enum: ["food", "culture", "activity", "shopping", "other"] }).notNull(),
   createdAt: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
   updatedAt: timestamp("updated_at", { mode: "date" })
@@ -83,9 +85,46 @@ export const userProfile = pgTable("user_profile", {
     .notNull()
     .unique()
     .references(() => user.id, { onDelete: "cascade" }),
+  country: text("country"),
   createdAt: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
   updatedAt: timestamp("updated_at", { mode: "date" })
     .defaultNow()
     .$onUpdate(() => /* @__PURE__ */ new Date())
     .notNull(),
 });
+
+// Relations
+export const userRelations = relations(user, ({ many, one }) => ({
+  sessions: many(session),
+  accounts: many(account),
+  companyProfile: one(companyProfile),
+  userProfile: one(userProfile),
+}));
+
+export const sessionRelations = relations(session, ({ one }) => ({
+  user: one(user, {
+    fields: [session.userId],
+    references: [user.id],
+  }),
+}));
+
+export const accountRelations = relations(account, ({ one }) => ({
+  user: one(user, {
+    fields: [account.userId],
+    references: [user.id],
+  }),
+}));
+
+export const companyProfileRelations = relations(companyProfile, ({ one }) => ({
+  user: one(user, {
+    fields: [companyProfile.userId],
+    references: [user.id],
+  }),
+}));
+
+export const userProfileRelations = relations(userProfile, ({ one }) => ({
+  user: one(user, {
+    fields: [userProfile.userId],
+    references: [user.id],
+  }),
+}));

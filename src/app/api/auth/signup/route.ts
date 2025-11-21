@@ -1,12 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { db } from "@/db";
-import { companyProfile, userProfile } from "@/db/schema";
+import { userProfile } from "@/db/schema";
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { email, password, accountType, companyName } = body;
+    
+    const { email, password, accountType, name, country } = body;
 
     if (!email || !password || !accountType) {
       return NextResponse.json(
@@ -22,18 +23,11 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (accountType === "company" && !companyName) {
-      return NextResponse.json(
-        { error: "Company name is required for company accounts" },
-        { status: 400 }
-      );
-    }
-
     const signUpResult = await auth.api.signUpEmail({
       body: {
         email,
         password,
-        name: accountType === "company" ? companyName : email,
+        name: name || email,
         accountType,
       },
     });
@@ -45,26 +39,23 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // 一般ユーザーの場合のみuserProfileを作成
     try {
-      if (accountType === "company") {
-        await db.insert(companyProfile).values({
-          id: crypto.randomUUID(),
-          userId: signUpResult.user.id,
-          companyName,
-          companyCategory: body.companyCategory,
-        });
-      } else {
+      if (accountType === "user") {
         await db.insert(userProfile).values({
           id: crypto.randomUUID(),
           userId: signUpResult.user.id,
+          country: country || null,
         });
       }
+      // カンパニーの場合は、/api/company POSTで別途作成する
     } catch (profileError) {
       console.error("Profile creation error:", profileError);
     }
 
     return NextResponse.json(
       {
+        success: true,
         message: "User created successfully",
         user: signUpResult.user,
       },

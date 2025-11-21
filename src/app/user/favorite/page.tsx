@@ -11,11 +11,11 @@ export default function FavoritePage() {
             <Spacer size="lg" />
             <Section title="Favorite Posts" className="gap-[16px]">
                 <div className="flex flex-col gap-[20px] mb-[94px]">
+                    {/* <PostCard />
                     <PostCard />
                     <PostCard />
                     <PostCard />
-                    <PostCard />
-                    <PostCard />
+                    <PostCard /> */}
                 </div>
             </Section>
         </div>
