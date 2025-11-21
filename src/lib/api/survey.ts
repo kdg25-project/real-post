@@ -1,12 +1,10 @@
-const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
-
 // ------------------------------
 // トップページ用（既存）
 // ------------------------------
 export async function getSurveysForTop(page: number, limit: number) {
   try {
     const res = await fetch(
-      `${BASE_URL}/api/surveys/unique-per-company?page=${page}&limit=${limit}`,
+      `/api/surveys/unique-per-company?page=${page}&limit=${limit}`,
       {
         method: "GET",
         headers: { "Content-Type": "application/json" },
@@ -47,7 +45,7 @@ export async function getSurveys({
   gender?: string;
 }) {
   try {
-    const url = new URL(`${BASE_URL}/api/surveys`);
+    const url = new URL(`/api/surveys`);
 
     url.searchParams.set("page", String(page));
     url.searchParams.set("limit", String(limit));
@@ -80,26 +78,3 @@ export async function getFavoriteSurveys() {}
 
 // 店舗管理画面用
 export async function getSurveysForStore() {}
-
-// ------------------------------
-// 詳細ページ用
-// ------------------------------
-export async function getSurveyDetail(id: string) {
-  try {
-    const res = await fetch(`${BASE_URL}/api/surveys/${id}`, {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    });
-
-    if (!res.ok) {
-      throw new Error("Failed to fetch survey detail");
-    }
-
-    const json = await res.json();
-    console.log(json)
-    return json;
-  } catch (err) {
-    console.error(err);
-    return null;
-  }
-}
