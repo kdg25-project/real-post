@@ -126,7 +126,7 @@ export async function GET(request: NextRequest) {
       country: s.country ?? "",
       createdAt: s.createdAt ? new Date(s.createdAt).toISOString() : null,
       updatedAt: s.updatedAt ? new Date(s.updatedAt).toISOString() : null,
-      isFavorited: userId ? favoriteSet.has(String(s.id)) : null,
+      isFavorited: sql<boolean | null>`CASE WHEN bool_or(${favorite.id} IS NOT NULL) THEN true ELSE null END`,
       companyCategory: (s.companyCategory as CompanyCategory) ?? "other",
       companyName: s.companyName ?? "",
       favoriteCount: s.favoriteCount,
