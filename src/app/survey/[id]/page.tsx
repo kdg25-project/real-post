@@ -52,7 +52,7 @@ export default function Survey() {
                 }}
             />
             <TextForm label="Your Country" placeholder="Japan" type="text" onChange={(e) => setForm({ ...form, country: e.target.value })} />
-            <CategoryForm title="Your Gender" defaultValue={4} onChange={(e) => setForm({ ...form, gender: e.target.value || null })} >
+            <CategoryForm title="Your Gender" defaultValue={4} onChange={(e) => setForm({ ...form, gender: (e.target.value || null) as "male" | "female" | "other" | null })} >
                 <NativeSelectOptGroup label="Your Gender">
                     <NativeSelectOption value="male">male</NativeSelectOption>
                     <NativeSelectOption value="female">female</NativeSelectOption>
@@ -60,7 +60,7 @@ export default function Survey() {
                     <NativeSelectOption value="">do not answer</NativeSelectOption>
                 </NativeSelectOptGroup>
             </CategoryForm>
-            <CategoryForm title="Your Age" defaultValue={6} onChange={(e) => setForm({ ...form, ageGroup: e.target.value || null })}>
+            <CategoryForm title="Your Age" defaultValue={6} onChange={(e) => setForm({ ...form, ageGroup: (e.target.value || null) as "18-24" | "25-34" | "35-44" | "45-54" | "55+" | null })}>
                 <NativeSelectOptGroup label="Your Age">
                     <NativeSelectOption value="1">18-24</NativeSelectOption>
                     <NativeSelectOption value="2">25-34</NativeSelectOption>
