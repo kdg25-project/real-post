@@ -32,15 +32,6 @@ export default function StoreInformationCreationPage() {
                     setPreview1(url);
                 }}
             />
-            <ImageUpload
-                label="グッズ画像"
-                preview={preview2 ?? undefined}
-                onChange={(file) => {
-                    if (!file) return;
-                    const url = URL.createObjectURL(file);
-                    setPreview2(url);
-                }}
-            />
         </div>
     )
 }
