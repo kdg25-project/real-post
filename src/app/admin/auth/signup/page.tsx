@@ -34,6 +34,7 @@ export default function SignUpPage() {
                             password: password,
                             accountType: "company",
                         })
+                        router.push("/admin/auth/store-create")
                     }}
                 />
                 <button className="flex justify-start w-fit text-[12px] text-gray-500 border-b-1 border-gray-500" 

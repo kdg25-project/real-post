@@ -32,9 +32,9 @@ export function companyCreate(req: CompanyCreateRequest): Promise<CompanyCreateR
     return fetch(`/api/company`,
         {
             method: "POST",
-            headers: {
-                "Content-Type": "multipart/form-data",
-            },
+            // headers: {
+            //     "Content-Type": "multipart/form-data",
+            // },
             body: formData
         })
         .then((res) => res.json())
