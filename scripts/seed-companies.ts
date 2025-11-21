@@ -17,6 +17,12 @@ const SURVEYS_PER_COMPANY = 5; // 各カンパニーが作成するサーベイ�
 const COMPANY_IMAGE_PATH = join(__dirname, "company-image.png");
 const SURVEY_IMAGE_PATH = join(__dirname, "survey-image.png");
 
+// ランダムに使用するplaceUrl
+const PLACE_URLS = [
+  "https://www.google.com/maps/place/%E3%83%9E%E3%82%AF%E3%83%89%E3%83%8A%E3%83%AB%E3%83%89+%EF%BC%AA%EF%BC%B2%E5%90%8D%E5%8F%A4%E5%B1%8B%E9%A7%85%E5%BA%97/@35.1692422,136.8435633,6709m/data=!3m1!1e3!4m6!3m5!1s0x600376e6335e5d4d:0x632e9cb3154fd755!8m2!3d35.1692422!4d136.8816721!16s%2Fg%2F1tdz9btv?entry=ttu&g_ep=EgoyMDI1MTExNy4wIKXMDSoASAFQAw%3D%3D",
+  "https://maps.app.goo.gl/ur2mqTTWdEdNxVdr9",
+];
+
 type CompanyCategory = "food" | "culture" | "activity" | "shopping" | "other";
 type Gender = "male" | "female" | "other";
 type AgeGroup = "18-24" | "25-34" | "35-44" | "45-54" | "55+";
@@ -179,9 +185,13 @@ async function createCompanyUser(companyData: CompanyData): Promise<{ userId: st
       type: "image/png",
     });
 
+    // ランダムにplaceUrlを選択
+    const randomPlaceUrl = PLACE_URLS[Math.floor(Math.random() * PLACE_URLS.length)];
+
     const formData = new FormData();
     formData.append("companyName", companyData.companyName);
     formData.append("companyCategory", companyData.companyCategory);
+    formData.append("placeUrl", randomPlaceUrl);
     formData.append("image", file);
 
     const profileResponse = await fetch(`${BASE_URL}/api/company`, {

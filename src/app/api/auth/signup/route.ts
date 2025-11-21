@@ -7,7 +7,7 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     
-    const { email, password, accountType, name, country } = body;
+    const { email, password, accountType, country } = body;
 
     // バリデーションエラー
     if (!email || !password || !accountType) {
@@ -48,7 +48,7 @@ export async function POST(request: NextRequest) {
         body: {
           email,
           password,
-          name: name || email,
+          name: email,
           accountType,
         },
       });

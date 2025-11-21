@@ -25,7 +25,6 @@ export async function signUp(data: {
   email: string;
   password: string;
   accountType: "company" | "user";
-  companyName?: string;
   country?: string;
 }): Promise<SignUpResponse> {
   const response = await fetch("/api/auth/signup", {

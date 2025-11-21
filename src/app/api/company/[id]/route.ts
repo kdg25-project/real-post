@@ -23,6 +23,7 @@ export async function GET(
         companyName: companyProfile.companyName,
         companyCategory: companyProfile.companyCategory,
         image: user.image,
+        placeUrl: companyProfile.placeUrl,
         createdAt: companyProfile.createdAt,
         updatedAt: companyProfile.updatedAt,
       })
