@@ -39,7 +39,7 @@ export default function StoreInformationCreationPage() {
             <h1 className="flex justify-center font-bold text-2xl py-5">店舗登録</h1>
             <TextForm label="店舗名" type="text" placeholder="例 ご飯大好きの会" value={form.companyName} onChange={(e) => setForm({...form, companyName: e.target.value})} />
             <TextForm label="住所" type="text" placeholder="例 名古屋市中村区日本橋1-1" value={form.placeUrl} onChange={(e) => setForm({...form, placeUrl: e.target.value})} />
-            <CategoryForm defaultValue="1" onChange={(e) => setForm({...form, companyCategory: e.target.value})} >
+            <CategoryForm title="カテゴリー" defaultValue="1" onChange={(e) => setForm({...form, companyCategory: e.target.value})} >
                 <NativeSelectOptGroup label="カテゴリー">
                     <NativeSelectOption value="1">飲食</NativeSelectOption>
                     <NativeSelectOption value="2">文化・歴史</NativeSelectOption>
@@ -50,6 +50,7 @@ export default function StoreInformationCreationPage() {
             </CategoryForm>
             <ImageUpload
                 label="店舗画像"
+                title="画像をアップロード"
                 preview={preview ?? undefined}
                 onChange={(file) => {
                     if (!file) return;

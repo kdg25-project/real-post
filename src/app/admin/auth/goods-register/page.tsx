@@ -14,6 +14,7 @@ export default function GoodsRegistration() {
             <TextForm label="グッズ名" type="text" placeholder="例 ご飯大好き缶バッチ" />
             <ImageUpload
                 label="グッズ画像"
+                title="画像をアップロード"
                 preview={preview1 ?? undefined}
                 onChange={(file) => {
                     if (!file) return;
