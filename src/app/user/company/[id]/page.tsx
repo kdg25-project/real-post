@@ -10,6 +10,7 @@ import { ChevronLeft } from "lucide-react";
 import PostInfo from "@/components/layouts/PostInfo";
 import Section from "@/components/layouts/Section";
 import PostCard from "@/components/elements/PostCard";
+import PrimaryButton from "@/components/elements/PrimaryButton";
 
 export default function CompanyDetailPage() {
     const params = useParams();
@@ -84,18 +85,20 @@ export default function CompanyDetailPage() {
                 <PostInfo
                     size="lg"
                     titleOnly
+                    notLink
                     companyName={data.companyName}
                 />
             </div>
 
             {data.placeUrl && (
-                <Section title="Location" className="px-[24px] gap-[16px]">
-                    <div className="w-full h-[300px]">
-                        {/* <iframe src={data.placeUrl} width="600" height="450" style={{ border: 0 }} allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade"></iframe> */}
-                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3261.573611769696!2d136.87627027591108!3d35.16725325803687!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x600376e698b4d345%3A0xf982b9328122786b!2z44CSNDUzLTA4MDEg5oSb55-l55yM5ZCN5Y-k5bGL5biC5Lit5p2R5Yy65aSq6Zak77yT5LiB55uu77yS4oiS77yR77yU!5e0!3m2!1sja!2sjp!4v1763782795926!5m2!1sja!2sjp" width="600" height="450" style={{ border: 0 }} allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade"></iframe>
-                    </div>
+                <Section title="Locate" className="px-[24px] gap-[16px]">
+                    <PrimaryButton
+                        text="Check Map"
+                        onClick={() => window.open(data.placeUrl, "_blank")}
+                    />
                 </Section>
             )}
+
 
             <Section title="Goods" className="px-[24px] gap-[16px]">
                 <div></div>

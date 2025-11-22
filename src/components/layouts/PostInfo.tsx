@@ -7,6 +7,7 @@ interface PostInfoProps {
     size?: "sm" | "lg";
     titleOnly?: boolean;
     isCenter?: boolean;
+    notLink?: boolean;
 
     companyId?: string;
     companyName: string;
@@ -19,6 +20,7 @@ export default function PostInfo({
     size = "sm",
     titleOnly = false,
     isCenter = false,
+    notLink = false,
 
     companyId,
     companyName,
@@ -34,7 +36,7 @@ export default function PostInfo({
 
     return (
         <div>
-            {size === "lg" ? (
+            {size === "lg" && !notLink ? (
                 <Link href={`/user/company/${companyId}`}>
                     {companyNameElement}
                 </Link>
