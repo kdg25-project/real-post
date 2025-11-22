@@ -92,13 +92,29 @@ export default function CompanyDetailPage() {
 
             {data.placeUrl && (
                 <Section title="Locate" className="px-[24px] gap-[16px]">
-                    <PrimaryButton
-                        text="Check Map"
-                        onClick={() => window.open(data.placeUrl, "_blank")}
-                    />
+
+                    {(() => {
+                        const extractLatLng = (url: string) => {
+                            const match = url.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/);
+                            if (!match) return null;
+                            return `${match[1]},${match[2]}`;
+                        };
+
+                        const coords = extractLatLng(data.placeUrl);
+                        console.log("coords:", coords);
+
+                        return (
+                            <iframe
+                                src={`https://www.google.com/maps/embed/v1/place?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY}&q=${coords ?? "Japan"}`}
+                                style={{ border: 0 }}
+                                allowFullScreen
+                                loading="lazy"
+                                referrerPolicy="no-referrer-when-downgrade"
+                            />
+                        );
+                    })()}
                 </Section>
             )}
-
 
             <Section title="Goods" className="px-[24px] gap-[16px]">
                 <div></div>
