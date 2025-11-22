@@ -28,7 +28,15 @@ export async function getSurveysForTop(page: number, limit: number) {
 // ------------------------------
 // 検索 + 絞り込み一覧
 // ------------------------------
-export async function getSurveys(params: { page: any; limit: any; category?: any; query?: any; ageGroup?: any; country?: any; gender?: any; }) {
+export async function getSurveys(params: {
+  page: any;
+  limit: any;
+  category?: any;
+  query?: any;
+  ageGroup?: any;
+  country?: any;
+  gender?: any;
+}) {
   try {
     const query = new URLSearchParams();
 
@@ -53,7 +61,7 @@ export async function getSurveys(params: { page: any; limit: any; category?: any
 
     return await res.json();
   } catch (err) {
-    console.error(err);
+    console.error("[getSurveys] ERROR:", err);
     return null;
   }
 }
