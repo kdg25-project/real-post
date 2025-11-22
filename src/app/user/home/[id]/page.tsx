@@ -124,6 +124,7 @@ export default function DetailPage() {
             <div className="px-[24px]">
                 <PostInfo
                     size="lg"
+                    companyId={data.companyId}
                     companyName={data.companyName}
                     country={data.country}
                     satisfactionLevel={data.satisfactionLevel}
