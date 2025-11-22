@@ -33,9 +33,9 @@ export async function getSurveys(params: {
   limit: number;
   category?: string;
   query?: string;
-  ageGroup?: string;
+  ageGroup?: "18-24" | "25-34" | "35-44" | "45-54" | "55+" | null;
   country?: string;
-  gender?: string;
+  gender?: "male" | "female" | "other" | null;
 }) {
   try {
     const query = new URLSearchParams();
