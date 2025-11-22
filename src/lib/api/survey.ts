@@ -30,8 +30,7 @@ export async function getSurveysForTop(page: number, limit: number) {
 // ------------------------------
 export async function getSurveys(params: { page: any; limit: any; category?: any; query?: any; ageGroup?: any; country?: any; gender?: any; }) {
   try {
-    let query = new URLSearchParams();
-    const url = new URL(`/api/surveys`);
+    const query = new URLSearchParams();
 
     query.set("page", String(params.page));
     query.set("limit", String(params.limit));
