@@ -6,12 +6,13 @@ import Header from "@/components/layouts/Header"
 import TextForm from "@/components/layouts/TextForm"
 import PrimaryButton from "@/components/elements/PrimaryButton"
 import Spacer from "@/components/elements/Spacer"
-import { CategoryForm, NativeSelectOptGroup, NativeSelectOption } from "@/components/layouts/CategoryForm";
+import { useRouter } from "next/navigation";
 
 export default function SignUpPage() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [country, setCountry] = useState("");
+    const router = useRouter();
 
     return (
         <div>
@@ -66,14 +67,24 @@ export default function SignUpPage() {
                 <PrimaryButton
                     text="SignUp"
                     onClick={async () => {
-                        await signUp({
+                        const result = await signUp({
                             email: email,
                             password: password,
                             accountType: "user",
-                            country: country
+                            country: country,
                         })
+
+                        if (result.success) {
+                            router.push('/user/home')
+                        }
                     }}
                 />
+                <div
+                    className="font-[14px] font-medium underline"
+                    onClick={() => router.push('/user/auth/login')}
+                >
+                    Already have an account ? Login
+                </div>
             </div>
         </div>
     )

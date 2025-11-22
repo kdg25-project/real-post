@@ -9,7 +9,7 @@ interface SectionProps {
 export default function Section({ title, children, className = "" }: SectionProps) {
     return (
         <section className={`flex flex-col ${className}`}>
-            <h2 className="text-[20px] font-bold">{title}</h2>
+            <h2 className="text-[24px] font-bold">{title}</h2>
             <div className="flex flex-col gap-[16px]">
                 {children}
             </div>

@@ -6,7 +6,7 @@ export default function GoodsPage() {
     return (
         <div className="flex flex-col gap-[24px] pt-[56px] pb-[94px]">
             <Slider />
-            <Section title="Gifts" className="gap-[24px]">
+            <Section title="Goods" className="gap-[24px]">
                 <div className="flex flex-wrap justify-between w-full gap-[24px]">
                     <GoodsCard />
                     <GoodsCard />
