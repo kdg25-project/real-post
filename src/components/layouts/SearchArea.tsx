@@ -5,15 +5,16 @@ import { FilterButton } from "@/components/elements/FilterButton";
 import { Search } from "lucide-react";
 
 interface SearchAreaProps {
-    onSearch?: (keyword: string) => void; // 親に渡す
+    onSearch?: (keyword: string) => void;
+    onFilterChange?: (age: string, country: string) => void; // ✅ 追加
 }
 
-export default function SearchArea({ onSearch }: SearchAreaProps) {
+export default function SearchArea({ onSearch, onFilterChange }: SearchAreaProps) {
     const [keyword, setKeyword] = useState("");
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === "Enter" && onSearch) {
-            onSearch(keyword); // ←検索ワードを親に渡す
+            onSearch(keyword);
         }
     };
 
@@ -30,7 +31,9 @@ export default function SearchArea({ onSearch }: SearchAreaProps) {
                     className="w-full pl-[56px] pr-[20px] py-[15px] rounded-[14px] bg-white shadow-base focus:outline-none"
                 />
             </div>
-            <FilterButton />
+
+            {/* ✅ Home に値を返す経路をここで確立 */}
+            <FilterButton onFilterChange={onFilterChange} />
         </div>
-    )
+    );
 }
