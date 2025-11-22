@@ -42,51 +42,60 @@ export async function PATCH(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> },
 ) {
-  const { id } = await params;
-  const goodsFormDataSchema = z.object({
-    name: z
-      .string()
-      .min(1, "名前は必須です。")
-      .max(50, "名前は50文字までです。")
-      .optional(),
-    images: z
-      .instanceof(Blob)
-      .refine((blob) => {
-        const validTypes = [
-          "image/jpeg",
-          "image/jpg",
-          "image/png",
-          "image/webp",
-          "image/avif",
-        ];
-        return validTypes.includes(blob.type);
-      }, "画像はJPEG、JPG、PNG、WEBP、AVIF形式である必要があります。")
-      .array()
-      .min(1, "画像は最低1枚必要です。")
-      .max(5, "画像は最大5枚までです。")
-      .optional(),
-    deleteImageIds: z.string().array().optional(),
-  });
-  const { error, user } = await requireCompanyAccount(req);
-  if (error) {
-    return NextResponse.json<ApiResponse<never>>(
-      {
-        success: false,
-        message: "User is not authenticated or does not have a company account",
-      },
-      { status: 401 },
-    );
-  }
-
   try {
+    const { id } = await params;
+    const goodsFormDataSchema = z.object({
+      name: z
+        .string()
+        .min(1, "名前は必須です。")
+        .max(50, "名前は50文字までです。")
+        .optional(),
+      images: z
+        .instanceof(Blob)
+        .refine((blob) => {
+          const validTypes = [
+            "image/jpeg",
+            "image/jpg",
+            "image/png",
+            "image/webp",
+            "image/avif",
+          ];
+          return validTypes.includes(blob.type);
+        }, "画像はJPEG、JPG、PNG、WEBP、AVIF形式である必要があります。")
+        .array()
+        .min(1, "画像は最低1枚必要です。")
+        .max(5, "画像は最大5枚までです。")
+        .optional(),
+      deleteImageIds: z.string().array().optional(),
+    });
+    const existingGoods = await db.query.goods.findFirst({
+      where: (table, { eq }) => eq(table.id, id),
+    });
+    const { error, user } = await requireCompanyAccount(req);
+    if (error) {
+      return NextResponse.json<ApiResponse<never>>(
+        {
+          success: false,
+          message:
+            "User is not authenticated or does not have a company account",
+        },
+        { status: 401 },
+      );
+    } else if (existingGoods?.companyId !== user.id) {
+      return NextResponse.json<ApiResponse<never>>(
+        {
+          success: false,
+          message: "You do not have permission to update this goods",
+        },
+        { status: 403 },
+      );
+    }
+
     const formData = await req.formData();
     const validatedData = goodsFormDataSchema.parse({
       name: formData.get("name"),
       images: formData.getAll("images"),
       deleteImageIds: formData.getAll("deleteImageIds"),
-    });
-    const existingGoods = await db.query.goods.findFirst({
-      where: (table, { eq }) => eq(table.id, id),
     });
 
     if (!existingGoods) {
