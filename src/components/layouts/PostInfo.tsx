@@ -26,31 +26,31 @@ export default function PostInfo({
 }: PostInfoProps) {
     return (
         <div>
-            <p className={`${size == "sm" ? "text-[18px]" : "text-[18px] underline"} font-semibold ${isCenter ? "text-center" : ""}`}>
+            <p className={`${size == "sm" ? "text-[18px]" : "text-[24px] underline"} font-semibold ${isCenter ? "text-center" : ""}`}>
                 {companyName}
             </p>
 
-            <div className={`flex items-center gap-[16px] ${size == "sm" ? "pt-[4px]" : "pt-[12px]"} ${titleOnly ? "hidden" : ""}`}>
+            <div className={`flex items-center gap-[16px] ${size == "sm" ? "pt-[8px]" : "pt-[12px]"} ${titleOnly ? "hidden" : ""}`}>
 
                 {/* 国名 */}
-                <div className={`flex items-center justify-center bg-gray ${size === "sm" ? "rounded-[5px] px-[6px] h-[18px]" : "rounded-[5px] w-[58px] h-[24px]"}`}>
-                    <p className={`${size == "sm" ? "text-[10px]" : "text-[14px]"} font-semibold`}>
+                <div className={`flex items-center justify-center bg-gray rounded-[5px] ${size === "sm" ? "px-[6px] py-[4px]" : "px-[8px] py-[6px]"}`}>
+                    <p className={`${size == "sm" ? "text-[12px]" : "text-[16px]"} font-semibold`}>
                         {country}
                     </p>
                 </div>
 
                 {/* 評価 */}
                 <div className="flex gap-[4px] text-gray-dark">
-                    <Star size={size == "sm" ? 14 : 20} />
-                    <p className={`${size === "sm" ? "text-[10px]" : "text-[14px]"} font-semibold`}>
+                    <Star size={size == "sm" ? 20 : 24} />
+                    <p className={`${size === "sm" ? "text-[14px]" : "text-[18px]"} font-semibold`}>
                         {satisfactionLevel}
                     </p>
                 </div>
 
                 {/* お気に入り数 */}
                 <div className="flex gap-[4px] text-gray-dark">
-                    <Heart size={size == "sm" ? 14 : 20} />
-                    <p className={`${size === "sm" ? "text-[10px]" : "text-[14px]"} font-semibold`}>
+                    <Heart size={size == "sm" ? 20 : 24} />
+                    <p className={`${size === "sm" ? "text-[14px]" : "text-[18px]"} font-semibold`}>
                         {favoriteCount}
                     </p>
                 </div>

@@ -6,10 +6,12 @@ import Header from "@/components/layouts/Header"
 import TextForm from "@/components/layouts/TextForm"
 import PrimaryButton from "@/components/elements/PrimaryButton"
 import Spacer from "@/components/elements/Spacer"
+import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const router = useRouter();
 
     return (
         <div>
@@ -23,10 +25,21 @@ export default function LoginPage() {
                     onClick={async () => {
                         await authClient.signIn.email({
                             email: email,
-                            password: password
+                            password: password,
+                            fetchOptions: {
+                                onSuccess: () => {
+                                    router.push('/user/home')
+                                }
+                            }
                         })
                     }}
                 />
+                <div
+                    className="font-[14px] font-medium underline"
+                    onClick={() => router.push('/user/auth/signup')}
+                >
+                    Don’t have an account ? Sing up
+                </div>
             </div>
         </div>
     )

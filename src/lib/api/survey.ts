@@ -16,6 +16,7 @@ export async function getSurveysForTop(page: number, limit: number) {
     }
 
     const json = await res.json();
+    console.log(json)
     return json;
   } catch (err) {
     console.error(err);
@@ -27,39 +28,31 @@ export async function getSurveysForTop(page: number, limit: number) {
 // ------------------------------
 // 検索 + 絞り込み一覧
 // ------------------------------
-export async function getSurveys({
-  page,
-  limit,
-  category,
-  query,
-  ageGroup,
-  country,
-  gender,
-}: {
+export async function getSurveys(params: {
   page: number;
   limit: number;
   category?: string;
   query?: string;
-  ageGroup?: string;
+  ageGroup?: "18-24" | "25-34" | "35-44" | "45-54" | "55+" | null;
   country?: string;
-  gender?: string;
+  gender?: "male" | "female" | "other" | null;
 }) {
   try {
-    const url = new URL(`/api/surveys`);
+    const query = new URLSearchParams();
 
-    url.searchParams.set("page", String(page));
-    url.searchParams.set("limit", String(limit));
+    query.set("page", String(params.page));
+    query.set("limit", String(params.limit));
+    if (params.category) query.set("category", params.category);
+    if (params.query) query.set("query", params.query);
+    if (params.ageGroup) query.set("age_group", params.ageGroup);
+    if (params.country) query.set("country", params.country);
+    if (params.gender) query.set("gender", params.gender);
 
-    if (category) url.searchParams.set("category", category);
-    if (query) url.searchParams.set("query", query);
-    if (ageGroup) url.searchParams.set("age_group", ageGroup);
-    if (country) url.searchParams.set("country", country);
-    if (gender) url.searchParams.set("gender", gender);
+    const url = `/api/surveys?${query.toString()}`;
 
-    // ← ここでURLをログ
-    console.log("[getSurveys] Fetch URL:", url.toString());
+    console.log("[getSurveys] URL:", url);
 
-    const res = await fetch(url.toString(), {
+    const res = await fetch(url, {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     });
@@ -68,13 +61,50 @@ export async function getSurveys({
 
     return await res.json();
   } catch (err) {
-    console.error(err);
+    console.error("[getSurveys] ERROR:", err);
     return null;
   }
 }
 
+// ------------------------------
 // お気に入り一覧専用
-export async function getFavoriteSurveys() {}
+// ------------------------------
+export async function getFavoriteSurveys() {
+  try {
+    const res = await fetch("/api/users/favorite", {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    });
+
+    if (!res.ok) return null;
+
+    return await res.json();
+  } catch {
+    return null;
+  }
+}
 
 // 店舗管理画面用
 export async function getSurveysForStore() {}
+
+// ------------------------------
+// 詳細ページ用
+// ------------------------------
+export async function getSurveyDetail(id: string) {
+  try {
+    const res = await fetch(`/api/surveys/${id}`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    });
+
+    if (!res.ok) {
+      throw new Error("Failed to fetch survey detail");
+    }
+
+    const json = await res.json();
+    return json;
+  } catch (err) {
+    console.error(err);
+    return null;
+  }
+}

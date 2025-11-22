@@ -1,7 +1,12 @@
+"use client";
+
 import Image from "next/image";
 import PostInfo from "../layouts/PostInfo";
 import { Heart } from "lucide-react";
 import Link from "next/link";
+import { useState } from "react";
+import { toggleFavorite } from "@/lib/api/favorite";
+import { useRouter } from "next/navigation";
 
 interface PostCardProps {
     id: string;
@@ -10,7 +15,7 @@ interface PostCardProps {
     country: string;
     satisfactionLevel: number;
     favoriteCount: number;
-    isFavorite: boolean;
+    isFavorited: boolean;
 }
 
 export default function PostCard({
@@ -20,11 +25,27 @@ export default function PostCard({
     country,
     satisfactionLevel,
     favoriteCount,
-    isFavorite
+    isFavorited
 }: PostCardProps) {
+    const [favorited, setFavorited] = useState(isFavorited);
+    const [count, setCount] = useState(favoriteCount);
+    const router = useRouter();
+
+    const handleFavoriteClick = async (e: React.MouseEvent) => {
+        e.preventDefault();
+
+        const result = await toggleFavorite(id);
+
+        if (result?.success) {
+            // 古い状態に依存せず更新
+            setFavorited(prev => !prev);
+            setCount(prev => (favorited ? prev - 1 : prev + 1));
+        }
+    };
+
     return (
         <Link href={`/user/home/${id}`} className="block">
-            <div className="flex flex-col gap-[8px] bg-white p-[10px] rounded-[15px] shadow-base">
+            <div className="flex flex-col gap-[8px] bg-white p-[16px] rounded-[15px] shadow-base">
                 <div className="relative w-full h-[140px] rounded-[5px]">
                     <Image
                         src={thumbnailUrl ?? "/images/no-image.png"}
@@ -39,15 +60,25 @@ export default function PostCard({
                         companyName={companyName}
                         country={country}
                         satisfactionLevel={satisfactionLevel}
-                        favoriteCount={favoriteCount}
+                        favoriteCount={count}
                     />
 
                     <Heart
                         size={28}
-                        className={`${isFavorite
-                            ? "text-primary-color"
+                        className={`${favorited
+                            ? "fill-current text-primary"
                             : "text-gray-dark"
                             }`}
+                        onClick={(e) => {
+                            e.preventDefault();
+
+                            if (favorited === null) {
+                                router.push("/user/auth/login");
+                                return;
+                            }
+
+                            handleFavoriteClick(e);
+                        }}
                     />
                 </div>
             </div>
