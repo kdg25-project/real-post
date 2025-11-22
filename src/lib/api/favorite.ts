@@ -12,7 +12,6 @@ export async function toggleFavorite(surveyId: string) {
         }
 
         const data = await res.json();
-        console.log("トグル！")
         return data;
     } catch (error) {
         console.error(error);
