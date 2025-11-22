@@ -107,7 +107,7 @@ export default function ProfilePage() {
                 </div>
             </Section>
 
-            <div className="fixed bottom-[94px] left-1/2 -translate-x-1/2 px-[24px]">
+            <div className="fixed bottom-[94px] left-1/2 -translate-x-1/2 w-full px-[24px]">
                 <PrimaryButton text="Logout"
                     onClick={async () => {
                         try {
