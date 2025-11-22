@@ -1,7 +1,6 @@
-// page.tsx
 'use client';
 
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Header from "@/components/layouts/Header";
 import Spacer from "@/components/elements/Spacer";
 import Section from "@/components/layouts/Section";
@@ -14,26 +13,21 @@ export default function FavoritePage() {
 
     useEffect(() => {
         const fetchFavorites = async () => {
-            try {
-                setIsLoading(true);
-                const data = await getFavoriteSurveys();
-                setFavorites(data ?? []);
-            } catch (error) {
-                setFavorites([]);
-            } finally {
-                setIsLoading(false);
-            }
+            setIsLoading(true);
+            const result = await getFavoriteSurveys();
+
+            // result が null の場合は空配列を入れる
+            setFavorites(result?.data ?? []);
+            setIsLoading(false);
         };
 
         fetchFavorites();
     }, []);
 
-
-
     return (
         <div>
-            <Header searchArea={true} />
-            <Spacer size="lg" />
+            <Header searchArea={false} />
+            <Spacer size="sm" />
 
             <Section title="Favorite Posts" className="gap-[16px]">
                 <div className="flex flex-col gap-[20px] mb-[94px]">

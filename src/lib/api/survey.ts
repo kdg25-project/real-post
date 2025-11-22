@@ -58,9 +58,23 @@ export async function getSurveys(params: { page: any; limit: any; category?: any
   }
 }
 
-
+// ------------------------------
 // お気に入り一覧専用
-export async function getFavoriteSurveys() {}
+// ------------------------------
+export async function getFavoriteSurveys() {
+  try {
+    const res = await fetch("/api/users/favorite", {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    });
+
+    if (!res.ok) return null;
+
+    return await res.json();
+  } catch {
+    return null;
+  }
+}
 
 // 店舗管理画面用
 export async function getSurveysForStore() {}

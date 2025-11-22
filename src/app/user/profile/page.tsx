@@ -107,16 +107,18 @@ export default function ProfilePage() {
                 </div>
             </Section>
 
-            <PrimaryButton text="Logout"
-                onClick={async () => {
-                    try {
-                        await authClient.signOut();  // auth-client のログアウト
-                        window.location.href = "/user/home"; // ログアウト後にリダイレクト
-                    } catch (err) {
-                        console.error("ログアウトエラー:", err);
-                    }
-                }}
-            />
+            <div className="fixed bottom-[94px] left-1/2 -translate-x-1/2 px-[24px]">
+                <PrimaryButton text="Logout"
+                    onClick={async () => {
+                        try {
+                            await authClient.signOut();  // auth-client のログアウト
+                            window.location.href = "/user/home"; // ログアウト後にリダイレクト
+                        } catch (err) {
+                            console.error("ログアウトエラー:", err);
+                        }
+                    }}
+                />
+            </div>
         </div>
     );
 }
