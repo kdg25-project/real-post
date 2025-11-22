@@ -29,13 +29,13 @@ export async function getSurveysForTop(page: number, limit: number) {
 // 検索 + 絞り込み一覧
 // ------------------------------
 export async function getSurveys(params: {
-  page: any;
-  limit: any;
-  category?: any;
-  query?: any;
-  ageGroup?: any;
-  country?: any;
-  gender?: any;
+  page: number;
+  limit: number;
+  category?: string;
+  query?: string;
+  ageGroup?: string;
+  country?: string;
+  gender?: string;
 }) {
   try {
     const query = new URLSearchParams();
