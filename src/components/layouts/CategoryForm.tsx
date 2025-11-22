@@ -3,13 +3,17 @@ import { ChevronDownIcon } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 
-function CategoryForm({ className, ...props }: React.ComponentProps<"select">) {
+type title = {
+  title: string
+}
+
+function CategoryForm({title, className, ...props }: React.ComponentProps<"select">) {
   return (
     <div
       className="flex flex-col gap-3 group/native-select  has-[select:disabled]:opacity-50"
       data-slot="native-select-wrapper"
     >
-      <p className="text-[16px] font-bold">カテゴリー</p>
+      <p className="text-[16px] font-bold">{title}</p>
       <div className="relative">
         <select
           data-slot="native-select"

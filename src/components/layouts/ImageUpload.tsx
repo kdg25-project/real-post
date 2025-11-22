@@ -7,12 +7,13 @@ import Image from "next/image";
 
 interface ImageUploadProps {
     label: string;
+    title: string;
     className?: string;
     onChange?:(file: File|null) => void
     preview?: string
 }
 
-export default function ImageUpload({ label, onChange, preview }: ImageUploadProps) {
+export default function ImageUpload({ title, label, onChange, preview }: ImageUploadProps) {
     const fileRef = useRef<HTMLInputElement| null>(null);
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -28,7 +29,7 @@ export default function ImageUpload({ label, onChange, preview }: ImageUploadPro
             <label className="flex items-center justify-center gap-4 w-full px-[20px] py-[15px] rounded-[14px] bg-gray-300 shadow-base focus:outline-none"
             onClick={() => fileRef.current?.click()}>
                 <Upload size={24} />
-                <p className="text-[16px]">画像をアップロード</p>
+                <p className="text-[16px]">{title}</p>
             <input 
             type="file"
             accept="image/*"
