@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/db";
 import { goods, companies } from "@/db/schema";
-import { validateCompanyVerification } from "@/lib/validations/company";
+import { validateCompanyVerification, CompanyNotFoundError } from "@/lib/validations/company";
 import { eq } from "drizzle-orm";
 
 export async function POST(request: NextRequest) {
@@ -43,13 +43,13 @@ export async function POST(request: NextRequest) {
       { status: 201 }
     );
   } catch (error) {
+    if (error instanceof CompanyNotFoundError) {
+      return NextResponse.json(
+        { error: error.message },
+        { status: 404 }
+      );
+    }
     if (error instanceof Error) {
-      if (error.message === "Company not found") {
-        return NextResponse.json(
-          { error: "Company not found" },
-          { status: 404 }
-        );
-      }
       return NextResponse.json(
         { error: error.message },
         { status: 500 }
@@ -69,7 +69,11 @@ export async function GET(request: NextRequest) {
 
     const baseQuery = db.select({
       goods: goods,
-      company: companies,
+      company: {
+        id: companies.id,
+        name: companies.name,
+        verified: companies.verified,
+      },
     }).from(goods).leftJoin(companies, eq(goods.companyId, companies.id));
 
     const allGoods = companyId
