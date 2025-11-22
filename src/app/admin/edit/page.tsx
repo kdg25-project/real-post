@@ -1,22 +1,33 @@
 'use client';
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import TextForm from "@/components/layouts/TextForm";
 import ImageUpload from "@/components/layouts/ImageUpload";
 import { CategoryForm,NativeSelectOption, NativeSelectOptGroup } from "@/components/layouts/CategoryForm";
+import { companyEdit, companyEditRequest } from "@/lib/api/company-edit";
 
 export default function EditPage() {
     const [preview1, setPreview1] = useState<string | null>(null);
     const [preview2, setPreview2] = useState<string | null>(null);
 
+    const[form, setForm] = useState<companyEditRequest>({
+        companyName: "",
+        companyCategory: "",
+        imageFile: new Blob(),
+    });
+
+    const router = useRouter();
+    
+
     return (
         <div className="flex flex-col justify-center gap-6 pb-[104px] pt-10">
-            <div className="flex items-center justify-between w-full h-[292px] bg-gray">
+            <div className="flex items-center justify-between w-full h-[292px]">
                 <h1>仮</h1>
             </div>
-            <TextForm label="店舗名" type="text" placeholder="例 ご飯大好きの会" />
+            <TextForm label="店舗名" type="text" placeholder="例 ご飯大好きの会" onChange={(e) => setForm({...form, companyName: e.target.value})} />
             <TextForm label="住所" type="text" placeholder="例 名古屋市中村区日本橋1-1" />
-            <CategoryForm title="カテゴリー">
+            <CategoryForm title="カテゴリー" onChange={(e) => setForm({...form, companyCategory: e.target.value})}>
                 <NativeSelectOptGroup label="カテゴリー">
                     <NativeSelectOption value="1">飲食</NativeSelectOption>
                     <NativeSelectOption value="2">文化・歴史</NativeSelectOption>
@@ -34,6 +45,7 @@ export default function EditPage() {
                     if (!file) return;
                     const url = URL.createObjectURL(file);
                     setPreview1(url);
+                    form.imageFile = file;
                 }}
             />
             <ImageUpload
