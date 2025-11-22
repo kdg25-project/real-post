@@ -24,7 +24,7 @@ export type GoodsCreateResponse = {
 export function GoodsCreate(req: GoodsCreateRequest): Promise<GoodsCreateResponse> {
     const formData = new FormData();
     formData.append("name", req.name);
-    formData.append("images", JSON.stringify(req.images));
+    formData.append("images", req.images[0]);
 
 
     return fetch(`/api/goods`, {

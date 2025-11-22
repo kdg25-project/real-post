@@ -28,7 +28,7 @@ export default function GoodsRegistration() {
                     if (!file) return;
                     const url = URL.createObjectURL(file);
                     setPreview1(url);
-                    form.images = [file];
+                    setForm(prev => ({ ...prev, images: [file] }));
                 }}
             />
             <PrimaryButton
