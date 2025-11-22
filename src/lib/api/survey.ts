@@ -50,8 +50,6 @@ export async function getSurveys(params: {
 
     const url = `/api/surveys?${query.toString()}`;
 
-    console.log("[getSurveys] URL:", url);
-
     const res = await fetch(url, {
       method: "GET",
       headers: { "Content-Type": "application/json" },
