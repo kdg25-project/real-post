@@ -16,7 +16,7 @@ export default function EditPage() {
             </div>
             <TextForm label="店舗名" type="text" placeholder="例 ご飯大好きの会" />
             <TextForm label="住所" type="text" placeholder="例 名古屋市中村区日本橋1-1" />
-            <CategoryForm>
+            <CategoryForm title="カテゴリー">
                 <NativeSelectOptGroup label="カテゴリー">
                     <NativeSelectOption value="1">飲食</NativeSelectOption>
                     <NativeSelectOption value="2">文化・歴史</NativeSelectOption>
@@ -28,6 +28,7 @@ export default function EditPage() {
             <TextForm label="SNS" type="text" placeholder="例 https://example.com/" />
             <ImageUpload
                 label="店舗画像"
+                title="画像をアップロード"
                 preview={preview1 ?? undefined}
                 onChange={(file) => {
                     if (!file) return;
@@ -37,6 +38,7 @@ export default function EditPage() {
             />
             <ImageUpload
                 label="グッズ画像"
+                title="画像をアップロード"
                 preview={preview2 ?? undefined}
                 onChange={(file) => {
                     if (!file) return;
