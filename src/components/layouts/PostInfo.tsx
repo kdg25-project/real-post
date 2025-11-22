@@ -10,9 +10,9 @@ interface PostInfoProps {
 
     companyId?: string;
     companyName: string;
-    country: string;
-    satisfactionLevel: number;
-    favoriteCount: number;
+    country?: string;
+    satisfactionLevel?: number;
+    favoriteCount?: number;
 }
 
 export default function PostInfo({
