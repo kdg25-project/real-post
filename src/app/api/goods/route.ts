@@ -74,7 +74,7 @@ export async function GET(request: NextRequest) {
         name: companies.name,
         verified: companies.verified,
       },
-    }).from(goods).leftJoin(companies, eq(goods.companyId, companies.id));
+    }).from(goods).innerJoin(companies, eq(goods.companyId, companies.id));
 
     const allGoods = companyId
       ? await baseQuery.where(eq(goods.companyId, companyId))

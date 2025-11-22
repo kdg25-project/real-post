@@ -24,7 +24,7 @@ export class CompanyNotVerifiedError extends Error {
  */
 export async function validateCompanyVerification(companyId: string): Promise<boolean> {
   const company = await db
-    .select()
+    .select({ verified: companies.verified })
     .from(companies)
     .where(eq(companies.id, companyId))
     .limit(1);
