@@ -225,6 +225,17 @@ export async function PATCH(
       updates.placeId = placeId;
     }
 
+    if (Object.keys(updates).length === 0) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "No updates provided",
+          data: null,
+        },
+        { status: 400 }
+      );
+    }
+
     const result = await db
       .update(companyProfile)
       .set(updates)
