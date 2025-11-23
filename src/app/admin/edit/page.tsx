@@ -5,63 +5,74 @@ import { useEffect } from "react";
 import Image from "next/image";
 import TextForm from "@/components/layouts/TextForm";
 import ImageUpload from "@/components/layouts/ImageUpload";
-import { CategoryForm,NativeSelectOption, NativeSelectOptGroup } from "@/components/layouts/CategoryForm";
-import { CompanyEdit, CompanyEditRequest ,} from "@/lib/api/company-edit";
+import { CategoryForm, NativeSelectOption, NativeSelectOptGroup } from "@/components/layouts/CategoryForm";
+import { CompanyEdit, CompanyEditRequest, } from "@/lib/api/company-edit";
 import { UpdateGoods, UpdateGoodsRequest } from "@/lib/api/update-goods";
 import { getCompanyDetail } from "@/lib/api/company";
 import PrimaryButton from "@/components/elements/PrimaryButton";
-import { get } from "http";
+import { useSession } from "@/lib/auth-client";
 
 export default function EditPage() {
-    const [preview1, setPreview1] = useState<string | null>(null);
-    const [preview2, setPreview2] = useState<string | null>(null);
-
-
-    const [companyImageUrl, setCompanyImageUrl] = useState<string | null>(null);
-
-    const [company, setCompany] = useState<getCompanyDetail>({
-        data: {
-            id: "",
-            companyName: "",
-            companyCategory: "",
-            imageUrl: "",
-        }
-    })
-
-    const[form, setForm] = useState<CompanyEditRequest>({
+    const { data } = useSession();
+    // companyのフォーム情報
+    const [company, setCompany] = useState<CompanyEditRequest>({
         companyName: "",
         companyCategory: "",
         imageFile: new Blob(),
     });
-
-    const[goods, setGoods] = useState<UpdateGoodsRequest>({
+    // goodsのフォーム情報
+    const [goods, setGoods] = useState<UpdateGoodsRequest>({
         name: "",
         images: [],
         deleteImageIds: [],
     });
-    
+    // 画像のURL（初期値）
+    const [imageUrls, setImageUrls] = useState({
+        companyImageUrl: "",
+        goodsImageUrl: "",
+    });
 
     const handleSubmit = async () => {
-        try {
-            const result = await CompanyEdit(form);
-            const result2 = await UpdateGoods(goods, );
+        // try {
+        //     const result = await CompanyEdit(form);
+        //     const result2 = await UpdateGoods(goods, goods.imageUrl; );
 
-            if (result.success && result2.success) {
-                alert("情報を編集しました");
-            } else {
-                alert("情報の編集に失敗しました");
-            }
-        } catch (err) {
-            console.error(err);
-            alert("通信エラーが発生しました");
-        }
+        //     if (result.success && result2.success) {
+        //         alert("情報を編集しました");
+        //     } else {
+        //         alert("情報の編集に失敗しました");
+        //     }
+        // } catch (err) {
+        //     console.error(err);
+        //     alert("通信エラーが発生しました");
+        // }
     };
 
-    const handleIndex = async() => {
-        const res = await getCompanyDetail();
-        // setFormでフォームの値に初期値を入れる
+    const handleIndex = async () => {
+        if (!data?.user.id) return;
+        const res = await getCompanyDetail(data?.user.id);
+        if (res.success === false) {
+            // TODO: alertを良いUIに変更する。
+            alert(res.message);
+            return;
+        }
+        setCompany({
+            companyName: res.data.companyName,
+            companyCategory: res.data.companyCategory,
+            // ここに画像ファイルを入れる。
+            imageFile: new Blob(),
+        });
+        setGoods({
+            name: res.data.goods.name,
+            images: [],
+            deleteImageIds: [res.data.goods.id],
+        });
+        setImageUrls({
+            companyImageUrl: res.data.imageUrl,
+            goodsImageUrl: res.data.goods.imageUrl,
+        });
     }
-    
+
     useEffect(() => {
         handleIndex();
     }, []);
@@ -78,9 +89,9 @@ export default function EditPage() {
                 />
             )}
             <p className="flex justify-center items-center text-2xl font-bold">編集</p>
-            <TextForm label="店舗名" type="text" placeholder="例 ご飯大好きの会" onChange={(e) => setForm({...form, companyName: e.target.value})} />
+            <TextForm label="店舗名" type="text" placeholder="例 ご飯大好きの会" onChange={(e) => setForm({ ...form, companyName: e.target.value })} />
             <TextForm label="住所" type="text" placeholder="例 名古屋市中村区日本橋1-1" />
-            <CategoryForm title="カテゴリー" onChange={(e) => setForm({...form, companyCategory: e.target.value})}>
+            <CategoryForm title="カテゴリー" onChange={(e) => setForm({ ...form, companyCategory: e.target.value })}>
                 <NativeSelectOptGroup label="カテゴリー">
                     <NativeSelectOption value="1">飲食</NativeSelectOption>
                     <NativeSelectOption value="2">文化・歴史</NativeSelectOption>
@@ -98,11 +109,11 @@ export default function EditPage() {
                     if (!file) return;
                     const url = URL.createObjectURL(file);
                     setPreview1(url);
-                    setCompanyImageUrl(url); 
+                    setCompanyImageUrl(url);
                     form.imageFile = file;
                 }}
             />
-            <TextForm label="グッズ名" type="text" placeholder="例 ご飯大好き缶バッチ" value={goods.name} onChange={(e) => setGoods({...goods, name: e.target.value})} />
+            <TextForm label="グッズ名" type="text" placeholder="例 ご飯大好き缶バッチ" value={goods.name} onChange={(e) => setGoods({ ...goods, name: e.target.value })} />
             <ImageUpload
                 label="グッズ画像"
                 title="画像をアップロード"
