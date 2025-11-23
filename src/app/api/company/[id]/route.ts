@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/db";
-import { eq, asc } from "drizzle-orm";
+import { eq, desc } from "drizzle-orm";
 import { companyProfile, user, goods, goodsImage } from "@/db/schema";
 
 type Params = {
@@ -35,7 +35,7 @@ export async function GET(
       .leftJoin(goods, eq(goods.companyId, companyProfile.userId))
       .leftJoin(goodsImage, eq(goodsImage.goodsId, goods.id))
       .where(eq(companyProfile.userId, id))
-      .orderBy(asc(goods.createdAt))
+      .orderBy(desc(goodsImage.createdAt))
       .limit(1)
       .then((res) => res);
 
