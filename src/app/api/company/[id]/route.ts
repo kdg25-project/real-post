@@ -57,7 +57,7 @@ export async function GET(
       userId: row.userId,
       companyName: row.companyName,
       companyCategory: row.companyCategory,
-      image: row.image,
+      imageUrl: row.imageUrl,
       placeId: row.placeId,
       createdAt: row.createdAt,
       updatedAt: row.updatedAt,
