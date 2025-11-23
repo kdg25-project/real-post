@@ -15,9 +15,9 @@ import { getCompanyGoods } from "@/lib/api/goods";
 
 export default function CompanyDetailPage() {
     const params = useParams();
-    const [data, setData] = useState<any>(null);
-    const [surveys, setSurveys] = useState<any[]>([]);
-    const [goods, setGoods] = useState<any[]>([]);
+    const [data, setData] = useState(null);
+    const [surveys, setSurveys] = useState([]);
+    const [goods, setGoods] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const router = useRouter();
 
