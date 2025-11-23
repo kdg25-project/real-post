@@ -10,12 +10,14 @@ import { ChevronLeft } from "lucide-react";
 import PostInfo from "@/components/layouts/PostInfo";
 import Section from "@/components/layouts/Section";
 import PostCard from "@/components/elements/PostCard";
-import PrimaryButton from "@/components/elements/PrimaryButton";
+import GoodsCard from "@/components/elements/GoodsCard";
+import { getCompanyGoods } from "@/lib/api/goods";
 
 export default function CompanyDetailPage() {
     const params = useParams();
     const [data, setData] = useState<any>(null);
     const [surveys, setSurveys] = useState<any[]>([]);
+    const [goods, setGoods] = useState<any[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const router = useRouter();
 
@@ -26,13 +28,17 @@ export default function CompanyDetailPage() {
         const fetchCompany = async () => {
             setIsLoading(true);
 
-            // 会社詳細取得
+            // 店舗詳細
             const result = await getCompanyDetail(companyId);
             setData(result?.data ?? null);
 
-            // 店舗アンケート取得
+            // アンケート
             const surveyResult = await getSurveysForStore(companyId, 1, 10);
             if (surveyResult?.success) setSurveys(surveyResult.data);
+
+            // ✅ グッズ取得
+            // const goodsResult = await getCompanyGoods(companyId);
+            // if (goodsResult?.success) setGoods(goodsResult.data);
 
             setIsLoading(false);
         };
@@ -117,7 +123,19 @@ export default function CompanyDetailPage() {
             )}
 
             <Section title="Goods" className="px-[24px] gap-[16px]">
-                <div></div>
+                <div className="flex flex-wrap gap-[16px]">
+                    {goods.length > 0 ? (
+                        goods.map((item) => (
+                            <GoodsCard
+                                key={item.id}
+                                companyId={item.companyId}
+                                imageUrl={item.images?.[0]?.imageUrl}
+                            />
+                        ))
+                    ) : (
+                        <p className="text-gray-400 text-sm">No Goods</p>
+                    )}
+                </div>
             </Section>
 
             <Section title="Other Posts" className="px-[24px] gap-[16px]">
