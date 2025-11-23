@@ -129,11 +129,11 @@ export default function CompanyDetailPage() {
                 />
             </div>
 
-            {data.placeUrl && (
+            {data.placeId && (
                 <Section title="Locate" className="px-[24px] gap-[16px]">
 
                     {(() => {
-                        return (data.placeId && process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY) && (
+                        return (
                             <iframe
                                 src={`https://www.google.com/maps/embed/v1/place?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY}&q=place_id:${data.placeId}`}
                                 style={{ border: 0 }}
