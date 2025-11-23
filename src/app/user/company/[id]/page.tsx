@@ -53,24 +53,23 @@ export default function CompanyDetailPage() {
         const companyId = params?.id;
         if (!companyId || Array.isArray(companyId)) return;
 
-        const fetchCompany = async () => {
-            setIsLoading(true);
+    const fetchCompany = async () => {
+        setIsLoading(true);
 
-            // 店舗詳細
-            const result = await getCompanyDetail(companyId);
-            setData(result?.data ?? null);
+    // 店舗詳細
+    const result = await getCompanyDetail(companyId);
+        setData(result.success ? result.data : null);
 
-            // アンケート
-            const surveyResult = await getSurveysForStore(companyId, 1, 10);
-            if (surveyResult?.success) setSurveys(surveyResult.data);
+    // アンケート
+    const surveyResult = await getSurveysForStore(companyId, 1, 10);
+        if (surveyResult?.success) setSurveys(surveyResult.data);
 
-            // ✅ グッズ取得
-            const goodsResult = await getCompanyGoods(companyId);
-            if (goodsResult?.success) setGoods(goodsResult.data);
+    // グッズ取得
+    const goodsResult = await getCompanyGoods(companyId);
+        if (goodsResult?.success) setGoods(goodsResult.data);
 
-            setIsLoading(false);
-        };
-
+        setIsLoading(false);
+    };
         fetchCompany();
     }, [params?.id]);
 
