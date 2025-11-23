@@ -19,11 +19,11 @@ export default function SignUpPage() {
             <div className="flex flex-col justify-center items-center font-bold gap-20 py-5">
                 <div className="flex items-center justify-between">
                     <div>
-                        <p className="text-gray-dark text-[14px] font-semibold">welcome to</p>
-                        <h1 className="text-[26px] font-bold leading-tight">Real Post</h1>
+                        <p className="text-gray-dark text-[14px] font-semibold">{t('common.welcome')}</p>
+                        <h1 className="text-[26px] font-bold leading-tight">{t('common.appName')}</h1>
                     </div>
                 </div>
-                <p className="text-2xl">管理者登録</p>
+                <p className="text-2xl">{t('admin.registerTitle')}</p>
             </div>
             <div className="flex flex-col gap-[24px]">
                 <TextForm label="メールアドレス" type="email" placeholder="example@gmail.com" onChange={(e) => setEmail(e.target.value)} />
@@ -41,7 +41,7 @@ export default function SignUpPage() {
                 />
                 <button className="flex justify-start w-fit text-[12px] text-gray-500 border-b-1 border-gray-500" 
                     onClick={() => router.push("/admin/auth/login") }>
-                    <p>すでにアカウントをお持ちですか? ログイン</p>
+                    <p>{t('auth.alreadyHaveAccount')}</p>
                 </button>
             </div>
         </div>

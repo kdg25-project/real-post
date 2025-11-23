@@ -20,21 +20,6 @@ export default function StoreInformationCreationPage() {
 
     const router = useRouter();
 
-    const handleSubmit = async () => {
-        if (!form.companyName || !form.companyCategory || !form.imageFile) {
-            alert(t('admin.requiredFields'));
-            return;
-        }
-
-        const result = await companyCreate(form);
-
-        if (result.success) {
-            router.push("/admin/auth/goods-register");
-        } else {
-            alert(result.message);
-        }
-    }
-
     return (
         <div className="flex flex-col justify-center gap-6">
             
@@ -58,12 +43,16 @@ export default function StoreInformationCreationPage() {
                     if (!file) return;
                     const url = URL.createObjectURL(file);
                     setPreview(url);
-                    form.imageFile = (file);
+                    setForm({...form, imageFile: file});
                 }}
             />
             <PrimaryButton
-                text="登録"
+                text={t('admin.registerButton')}
                 onClick={async () => {
+                    if (!form.companyName || !form.companyCategory || !form.imageFile) {
+                        alert(t('admin.requiredFields'));
+                        return;
+                    }
                     const result = await companyCreate(form);
                     if (result.success) {
                         router.push("/admin/auth/goods-register")
