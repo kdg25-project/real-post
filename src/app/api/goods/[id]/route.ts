@@ -45,11 +45,7 @@ export async function PATCH(
   try {
     const { id } = await params;
     const goodsFormDataSchema = z.object({
-      name: z
-        .string()
-        .min(1, "名前は必須です。")
-        .max(50, "名前は50文字までです。")
-        .optional(),
+      name: z.string().max(50, "名前は50文字までです。").nullable(),
       images: z
         .instanceof(Blob)
         .refine((blob) => {
@@ -63,10 +59,9 @@ export async function PATCH(
           return validTypes.includes(blob.type);
         }, "画像はJPEG、JPG、PNG、WEBP、AVIF形式である必要があります。")
         .array()
-        .min(1, "画像は最低1枚必要です。")
         .max(5, "画像は最大5枚までです。")
-        .optional(),
-      deleteImageIds: z.string().array().optional(),
+        .nullable(),
+      deleteImageIds: z.string().array().default([]),
     });
     const existingGoods = await db.query.goods.findFirst({
       where: (table, { eq }) => eq(table.id, id),
