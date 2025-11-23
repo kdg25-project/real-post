@@ -26,9 +26,21 @@ export async function POST(request: NextRequest) {
     const companyName = formData.get("companyName");
     const companyCategory = formData.get("companyCategory");
     const imageFile = formData.get("image");
-    const placeUrl = formData.get("placeUrl");
+    const placeUrl = formData.get("placeUrl") || null;
+    let placeId = formData.get("placeId") || null;
 
-    const placeId = extractPlaceIdFromGoogleMapsUrl(String(placeUrl));
+    if (!placeId && !placeUrl) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Either placeUrl or placeId must be provided",
+          data: null,
+        },
+        { status: 400 }
+      );
+    }
+
+    placeId = placeId || await extractPlaceIdFromGoogleMapsUrl(String(placeUrl));
     if (placeUrl && !placeId) {
       return NextResponse.json(
         {
@@ -76,7 +88,7 @@ export async function POST(request: NextRequest) {
           | "shopping"
           | "other",
         imageUrl: imageUrl,
-        placeId: placeId,
+        placeId: (placeId as string) || null,
       })
       .returning();
 
@@ -175,6 +187,7 @@ export async function PATCH(
     const companyCategory = formData.get("companyCategory") ?? undefined;
     const imageFile = formData.get("image") ?? undefined;
     let placeUrl = formData.get("placeUrl") ?? undefined;
+    let placeId: string | null | undefined = (formData.get("placeId") as string) ?? undefined;
 
     if (placeUrl && typeof placeUrl === "string" && placeUrl.includes("maps.app.goo.gl")) {
       try {
@@ -186,6 +199,10 @@ export async function PATCH(
       } catch (err) {
         console.error("Error resolving placeUrl redirect:", err);
       }
+    }
+
+    if (placeUrl && !placeId) {
+      placeId = await extractPlaceIdFromGoogleMapsUrl(String(placeUrl));
     }
 
     let imageUrl: string | null = null;
@@ -204,8 +221,19 @@ export async function PATCH(
     if (imageUrl) {
       updates.imageUrl = imageUrl;
     }
-    if (placeUrl && typeof placeUrl === "string") {
-      updates.placeUrl = placeUrl;
+    if (placeId && typeof placeId === "string") {
+      updates.placeId = placeId;
+    }
+
+    if (Object.keys(updates).length === 0) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "No updates provided",
+          data: null,
+        },
+        { status: 400 }
+      );
     }
 
     const result = await db
