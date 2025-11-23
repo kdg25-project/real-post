@@ -1,0 +1,125 @@
+{
+  "common": {
+    "loading": "載入中...",
+    "noData": "沒有資料",
+    "welcome": "歡迎來到",
+    "appName": "Real Post",
+    "language": "語言"
+  },
+  "auth": {
+    "email": "電子郵件",
+    "password": "密碼",
+    "country": "國家",
+    "login": "登入",
+    "signup": "註冊",
+    "logout": "登出",
+    "dontHaveAccount": "還沒有帳號？ 註冊",
+    "alreadyHaveAccount": "已有帳號？ 登入",
+    "adminLogin": "管理員登入",
+    "noAccountQuestion": "還沒有帳號？ 建立新帳號"
+  },
+  "profile": {
+    "title": "個人資料",
+    "email": "電子郵件",
+    "emailPlaceholder": "電子郵件",
+    "cancel": "取消",
+    "save": "儲存"
+  },
+  "home": {
+    "categories": "分類",
+    "posts": "貼文"
+  },
+  "categories": {
+    "all": "全部",
+    "food": "美食",
+    "culture": "文化",
+    "activity": "活動",
+    "shopping": "購物",
+    "other": "其他"
+  },
+  "favorite": {
+    "title": "收藏的貼文",
+    "noFavorites": "還沒有收藏。"
+  },
+  "goods": {
+    "title": "商品",
+    "noGoods": "沒有商品"
+  },
+  "company": {
+    "notFound": "找不到店舖",
+    "locate": "位置",
+    "goods": "商品",
+    "otherPosts": "其他貼文"
+  },
+  "survey": {
+    "invalidToken": "無效的調查令牌",
+    "invalidTokenMessage": "您使用的調查連結無效或已過期。",
+    "pleaseParticipate": "請參與我們的調查",
+    "postThumbnail": "貼文縮圖",
+    "selectFile": "選擇檔案",
+    "yourCountry": "您的國家",
+    "yourGender": "您的性別",
+    "yourAge": "您的年齡",
+    "yourSatisfaction": "您的滿意度",
+    "yourReview": "您的評價",
+    "agreePolicy": "我同意隱私政策",
+    "submit": "提交"
+  },
+  "gender": {
+    "male": "男性",
+    "female": "女性",
+    "other": "其他",
+    "noAnswer": "不回答"
+  },
+  "ageGroup": {
+    "18-24": "18-24",
+    "25-34": "25-34",
+    "35-44": "35-44",
+    "45-54": "45-54",
+    "55+": "55+",
+    "noAnswer": "不回答"
+  },
+  "countries": {
+    "JP": "日本",
+    "KR": "韓國: 한국",
+    "US": "美國: English",
+    "CN": "中國: 中国",
+    "GB": "英國: English",
+    "CA": "加拿大: English / Français",
+    "AU": "澳洲: English",
+    "FR": "法國: Français",
+    "DE": "德國: Deutsch",
+    "ES": "西班牙: Español",
+    "IT": "義大利: Italiano",
+    "RU": "俄羅斯: Русский",
+    "TH": "泰國: ไทย",
+    "VN": "越南: Tiếng Việt",
+    "IN": "印度: हिन्दी",
+    "ID": "印尼: Bahasa Indonesia",
+    "MY": "馬來西亞: Bahasa Melayu",
+    "PH": "菲律賓: English / Filipino",
+    "SG": "新加坡: English / 中文",
+    "BR": "巴西: Português",
+    "MX": "墨西哥: Español",
+    "AR": "阿根廷: Español",
+    "EG": "埃及: العربية",
+    "SA": "沙烏地阿拉伯: العربية",
+    "TR": "土耳其: Türkçe",
+    "ZA": "南非: English",
+    "SE": "瑞典: Svenska",
+    "NO": "挪威: Norsk",
+    "FI": "芬蘭: Suomi",
+    "DK": "丹麥: Dansk",
+    "NL": "荷蘭: Nederlands",
+    "BE": "比利時: Nederlands / Français",
+    "CH": "瑞士: Deutsch / Français",
+    "PL": "波蘭: Polski",
+    "UA": "烏克蘭: Українська"
+  },
+  "admin": {
+    "emailLabel": "電子郵件地址",
+    "passwordLabel": "密碼",
+    "loginButton": "登入",
+    "noAccountMessage": "還沒有帳號？ 建立新帳號"
+  }
+}
