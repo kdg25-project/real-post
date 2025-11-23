@@ -28,10 +28,21 @@ type GoodsItem = {
     [key: string]: unknown;
 };
 
+type SurveyItem = {
+    id: string;
+    thumbnailUrl?: string | null;
+    companyName: string;
+    country: string;
+    satisfactionLevel: number;
+    favoriteCount: number;
+    isFavorited: boolean;
+    [key: string]: unknown;
+};
+
 export default function CompanyDetailPage() {
     const params = useParams();
     const [data, setData] = useState<CompanyData | null>(null);
-    const [surveys, setSurveys] = useState<any[]>([]);
+    const [surveys, setSurveys] = useState<SurveyItem[]>([]);
     const [goods, setGoods] = useState<GoodsItem[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const router = useRouter();
