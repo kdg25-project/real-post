@@ -13,7 +13,7 @@ export default function CategoryButton({
 }: CategoryButtonProps) {
     return (
         <button
-            className={`px-[14px] py-[8px] rounded-full text-[14px] font-semibold shadow-base ${selected ? "bg-primary text-white" : "bg-white text-black"
+            className={`px-[14px] py-[8px] rounded-full text-[14px] font-semibold shadow-base whitespace-nowrap ${selected ? "bg-primary text-white" : "bg-white text-black"
                 }`}
             onClick={onClick}
         >
