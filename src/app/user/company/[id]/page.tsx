@@ -21,11 +21,18 @@ type CompanyData = {
     [key: string]: unknown;
 };
 
+type GoodsItem = {
+    id: string;
+    companyId: string;
+    images?: Array<{ imageUrl?: string | null }>; 
+    [key: string]: unknown;
+};
+
 export default function CompanyDetailPage() {
     const params = useParams();
     const [data, setData] = useState<CompanyData | null>(null);
-    const [surveys, setSurveys] = useState([]);
-    const [goods, setGoods] = useState([]);
+    const [surveys, setSurveys] = useState<any[]>([]);
+    const [goods, setGoods] = useState<GoodsItem[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const router = useRouter();
 
@@ -107,7 +114,7 @@ export default function CompanyDetailPage() {
                     size="lg"
                     titleOnly
                     notLink
-                    companyName={data.companyName}
+                    companyName={String(data.companyName ?? "")}
                 />
             </div>
 
@@ -135,7 +142,7 @@ export default function CompanyDetailPage() {
                             <GoodsCard
                                 key={item.id}
                                 companyId={item.companyId}
-                                imageUrl={item.images?.[0]?.imageUrl}
+                                imageUrl={item.images?.[0]?.imageUrl ?? undefined}
                             />
                         ))
                     ) : (
