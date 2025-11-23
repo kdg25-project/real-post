@@ -1,7 +1,7 @@
-export type UpdateGoodsRequest  = {
+export type UpdateGoodsRequest = {
     name: string;
     // NOTE: 1枚だけ送る様にして
-    images: Array<Blob>; // バイナリ
+    images: Array<Blob | File>; // バイナリ
     deleteImageIds: Array<string>;
 };
 
@@ -18,9 +18,9 @@ export type UpdateGoodsResponse = {
     }
 
 }
-| {
-    success: false;
-    message: string;
+    | {
+        success: false;
+        message: string;
     };
 
 export function UpdateGoods(req: UpdateGoodsRequest, id: string): Promise<UpdateGoodsResponse> {

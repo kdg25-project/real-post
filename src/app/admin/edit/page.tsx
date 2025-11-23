@@ -26,26 +26,27 @@ export default function EditPage() {
         images: [],
         deleteImageIds: [],
     });
-    // 画像のURL（初期値）
+    // 画像のURL（フォームの画像のURL）
     const [imageUrls, setImageUrls] = useState({
         companyImageUrl: "",
         goodsImageUrl: "",
     });
+    const [goodsId, setGoodsId] = useState("");
 
     const handleSubmit = async () => {
-        // try {
-        //     const result = await CompanyEdit(form);
-        //     const result2 = await UpdateGoods(goods, goods.imageUrl; );
-
-        //     if (result.success && result2.success) {
-        //         alert("情報を編集しました");
-        //     } else {
-        //         alert("情報の編集に失敗しました");
-        //     }
-        // } catch (err) {
-        //     console.error(err);
-        //     alert("通信エラーが発生しました");
-        // }
+        try {
+            const result = await CompanyEdit(company);
+            const result2 = await UpdateGoods(goods, goodsId);
+            // nullチェック
+            if (result?.success && result2?.success) {
+                alert("情報を編集しました");
+            } else {
+                alert("情報の編集に失敗しました");
+            }
+        } catch (err) {
+            console.error(err);
+            alert("通信エラーが発生しました");
+        }
     };
 
     const handleIndex = async () => {
@@ -73,6 +74,7 @@ export default function EditPage() {
             companyImageUrl: res.data.imageUrl,
             goodsImageUrl: res.data.goods.imageUrl,
         });
+        setGoodsId(res.data.goods.id);
     }
 
     useEffect(() => {
@@ -81,19 +83,19 @@ export default function EditPage() {
 
     return (
         <div className="flex flex-col justify-center gap-6 pb-[104px] pt-10">
-            {companyImageUrl && (
+            {/* {imageUrls.companyImageUrl &&
                 <Image
-                    src={companyImageUrl}
+                    src={imageUrls.companyImageUrl}
                     alt="店舗画像"
                     width={100}
                     height={100}
                     className="w-full h-[100px] mx-auto"
                 />
-            )}
+            } */}
             <p className="flex justify-center items-center text-2xl font-bold">編集</p>
-            <TextForm label="店舗名" type="text" placeholder="例 ご飯大好きの会" onChange={(e) => setForm({ ...form, companyName: e.target.value })} />
+            <TextForm label="店舗名" type="text" placeholder="例 ご飯大好きの会" value={company.companyName} onChange={(e) => setCompany({ ...company, companyName: e.target.value })} />
             <TextForm label="住所" type="text" placeholder="例 名古屋市中村区日本橋1-1" />
-            <CategoryForm title="カテゴリー" onChange={(e) => setForm({ ...form, companyCategory: e.target.value })}>
+            <CategoryForm title="カテゴリー" value={company.companyCategory} onChange={(e) => setCompany({ ...company, companyCategory: e.target.value })}>
                 <NativeSelectOptGroup label="カテゴリー">
                     <NativeSelectOption value="1">飲食</NativeSelectOption>
                     <NativeSelectOption value="2">文化・歴史</NativeSelectOption>
@@ -106,25 +108,30 @@ export default function EditPage() {
             <ImageUpload
                 label="店舗画像"
                 title="画像をアップロード"
-                preview={preview1 ?? undefined}
+                preview={imageUrls.companyImageUrl ?? undefined}
                 onChange={(file) => {
                     if (!file) return;
                     const url = URL.createObjectURL(file);
-                    setPreview1(url);
-                    setCompanyImageUrl(url);
-                    form.imageFile = file;
+                    setImageUrls({
+                        ...imageUrls,
+                        companyImageUrl: url
+                    })
+                    company.imageFile = file;
                 }}
             />
             <TextForm label="グッズ名" type="text" placeholder="例 ご飯大好き缶バッチ" value={goods.name} onChange={(e) => setGoods({ ...goods, name: e.target.value })} />
             <ImageUpload
                 label="グッズ画像"
                 title="画像をアップロード"
-                preview={preview2 ?? undefined}
+                preview={imageUrls.goodsImageUrl || undefined}
                 onChange={(file) => {
                     if (!file) return;
                     const url = URL.createObjectURL(file);
-                    setPreview2(url);
-                    goods.images = [file];
+                    setImageUrls({
+                        ...imageUrls,
+                        goodsImageUrl: url
+                    });
+                    setGoods({ ...goods, images: [file] });
                 }}
             />
             <PrimaryButton

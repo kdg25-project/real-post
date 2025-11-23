@@ -28,6 +28,7 @@ export function companyCreate(req: CompanyCreateRequest): Promise<CompanyCreateR
     formData.append("companyName", req.companyName);
     formData.append("companyCategory", req.companyCategory);
     formData.append("imageFile", req.imageFile);
+    formData.append("placeUrl", req.placeUrl);
 
     return fetch(`/api/company`,
         {
