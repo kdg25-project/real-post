@@ -20,7 +20,7 @@ export default function GoodsRegistration() {
     return (
         <div className="flex flex-col justify-center gap-6">
             <h1 className="flex justify-center font-bold text-2xl py-5">{t('admin.goodsRegistration')}</h1>
-            <TextForm label={t('admin.goodsName')} type="text" placeholder={t('admin.goodsNamePlaceholder')} />
+            <TextForm label={t('admin.goodsName')} type="text" placeholder={t('admin.goodsNamePlaceholder')} value={form.name} onChange={(e) => setForm({...form, name: e.target.value})} />
             <ImageUpload
                 label={t('admin.goodsImage')}
                 title={t('admin.uploadImage')}
@@ -29,7 +29,10 @@ export default function GoodsRegistration() {
                     if (!file) return;
                     const url = URL.createObjectURL(file);
                     setPreview1(url);
-                    setForm(prev => ({ ...prev, images: [file] }));
+                    setForm({
+                        ...form,
+                        images: [file],
+                    })
                 }}
             />
             <PrimaryButton
