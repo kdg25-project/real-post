@@ -40,34 +40,34 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (!placeId && placeUrl) {
-      try {
-        const extracted = await extractPlaceIdFromGoogleMapsUrl(String(placeUrl));
-        placeId = extracted;
-      } catch (err: unknown) {
-        console.error("Error resolving placeId from Google Maps API:", err);
-        const msg = err instanceof Error ? err.message : String(err);
-        return NextResponse.json(
-          {
-            success: false,
-            message: msg || "Failed to retrieve place_id from Google Maps API",
-            data: null,
-          },
-          { status: 500 }
-        );
-      }
-
-      if (placeUrl && !placeId) {
-        return NextResponse.json(
-          {
-            success: false,
-            message: "Invalid Google Maps URL for placeId",
-            data: null,
-          },
-          { status: 400 }
-        );
-      }
-    }
+    // NOTE: placeIdを送っているのでここでは不要
+    // if (!placeId && placeUrl) {
+    //   try {
+    //     const extracted = await extractPlaceIdFromGoogleMapsUrl(String(placeUrl));
+    //     placeId = extracted;
+    //   } catch (err: unknown) {
+    //     console.error("Error resolving placeId from Google Maps API:", err);
+    //     const msg = err instanceof Error ? err.message : String(err);
+    //     return NextResponse.json(
+    //       {
+    //         success: false,
+    //         message: msg || "Failed to retrieve place_id from Google Maps API",
+    //         data: null,
+    //       },
+    //       { status: 500 }
+    //     );
+    //   }
+    // if (placeUrl && !placeId) {
+    //   return NextResponse.json(
+    //     {
+    //       success: false,
+    //       message: "Invalid Google Maps URL for placeId",
+    //       data: null,
+    //     },
+    //     { status: 400 }
+    //   );
+    // }
+    // }
 
     let imageUrl: string | null = null;
     if (imageFile && imageFile instanceof File) {
@@ -203,7 +203,7 @@ export async function PATCH(
     const companyName = formData.get("companyName");
     const companyCategory = formData.get("companyCategory");
     const imageFile = formData.get("image");
-    
+
     const placeUrlRaw = formData.get("placeUrl");
     const placeIdRaw = formData.get("placeId");
 

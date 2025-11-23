@@ -1,6 +1,7 @@
 export type CompanyCreateRequest = {
     companyName: string;
     companyCategory: string;
+    placeId: string;
     placeUrl: string;
     imageFile: Blob | File;
 }

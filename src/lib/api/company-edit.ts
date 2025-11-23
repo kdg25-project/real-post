@@ -2,6 +2,8 @@ export type CompanyEditRequest  = {
     companyName: string;
     companyCategory: string;
     imageFile: Blob | File;
+    placeUrl: string;
+    placeId?: string;
 };
 
 export type CompanyEditResponse = {
@@ -27,6 +29,7 @@ export function CompanyEdit(req: CompanyEditRequest): Promise<CompanyEditRespons
     formData.append("companyName", req.companyName);
     formData.append("companyCategory", req.companyCategory);
     formData.append("imageFile", req.imageFile);
+    formData.append("placeUrl", req.placeUrl);
 
     return fetch(`/api/company`, {
         method:"PATCH",
