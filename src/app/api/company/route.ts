@@ -4,6 +4,7 @@ import { eq } from "drizzle-orm";
 import { requireCompanyAccount } from "@/lib/auth-middleware";
 import { companyProfile } from "@/db/schema";
 import { uploadFileToR2 } from "@/lib/r2";
+import { extractPlaceIdFromGoogleMapsUrl } from "@/lib/placeIdFormetter";
 
 export async function POST(request: NextRequest) {
   try {
@@ -26,6 +27,18 @@ export async function POST(request: NextRequest) {
     const companyCategory = formData.get("companyCategory");
     const imageFile = formData.get("image");
     const placeUrl = formData.get("placeUrl");
+
+    const placeId = extractPlaceIdFromGoogleMapsUrl(String(placeUrl));
+    if (placeUrl && !placeId) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Invalid Google Maps URL for placeId",
+          data: null,
+        },
+        { status: 400 }
+      );
+    }
 
     let imageUrl: string | null = null;
     if (imageFile && imageFile instanceof File) {
@@ -63,7 +76,7 @@ export async function POST(request: NextRequest) {
           | "shopping"
           | "other",
         imageUrl: imageUrl,
-        placeUrl: placeUrl ? String(placeUrl) : null,
+        placeId: placeId,
       })
       .returning();
 

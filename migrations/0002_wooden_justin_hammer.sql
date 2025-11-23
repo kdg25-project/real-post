@@ -1,0 +1,1 @@
+ALTER TABLE "company_profile" RENAME COLUMN "place_url" TO "place_id";
