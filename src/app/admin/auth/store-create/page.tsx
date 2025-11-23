@@ -15,6 +15,7 @@ import {
 } from "@react-google-maps/api";
 
 export default function StoreInformationCreationPage() {
+    const t = useTranslations();
     const [preview, setPreview] = useState<string | null>(null);
     const [form, setForm] = useState<CompanyCreateRequest>({
         companyName: "",
@@ -181,8 +182,8 @@ export default function StoreInformationCreationPage() {
                 </>
             )}
             <ImageUpload
-                label="店舗画像"
-                title="画像をアップロード"
+                label={t('admin.storeImage')}
+                title={t('admin.uploadImage')}
                 preview={preview ?? undefined}
                 onChange={(file) => {
                     if (!file) return;

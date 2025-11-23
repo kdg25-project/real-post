@@ -15,7 +15,9 @@ export async function GET(
   try {
     const goodsfromid = await db.query.goods.findFirst({
       with: {
-        images: true,
+        images: {
+          orderBy: (images, { desc }) => [desc(images.createdAt)],
+        },
       },
       where: (table, { eq }) => eq(table.id, id),
     });
@@ -136,7 +138,9 @@ export async function PATCH(
 
     const updatedGoods = await db.query.goods.findFirst({
       with: {
-        images: true,
+        images: {
+          orderBy: (images, { desc }) => [desc(images.createdAt)],
+        },
       },
       where: (table, { eq }) => eq(table.id, id),
     });

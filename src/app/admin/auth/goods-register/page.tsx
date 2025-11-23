@@ -3,11 +3,13 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { GoodsCreate, GoodsCreateRequest } from "@/lib/api/goods-create"
+import { useTranslations } from "next-intl";
 import TextForm from "@/components/layouts/TextForm";
 import ImageUpload from "@/components/layouts/ImageUpload";
 import PrimaryButton from "@/components/elements/PrimaryButton";
 
 export default function GoodsRegistration() {
+    const t = useTranslations();
     const [preview1, setPreview1] = useState<string | null>(null);
     const router = useRouter();
     const [form, setForm] = useState<GoodsCreateRequest>({
@@ -17,12 +19,11 @@ export default function GoodsRegistration() {
 
     return (
         <div className="flex flex-col justify-center gap-6">
-            
-            <h1 className="flex justify-center font-bold text-2xl py-5">グッズ登録</h1>
-            <TextForm label="グッズ名" type="text" placeholder="例 ご飯大好き缶バッチ" value={form.name} onChange={(e) => setForm({...form, name: e.target.value})} />
+            <h1 className="flex justify-center font-bold text-2xl py-5">{t('admin.goodsRegistration')}</h1>
+            <TextForm label={t('admin.goodsName')} type="text" placeholder={t('admin.goodsNamePlaceholder')} />
             <ImageUpload
-                label="グッズ画像"
-                title="画像をアップロード"
+                label={t('admin.goodsImage')}
+                title={t('admin.uploadImage')}
                 preview={preview1 ?? undefined}
                 onChange={(file) => {
                     if (!file) return;

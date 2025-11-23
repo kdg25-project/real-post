@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import { authClient } from "@/lib/auth-client";
 import PrimaryButton from "@/components/elements/PrimaryButton";
 import Header from "@/components/layouts/Header";
@@ -15,6 +16,7 @@ interface Profile {
 }
 
 export default function ProfilePage() {
+    const t = useTranslations();
     // 初期値を空文字にして制御コンポーネントに
     const [profile, setProfile] = useState<Profile>({ email: "" });
     const [initialProfile, setInitialProfile] = useState<Profile>({ email: "" });
@@ -48,19 +50,19 @@ export default function ProfilePage() {
         console.log("保存データ:", profile);
     };
 
-    if (loading) return <p>Loading...</p>;
+    if (loading) return <p>{t('common.loading')}</p>;
 
     return (
         <div>
             <Header searchArea={false} />
             <Spacer size="sm" />
-            <Section title="Your Profile" className="gap-[16px]">
+            <Section title={t('profile.title')} className="gap-[16px]">
                 <div className="flex flex-col gap-[12px]">
-                    <label htmlFor="email" className="text-[16px] font-bold">Email</label>
+                    <label htmlFor="email" className="text-[16px] font-bold">{t('profile.email')}</label>
                     <input
                         id="email"
                         type="email"
-                        placeholder="email"
+                        placeholder={t('profile.emailPlaceholder')}
                         value={profile.email}
                         onChange={handleChange}
                         className="w-full px-[20px] py-[15px] rounded-[14px] bg-white shadow-base focus:outline-none"
@@ -96,19 +98,19 @@ export default function ProfilePage() {
                         className="w-full bg-gray rounded-[15px] text-[20px] text-white font-medium py-[12px]"
                         onClick={handleCancel}
                     >
-                        Cancel
+                        {t('profile.cancel')}
                     </button>
                     <button
                         className="w-full bg-primary rounded-[15px] text-[20px] text-white font-medium py-[12px]"
                         onClick={handleSave}
                     >
-                        Save
+                        {t('profile.save')}
                     </button>
                 </div>
             </Section>
 
             <div className="fixed bottom-[94px] left-1/2 -translate-x-1/2 w-full px-[24px]">
-                <PrimaryButton text="Logout"
+                <PrimaryButton text={t('auth.logout')}
                     onClick={async () => {
                         try {
                             await authClient.signOut();  // auth-client のログアウト

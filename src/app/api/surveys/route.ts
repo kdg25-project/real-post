@@ -55,7 +55,7 @@ export async function GET(request: NextRequest) {
       .leftJoin(user, eq(user.id, survey.companyId))
       .leftJoin(favorite, eq(favorite.surveyId, survey.id))
       .where(and(
-        categoryList.length ? inArray(companyProfile.companyCategory, categoryList) : undefined,
+        categoryList.length ? inArray(companyProfile.companyCategory, categoryList as CompanyCategory[]) : undefined,
         queryList.length ? or(...queryList.map((q) => like(survey.description, `%${q}%`))) : undefined,
         ageGroupList.length ? inArray(survey.ageGroup, ageGroupList as AgeGroup[]) : undefined,
         countryList.length ? inArray(survey.country, countryList) : undefined,

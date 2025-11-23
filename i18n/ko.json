@@ -1,0 +1,144 @@
+{
+  "common": {
+    "loading": "로딩 중...",
+    "noData": "데이터 없음",
+    "welcome": "환영합니다",
+    "appName": "Real Post",
+    "language": "언어"
+  },
+  "auth": {
+    "email": "이메일",
+    "password": "비밀번호",
+    "country": "국가",
+    "login": "로그인",
+    "signup": "회원가입",
+    "logout": "로그아웃",
+    "dontHaveAccount": "계정이 없으신가요? 가입하기",
+    "alreadyHaveAccount": "이미 계정이 있으신가요? 로그인",
+    "adminLogin": "관리자 로그인",
+    "noAccountQuestion": "계정이 없으신가요? 새로 만들기"
+  },
+  "profile": {
+    "title": "프로필",
+    "email": "이메일",
+    "emailPlaceholder": "이메일",
+    "cancel": "취소",
+    "save": "저장"
+  },
+  "home": {
+    "categories": "카테고리",
+    "posts": "게시물"
+  },
+  "categories": {
+    "all": "전체",
+    "food": "음식",
+    "culture": "문화",
+    "activity": "활동",
+    "shopping": "쇼핑",
+    "other": "기타"
+  },
+  "favorite": {
+    "title": "즐겨찾기 게시물",
+    "noFavorites": "아직 즐겨찾기가 없습니다."
+  },
+  "goods": {
+    "title": "상품",
+    "noGoods": "상품 없음"
+  },
+  "company": {
+    "notFound": "매장을 찾을 수 없습니다",
+    "locate": "위치",
+    "goods": "상품",
+    "otherPosts": "다른 게시물"
+  },
+  "survey": {
+    "invalidToken": "유효하지 않은 설문조사 토큰",
+    "invalidTokenMessage": "사용한 설문조사 링크가 유효하지 않거나 만료되었습니다.",
+    "pleaseParticipate": "설문조사에 참여해 주세요",
+    "postThumbnail": "게시물 썸네일",
+    "selectFile": "파일 선택",
+    "yourCountry": "귀하의 국가",
+    "yourGender": "귀하의 성별",
+    "yourAge": "귀하의 나이",
+    "yourSatisfaction": "귀하의 만족도",
+    "yourReview": "귀하의 리뷰",
+    "agreePolicy": "개인정보 보호정책에 동의합니다",
+    "submit": "제출"
+  },
+  "gender": {
+    "male": "남성",
+    "female": "여성",
+    "other": "기타",
+    "noAnswer": "답변 안 함"
+  },
+  "ageGroup": {
+    "18-24": "18-24",
+    "25-34": "25-34",
+    "35-44": "35-44",
+    "45-54": "45-54",
+    "55+": "55+",
+    "noAnswer": "답변 안 함"
+  },
+  "countries": {
+    "JP": "일본: 日本",
+    "KR": "한국",
+    "US": "미국: English",
+    "CN": "중국: 中国",
+    "GB": "영국: English",
+    "CA": "캐나다: English / Français",
+    "AU": "호주: English",
+    "FR": "프랑스: Français",
+    "DE": "독일: Deutsch",
+    "ES": "스페인: Español",
+    "IT": "이탈리아: Italiano",
+    "RU": "러시아: Русский",
+    "TH": "태국: ไทย",
+    "VN": "베트남: Tiếng Việt",
+    "IN": "인도: हिन्दी",
+    "ID": "인도네시아: Bahasa Indonesia",
+    "MY": "말레이시아: Bahasa Melayu",
+    "PH": "필리핀: English / Filipino",
+    "SG": "싱가포르: English / 中文",
+    "BR": "브라질: Português",
+    "MX": "멕시코: Español",
+    "AR": "아르헨티나: Español",
+    "EG": "이집트: العربية",
+    "SA": "사우디아라비아: العربية",
+    "TR": "터키: Türkçe",
+    "ZA": "남아프리카: English",
+    "SE": "스웨덴: Svenska",
+    "NO": "노르웨이: Norsk",
+    "FI": "핀란드: Suomi",
+    "DK": "덴마크: Dansk",
+    "NL": "네덜란드: Nederlands",
+    "BE": "벨기에: Nederlands / Français",
+    "CH": "스위스: Deutsch / Français",
+    "PL": "폴란드: Polski",
+    "UA": "우크라이나: Українська"
+  },
+  "admin": {
+    "emailLabel": "이메일 주소",
+    "passwordLabel": "비밀번호",
+    "loginButton": "로그인",
+    "noAccountMessage": "계정이 없으신가요? 새로 만들기",
+    "registerTitle": "관리자 등록",
+    "registerButton": "등록",
+    "storeCreation": "매장 정보 생성",
+    "companyName": "회사명",
+    "companyCategory": "카테고리",
+    "placeUrl": "위치 URL",
+    "storeImage": "매장 이미지",
+    "uploadImage": "이미지 업로드",
+    "requiredFields": "회사명, 카테고리, 이미지는 필수입니다",
+    "goodsRegistration": "상품 등록",
+    "goodsName": "상품명",
+    "goodsImage": "상품 이미지",
+    "goodsNamePlaceholder": "예: 밥 좋아요 배지",
+    "qrIssue": "QR 코드 발행",
+    "pleaseIssueQr": "QR 코드를 발행해 주세요",
+    "qrUsageCount": "QR 코드 사용 횟수",
+    "qrUsageCountPlaceholder": "예: 1",
+    "issueQrButton": "QR 코드 발행하기",
+    "qrGenerationFailed": "QR 코드 생성 실패"
+  }
+}
