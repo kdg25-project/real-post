@@ -187,6 +187,7 @@ export async function PATCH(
     const companyCategory = formData.get("companyCategory") ?? undefined;
     const imageFile = formData.get("image") ?? undefined;
     let placeUrl = formData.get("placeUrl") ?? undefined;
+    let placeId: string | null | undefined = (formData.get("placeId") as string) ?? undefined;
 
     if (placeUrl && typeof placeUrl === "string" && placeUrl.includes("maps.app.goo.gl")) {
       try {
@@ -198,6 +199,10 @@ export async function PATCH(
       } catch (err) {
         console.error("Error resolving placeUrl redirect:", err);
       }
+    }
+
+    if (placeUrl && !placeId) {
+      placeId = await extractPlaceIdFromGoogleMapsUrl(String(placeUrl));
     }
 
     let imageUrl: string | null = null;
@@ -216,8 +221,8 @@ export async function PATCH(
     if (imageUrl) {
       updates.imageUrl = imageUrl;
     }
-    if (placeUrl && typeof placeUrl === "string") {
-      updates.placeUrl = placeUrl;
+    if (placeId && typeof placeId === "string") {
+      updates.placeId = placeId;
     }
 
     const result = await db
