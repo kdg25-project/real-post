@@ -13,9 +13,17 @@ import PostCard from "@/components/elements/PostCard";
 import GoodsCard from "@/components/elements/GoodsCard";
 import { getCompanyGoods } from "@/lib/api/goods";
 
+type CompanyData = {
+    image?: string | null;
+    companyName?: string | null;
+    placeUrl?: string | null;
+    placeId?: string | null;
+    [key: string]: unknown;
+};
+
 export default function CompanyDetailPage() {
     const params = useParams();
-    const [data, setData] = useState(null);
+    const [data, setData] = useState<CompanyData | null>(null);
     const [surveys, setSurveys] = useState([]);
     const [goods, setGoods] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -53,6 +61,15 @@ export default function CompanyDetailPage() {
         return (
             <div className="w-full h-full flex items-center justify-center">
                 <p className="text-gray-500 text-lg">Loading...</p>
+            </div>
+        );
+    }
+
+    // データが存在しない場合は表示しない（404的な扱い）
+    if (!data) {
+        return (
+            <div className="w-full h-full flex items-center justify-center">
+                <p className="text-gray-500 text-lg">Company not found</p>
             </div>
         );
     }
