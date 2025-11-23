@@ -13,11 +13,37 @@ import PostCard from "@/components/elements/PostCard";
 import GoodsCard from "@/components/elements/GoodsCard";
 import { getCompanyGoods } from "@/lib/api/goods";
 
+type CompanyData = {
+    image?: string | null;
+    companyName?: string | null;
+    placeUrl?: string | null;
+    placeId?: string | null;
+    [key: string]: unknown;
+};
+
+type GoodsItem = {
+    id: string;
+    companyId: string;
+    images?: Array<{ imageUrl?: string | null }>; 
+    [key: string]: unknown;
+};
+
+type SurveyItem = {
+    id: string;
+    thumbnailUrl?: string | null;
+    companyName: string;
+    country: string;
+    satisfactionLevel: number;
+    favoriteCount: number;
+    isFavorited: boolean;
+    [key: string]: unknown;
+};
+
 export default function CompanyDetailPage() {
     const params = useParams();
-    const [data, setData] = useState<any>(null);
-    const [surveys, setSurveys] = useState<any[]>([]);
-    const [goods, setGoods] = useState<any[]>([]);
+    const [data, setData] = useState<CompanyData | null>(null);
+    const [surveys, setSurveys] = useState<SurveyItem[]>([]);
+    const [goods, setGoods] = useState<GoodsItem[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const router = useRouter();
 
@@ -57,7 +83,14 @@ export default function CompanyDetailPage() {
         );
     }
 
-    console.log(data.placeUrl)
+    // データが存在しない場合は表示しない（404的な扱い）
+    if (!data) {
+        return (
+            <div className="w-full h-full flex items-center justify-center">
+                <p className="text-gray-500 text-lg">Company not found</p>
+            </div>
+        );
+    }
 
     return (
         <motion.div
@@ -92,26 +125,17 @@ export default function CompanyDetailPage() {
                     size="lg"
                     titleOnly
                     notLink
-                    companyName={data.companyName}
+                    companyName={String(data.companyName ?? "")}
                 />
             </div>
 
-            {data.placeUrl && (
+            {data.placeId && (
                 <Section title="Locate" className="px-[24px] gap-[16px]">
 
                     {(() => {
-                        const extractLatLng = (url: string) => {
-                            const match = url.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/);
-                            if (!match) return null;
-                            return `${match[1]},${match[2]}`;
-                        };
-
-                        const coords = extractLatLng(data.placeUrl);
-                        console.log("coords:", coords);
-
                         return (
                             <iframe
-                                src={`https://www.google.com/maps/embed/v1/place?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY}&q=${coords ?? "Japan"}`}
+                                src={`https://www.google.com/maps/embed/v1/place?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY}&q=place_id:${data.placeId}`}
                                 style={{ border: 0 }}
                                 allowFullScreen
                                 loading="lazy"
@@ -129,7 +153,7 @@ export default function CompanyDetailPage() {
                             <GoodsCard
                                 key={item.id}
                                 companyId={item.companyId}
-                                imageUrl={item.images?.[0]?.imageUrl}
+                                imageUrl={item.images?.[0]?.imageUrl ?? undefined}
                             />
                         ))
                     ) : (

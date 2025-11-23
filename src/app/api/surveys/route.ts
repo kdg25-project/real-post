@@ -3,7 +3,7 @@ import { db } from "@/db";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { survey, surveyImage, companyProfile, favorite, user } from "@/db/schema";
-import { eq, like, and, inArray, sql } from "drizzle-orm";
+import { eq, like, and, inArray, sql, or } from "drizzle-orm";
 
 type CompanyCategory = "other" | "food" | "culture" | "activity" | "shopping";
 type AgeGroup = "18-24" | "25-34" | "35-44" | "45-54" | "55+";
@@ -20,18 +20,20 @@ export async function GET(request: NextRequest) {
 
     const page = parseInt(searchParams.get("page") || "1", 10);
     const limit = parseInt(searchParams.get("limit") || "10", 10);
-    const category = searchParams.get("category");
-    const query = searchParams.get("query");
-    const ageGroup = searchParams.get("age_group");
-    const country = searchParams.get("country");
-    const gender = searchParams.get("gender");
-
-    const categoryVal = category as CompanyCategory | null;
+    // パラメータは複数指定をサポート (繰り返しパラメータ or カンマ区切り)
+    const categoryList = searchParams.getAll("category").flatMap((s) => s.split(",")).map((s) => s.trim()).filter(Boolean);
+    const queryList = searchParams.getAll("query").flatMap((s) => s.split(",")).map((s) => s.trim()).filter(Boolean);
+    const ageGroupList = searchParams.getAll("age_group").flatMap((s) => s.split(",")).map((s) => s.trim()).filter(Boolean);
+    const countryList = searchParams.getAll("country").flatMap((s) => s.split(",")).map((s) => s.trim()).filter(Boolean);
+    const genderList = searchParams.getAll("gender").flatMap((s) => s.split(",")).map((s) => s.trim()).filter(Boolean);
 
     const offset = (page - 1) * limit;
 
+    // 判定: ページ/リミット以外にフィルタが何も指定されていない (全件取得 & 再並び替えを行う)
+    const noFilters = categoryList.length === 0 && queryList.length === 0 && ageGroupList.length === 0 && countryList.length === 0 && genderList.length === 0;
+
     // 1) surveys を取得(必要なら where 条件を追加)
-    const surveys = await db
+    const baseQuery = db
       .select({
         id: survey.id,
         description: survey.description,
@@ -53,17 +55,72 @@ export async function GET(request: NextRequest) {
       .leftJoin(user, eq(user.id, survey.companyId))
       .leftJoin(favorite, eq(favorite.surveyId, survey.id))
       .where(and(
-        categoryVal ? eq(companyProfile.companyCategory, categoryVal) : undefined,
-        query ? like(survey.description, `%${query}%`) : undefined,
-        ageGroup ? eq(survey.ageGroup, ageGroup as AgeGroup) : undefined,
-        country ? eq(survey.country, country) : undefined,
-        gender ? eq(survey.gender, gender as "male" | "female" | "other") : undefined
+        categoryList.length ? inArray(companyProfile.companyCategory, categoryList) : undefined,
+        queryList.length ? or(...queryList.map((q) => like(survey.description, `%${q}%`))) : undefined,
+        ageGroupList.length ? inArray(survey.ageGroup, ageGroupList as AgeGroup[]) : undefined,
+        countryList.length ? inArray(survey.country, countryList) : undefined,
+        genderList.length ? inArray(survey.gender, genderList as ("male" | "female" | "other")[]) : undefined
       ))
-      .groupBy(survey.id, companyProfile.companyCategory, companyProfile.companyName, user.image)
-      .limit(limit)
-      .offset(offset);
+      .groupBy(survey.id, companyProfile.companyCategory, companyProfile.companyName, user.image);
 
-    const surveyIds = surveys.map((s) => s.id);
+    // noFilters の場合は全件取得して並べ替え後にページングを適用する。
+    // フィルタがある場合は DB 側で limit/offset を適用して効率化する。
+    let surveys = noFilters
+      ? await baseQuery
+      : await baseQuery.limit(limit).offset(offset);
+
+    // フィルタ無しの場合、同一会社のサーベイが連続して表示されないように順序を調整する
+    if (noFilters && surveys.length > 1) {
+      // companyId をキーにしてキュー化
+      const groups = new Map<string, typeof surveys[0][]>();
+      surveys.forEach((s) => {
+        const key = String(s.companyId ?? "__null__");
+        if (!groups.has(key)) groups.set(key, []);
+        groups.get(key)!.push(s);
+      });
+
+      const entries: Array<{ cid: string; arr: typeof surveys[0][] }> = Array.from(groups.entries()).map(([cid, arr]) => ({ cid, arr }));
+      const total = surveys.length;
+      const ordered: typeof surveys = [];
+      let lastCompany: string | null = null;
+
+      // Greedy: 毎回残数が多い会社から選ぶ。ただし直前の会社は避ける。
+      while (ordered.length < total) {
+        // 残数で降順ソート
+        entries.sort((a, b) => b.arr.length - a.arr.length);
+
+        // 直前会社ではない最上位を探す
+        let chosenIndex = -1;
+        for (let i = 0; i < entries.length; i++) {
+          if (entries[i].arr.length === 0) continue;
+          if (entries[i].cid === lastCompany) continue;
+          chosenIndex = i;
+          break;
+        }
+
+        // 見つからない場合（残っているのは直前会社のみなど）、最上位を使う
+        if (chosenIndex === -1) {
+          for (let i = 0; i < entries.length; i++) {
+            if (entries[i].arr.length > 0) {
+              chosenIndex = i;
+              break;
+            }
+          }
+        }
+
+        if (chosenIndex === -1) break; // safety
+
+        const chosen = entries[chosenIndex];
+        ordered.push(chosen.arr.shift()!);
+        lastCompany = chosen.cid;
+      }
+
+      surveys = ordered;
+    }
+    // ページング: フィルタ無しなら並べ替えた結果から slice、そうでなければ既に DB 側で制限済
+    const pagedSurveys = noFilters ? surveys.slice(offset, offset + limit) : surveys;
+
+    const surveyIds = pagedSurveys.map((s) => s.id);
     if (surveyIds.length === 0) {
       return NextResponse.json({
         success: true,
@@ -102,7 +159,8 @@ export async function GET(request: NextRequest) {
     }
 
     // 4) レスポンス整形
-    const data = surveys.map((s) => ({
+    const data = pagedSurveys.map((s) => ({
+      companyId: String(s.companyId),
       id: String(s.id),
       description: s.description ?? "",
       thumbnailUrl: s.thumbnailUrl ?? s.companyImage ?? null,
