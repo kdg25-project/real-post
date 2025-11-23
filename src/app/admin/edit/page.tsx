@@ -77,7 +77,7 @@ export default function EditPage() {
 
     useEffect(() => {
         handleIndex();
-    }, []);
+    }, [data]);
 
     return (
         <div className="flex flex-col justify-center gap-6 pb-[104px] pt-10">
