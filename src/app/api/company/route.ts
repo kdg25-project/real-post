@@ -40,16 +40,33 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    placeId = placeId || await extractPlaceIdFromGoogleMapsUrl(String(placeUrl));
-    if (placeUrl && !placeId) {
-      return NextResponse.json(
-        {
-          success: false,
-          message: "Invalid Google Maps URL for placeId",
-          data: null,
-        },
-        { status: 400 }
-      );
+    if (!placeId && placeUrl) {
+      try {
+        const extracted = await extractPlaceIdFromGoogleMapsUrl(String(placeUrl));
+        placeId = extracted;
+      } catch (err: unknown) {
+        console.error("Error resolving placeId from Google Maps API:", err);
+        const msg = err instanceof Error ? err.message : String(err);
+        return NextResponse.json(
+          {
+            success: false,
+            message: msg || "Failed to retrieve place_id from Google Maps API",
+            data: null,
+          },
+          { status: 500 }
+        );
+      }
+
+      if (placeUrl && !placeId) {
+        return NextResponse.json(
+          {
+            success: false,
+            message: "Invalid Google Maps URL for placeId",
+            data: null,
+          },
+          { status: 400 }
+        );
+      }
     }
 
     let imageUrl: string | null = null;
@@ -183,26 +200,60 @@ export async function PATCH(
 
     // company_profileを更新
     const formData = await request.formData();
-    const companyName = formData.get("companyName") ?? undefined;
-    const companyCategory = formData.get("companyCategory") ?? undefined;
-    const imageFile = formData.get("image") ?? undefined;
-    let placeUrl = formData.get("placeUrl") ?? undefined;
-    let placeId: string | null | undefined = (formData.get("placeId") as string) ?? undefined;
+    const companyName = formData.get("companyName");
+    const companyCategory = formData.get("companyCategory");
+    const imageFile = formData.get("image");
+    
+    const placeUrlRaw = formData.get("placeUrl");
+    const placeIdRaw = formData.get("placeId");
 
-    if (placeUrl && typeof placeUrl === "string" && placeUrl.includes("maps.app.goo.gl")) {
-      try {
-        const response = await fetch(placeUrl, {
-          method: "HEAD",
-          redirect: "follow",
-        });
-        placeUrl = response.url;
-      } catch (err) {
-        console.error("Error resolving placeUrl redirect:", err);
-      }
+    let placeIdValue: string | undefined = undefined;
+    if (placeIdRaw !== null) {
+      placeIdValue = String(placeIdRaw);
     }
 
-    if (placeUrl && !placeId) {
-      placeId = await extractPlaceIdFromGoogleMapsUrl(String(placeUrl));
+    if (placeUrlRaw !== null) {
+      let placeUrl = String(placeUrlRaw);
+      if (placeUrl.includes("maps.app.goo.gl")) {
+        try {
+          const response = await fetch(placeUrl, {
+            method: "HEAD",
+            redirect: "follow",
+          });
+          placeUrl = response.url;
+        } catch (err) {
+          console.error("Error resolving placeUrl redirect:", err);
+        }
+      }
+
+      if (!placeIdValue && placeUrl.length > 0) {
+        try {
+          const extractedId = await extractPlaceIdFromGoogleMapsUrl(placeUrl);
+          if (extractedId) {
+            placeIdValue = extractedId;
+          } else {
+            return NextResponse.json(
+              {
+                success: false,
+                message: "Invalid Google Maps URL",
+                data: null,
+              },
+              { status: 400 }
+            );
+          }
+        } catch (err: unknown) {
+          console.error("Error resolving placeId from Google Maps API:", err);
+          const msg = err instanceof Error ? err.message : String(err);
+          return NextResponse.json(
+            {
+              success: false,
+              message: msg || "Failed to retrieve place_id from Google Maps API",
+              data: null,
+            },
+            { status: 500 }
+          );
+        }
+      }
     }
 
     let imageUrl: string | null = null;
@@ -212,17 +263,17 @@ export async function PATCH(
     }
 
     const updates: Record<string, unknown> = {};
-    if (companyName && typeof companyName === "string") {
-      updates.companyName = companyName;
+    if (companyName !== null) {
+      updates.companyName = String(companyName);
     }
-    if (companyCategory && typeof companyCategory === "string") {
-      updates.companyCategory = companyCategory;
+    if (companyCategory !== null) {
+      updates.companyCategory = String(companyCategory);
     }
     if (imageUrl) {
       updates.imageUrl = imageUrl;
     }
-    if (placeId && typeof placeId === "string") {
-      updates.placeId = placeId;
+    if (placeIdValue !== undefined) {
+      updates.placeId = placeIdValue;
     }
 
     if (Object.keys(updates).length === 0) {
