@@ -18,7 +18,11 @@ export async function GET(
 
     const [goodsfromid, totalCount] = await Promise.all([
       db.query.goods.findMany({
-        with: { images: true },
+        with: { 
+          images: {
+            orderBy: (images, { desc }) => [desc(images.createdAt)],
+          }
+        },
         limit: pageSize,
         offset: (page - 1) * pageSize,
         where: (table, { eq }) => eq(table.companyId, id),
