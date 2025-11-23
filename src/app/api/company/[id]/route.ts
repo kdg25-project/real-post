@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/db";
-import { eq } from "drizzle-orm";
-import { companyProfile, user } from "@/db/schema";
+import { eq, asc } from "drizzle-orm";
+import { companyProfile, user, goods, goodsImage } from "@/db/schema";
 
 type Params = {
   params: Promise<{
@@ -26,10 +26,17 @@ export async function GET(
         placeId: companyProfile.placeId,
         createdAt: companyProfile.createdAt,
         updatedAt: companyProfile.updatedAt,
+        goodsId: goods.id,
+        goodsName: goods.name,
+        goodsImageUrl: goodsImage.imageUrl,
       })
       .from(companyProfile)
       .leftJoin(user, eq(user.id, companyProfile.userId))
+      .leftJoin(goods, eq(goods.companyId, companyProfile.userId))
+      .leftJoin(goodsImage, eq(goodsImage.goodsId, goods.id))
       .where(eq(companyProfile.userId, id))
+      .orderBy(asc(goods.createdAt))
+      .limit(1)
       .then((res) => res);
 
     if (!result || result.length === 0) {
@@ -43,7 +50,25 @@ export async function GET(
       );
     }
 
-    const companyData = result[0];
+    const row = result[0];
+
+    const companyData = {
+      id: row.id,
+      userId: row.userId,
+      companyName: row.companyName,
+      companyCategory: row.companyCategory,
+      image: row.image,
+      placeId: row.placeId,
+      createdAt: row.createdAt,
+      updatedAt: row.updatedAt,
+      goods: row.goodsId
+        ? {
+            id: row.goodsId,
+            name: row.goodsName,
+            imageUrl: row.goodsImageUrl,
+          }
+        : null,
+    };
 
     return NextResponse.json(
       {
