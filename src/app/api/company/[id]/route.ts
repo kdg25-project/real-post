@@ -22,7 +22,7 @@ export async function GET(
         userId: companyProfile.userId,
         companyName: companyProfile.companyName,
         companyCategory: companyProfile.companyCategory,
-        image: user.image,
+        imageUrl: companyProfile.imageUrl,
         placeId: companyProfile.placeId,
         createdAt: companyProfile.createdAt,
         updatedAt: companyProfile.updatedAt,
