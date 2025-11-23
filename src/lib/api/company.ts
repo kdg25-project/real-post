@@ -14,7 +14,7 @@ export type GetCompanyDetail = {
       "id": string;
       "name": string;
       "imageUrl": string;
-    };
+    } | null;
   }
 }
   | {

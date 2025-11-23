@@ -62,6 +62,8 @@ export default function EditPage() {
             // ここに画像ファイルを入れる。
             imageFile: new Blob(),
         });
+
+        if (!res.data.goods) return;
         setGoods({
             name: res.data.goods.name,
             images: [],
