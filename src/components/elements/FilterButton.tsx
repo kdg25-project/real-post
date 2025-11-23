@@ -1,61 +1,33 @@
 "use client"
 
 import * as React from "react"
-import { Minus, Plus } from "lucide-react"
-
-import { Button } from "@/components/ui/button"
-import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle, DrawerTrigger } from "@/components/ui/drawer"
-
 import { Settings2 } from "lucide-react"
+import {
+    Drawer,
+    DrawerContent,
+    DrawerDescription,
+    DrawerHeader,
+    DrawerTitle,
+    DrawerTrigger,
+} from "@/components/ui/drawer"
+import CategoryButton from "./CategoryButton"
 
-const data = [
-    {
-        goal: 400,
-    },
-    {
-        goal: 300,
-    },
-    {
-        goal: 200,
-    },
-    {
-        goal: 300,
-    },
-    {
-        goal: 200,
-    },
-    {
-        goal: 278,
-    },
-    {
-        goal: 189,
-    },
-    {
-        goal: 239,
-    },
-    {
-        goal: 300,
-    },
-    {
-        goal: 200,
-    },
-    {
-        goal: 278,
-    },
-    {
-        goal: 189,
-    },
-    {
-        goal: 349,
-    },
-]
+type Props = {
+    onFilterChange?: (age: string, country: string) => void
+}
 
-export function FilterButton() {
-    const [goal, setGoal] = React.useState(350)
+export function FilterButton({ onFilterChange }: Props) {
+    const [ageGroup, setAgeGroup] = React.useState("")
+    const [country, setCountry] = React.useState("")
 
-    function onClick(adjustment: number) {
-        setGoal(Math.max(200, Math.min(400, goal + adjustment)))
-    }
+    const ageGroups = ["18-24", "25-34", "35-44", "45-54", "55+"]
+    const countries = ["Japan", "USA", "UK", "Korea", "China"]
+
+    // ✅ 選択した瞬間に親へ通知
+    React.useEffect(() => {
+        if (!onFilterChange) return
+        onFilterChange(ageGroup, country)
+    }, [ageGroup, country])
 
     return (
         <Drawer>
@@ -64,50 +36,43 @@ export function FilterButton() {
                     <Settings2 size={28} className="text-white" />
                 </div>
             </DrawerTrigger>
+
             <DrawerContent>
-                <div className="mx-auto w-full max-w-sm">
+                <div className="mx-auto w-full max-w-sm p-4">
                     <DrawerHeader>
-                        <DrawerTitle>Move Goal</DrawerTitle>
-                        <DrawerDescription>Set your daily activity goal.</DrawerDescription>
+                        <DrawerTitle>Filter</DrawerTitle>
+                        <DrawerDescription>
+                            Choose your filter criteria.
+                        </DrawerDescription>
                     </DrawerHeader>
-                    <div className="p-4 pb-0">
-                        <div className="flex items-center justify-center space-x-2">
-                            <Button
-                                variant="outline"
-                                size="icon"
-                                className="h-8 w-8 shrink-0 rounded-full"
-                                onClick={() => onClick(-10)}
-                                disabled={goal <= 200}
-                            >
-                                <Minus />
-                                <span className="sr-only">Decrease</span>
-                            </Button>
-                            <div className="flex-1 text-center">
-                                <div className="text-7xl font-bold tracking-tighter">
-                                    {goal}
-                                </div>
-                                <div className="text-muted-foreground text-[0.70rem] uppercase">
-                                    Calories/day
-                                </div>
-                            </div>
-                            <Button
-                                variant="outline"
-                                size="icon"
-                                className="h-8 w-8 shrink-0 rounded-full"
-                                onClick={() => onClick(10)}
-                                disabled={goal >= 400}
-                            >
-                                <Plus />
-                                <span className="sr-only">Increase</span>
-                            </Button>
+
+                    <div className="mt-4">
+                        <p className="font-medium mb-2">Age Group</p>
+                        <div className="flex flex-wrap gap-2">
+                            {ageGroups.map((age) => (
+                                <CategoryButton
+                                    key={age}
+                                    name={age}
+                                    selected={ageGroup === age}
+                                    onClick={() => setAgeGroup(age)}
+                                />
+                            ))}
                         </div>
                     </div>
-                    <DrawerFooter>
-                        <Button>Submit</Button>
-                        <DrawerClose asChild>
-                            <Button variant="outline">Cancel</Button>
-                        </DrawerClose>
-                    </DrawerFooter>
+
+                    <div className="mt-6">
+                        <p className="font-medium mb-2">Country</p>
+                        <div className="flex flex-wrap gap-2">
+                            {countries.map((c) => (
+                                <CategoryButton
+                                    key={c}
+                                    name={c}
+                                    selected={country === c}
+                                    onClick={() => setCountry(c)}
+                                />
+                            ))}
+                        </div>
+                    </div>
                 </div>
             </DrawerContent>
         </Drawer>

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Header from "@/components/layouts/Header";
 import Spacer from "@/components/elements/Spacer";
 import Slider from "@/components/layouts/SliderArea";
@@ -10,39 +10,23 @@ import PostCard from "@/components/elements/PostCard";
 import { getSurveys } from "@/lib/api/survey";
 
 export default function HomePage() {
-    const categories = ["all", "food", "cluture", "activity", "shopping", "other"];
-    const [selectedCategory, setSelectedCategory] = React.useState("all");
-    const [surveys, setSurveys] = React.useState<any[]>([]);
-    const [isFilteredMode, setIsFilteredMode] = React.useState(false);
-    const [isLoading, setIsLoading] = React.useState(false);
+    const categories = ["all", "food", "culture", "activity", "shopping", "other"];
 
-    // -----------------------------
-    // 初回ロード
-    // -----------------------------
+    const [selectedCategory, setSelectedCategory] = useState("all");
+    const [ageGroup, setAgeGroup] = useState("");
+    const [country, setCountry] = useState("");
+    const [searchKeyword, setSearchKeyword] = useState("");
+    const [surveys, setSurveys] = useState<any[]>([]);
+    const [isLoading, setIsLoading] = useState(false);
+
+    // ✅ called when FilterButton updates age/country
+    const handleFilterChange = (age: string, country: string) => {
+        setAgeGroup(age);
+        setCountry(country);
+    };
+
+    // ✅ fetch whenever filter changes
     useEffect(() => {
-        async function fetchData() {
-            setIsLoading(true);
-
-            const res = await getSurveys({
-                page: 1,
-                limit: 10
-            });
-
-            if (res?.success) {
-                setSurveys(res.data);
-            }
-
-            setIsLoading(false);
-        }
-        fetchData();
-    }, []);
-
-    // -----------------------------
-    // カテゴリ変更時
-    // -----------------------------
-    useEffect(() => {
-        if (!isFilteredMode) return;
-
         async function fetchFiltered() {
             setIsLoading(true);
 
@@ -51,9 +35,10 @@ export default function HomePage() {
                 limit: 10,
             };
 
-            if (selectedCategory !== "all") {
-                params.category = selectedCategory;
-            }
+            if (selectedCategory !== "all") params.category = selectedCategory;
+            if (searchKeyword) params.query = searchKeyword;
+            if (ageGroup) params.ageGroup = ageGroup;
+            if (country) params.country = country;
 
             const res = await getSurveys(params);
 
@@ -63,25 +48,27 @@ export default function HomePage() {
         }
 
         fetchFiltered();
-    }, [isFilteredMode, selectedCategory]);
+    }, [selectedCategory, searchKeyword, ageGroup, country]);
+
+    // ✅ first load
+    useEffect(() => {
+        async function fetchData() {
+            setIsLoading(true);
+            const res = await getSurveys({ page: 1, limit: 10 });
+            if (res?.success) setSurveys(res.data);
+            setIsLoading(false);
+        }
+        fetchData();
+    }, []);
 
     return (
         <div>
             <Header
                 searchArea={true}
                 onSearch={(keyword) => {
-                    setIsFilteredMode(true);
-
-                    async function fetchSearch() {
-                        const res = await getSurveys({
-                            page: 1,
-                            limit: 10,
-                            query: keyword,
-                        });
-                        if (res?.success) setSurveys(res.data);
-                    }
-                    fetchSearch();
+                    setSearchKeyword(keyword);
                 }}
+                onFilterChange={handleFilterChange}
             />
 
             <Spacer size="lg" />
@@ -94,10 +81,7 @@ export default function HomePage() {
                             key={cat}
                             name={cat}
                             selected={selectedCategory === cat}
-                            onClick={() => {
-                                setSelectedCategory(cat);
-                                setIsFilteredMode(true);
-                            }}
+                            onClick={() => setSelectedCategory(cat)}
                         />
                     ))}
                 </div>
