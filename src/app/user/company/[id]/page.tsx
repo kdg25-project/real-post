@@ -37,8 +37,8 @@ export default function CompanyDetailPage() {
             if (surveyResult?.success) setSurveys(surveyResult.data);
 
             // ✅ グッズ取得
-            // const goodsResult = await getCompanyGoods(companyId);
-            // if (goodsResult?.success) setGoods(goodsResult.data);
+            const goodsResult = await getCompanyGoods(companyId);
+            if (goodsResult?.success) setGoods(goodsResult.data);
 
             setIsLoading(false);
         };
