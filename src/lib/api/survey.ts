@@ -16,7 +16,6 @@ export async function getSurveysForTop(page: number, limit: number) {
     }
 
     const json = await res.json();
-    console.log(json)
     return json;
   } catch (err) {
     console.error(err);
@@ -82,8 +81,29 @@ export async function getFavoriteSurveys() {
   }
 }
 
-// 店舗管理画面用
-export async function getSurveysForStore() {}
+// ------------------------------
+// 店舗詳細専用
+// ------------------------------
+export async function getSurveysForStore(companyId: string, page: number, limit: number) {
+  try {
+    const url = `/api/surveys/company/${companyId}?page=${page}&limit=${limit}`;
+
+    const res = await fetch(url, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    });
+
+    if (!res.ok) {
+      throw new Error("Failed to fetch surveys for store");
+    }
+
+    const json = await res.json();
+    return json;
+  } catch (err) {
+    console.error("[getSurveysForStore] ERROR:", err);
+    return null;
+  }
+}
 
 // ------------------------------
 // 詳細ページ用

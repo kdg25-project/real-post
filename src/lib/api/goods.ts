@@ -27,7 +27,7 @@ export async function getGoodsList(page: number, limit: number) {
 // ------------------------------
 export async function getCompanyGoods(companyId: string) {
     try {
-        const res = await fetch(`/api/goods/${companyId}`, {
+        const res = await fetch(`/api/goods/company/${companyId}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
