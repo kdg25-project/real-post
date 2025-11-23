@@ -171,27 +171,30 @@ await updateCompanyProfile({
 - **Query Params**:
   - `page` (number, default: 1): ページ番号
   - `limit` (number, default: 10): 1ページあたりの件数
-  - `category` (string): 企業カテゴリでフィルタ
-  - `query` (string): 説明文(description)の部分一致検索
-  - `age_group` (string): 年齢層フィルタ
-  - `country` (string): 国フィルタ
-  - `gender` (string): 性別フィルタ (`male`, `female`, `other`)
+  - `category` (string | string[]): 企業カテゴリでフィルタ。複数指定をサポートします（繰り返しパラメータ `?category=a&category=b` または カンマ区切り `?category=a,b`）。
+  - `query` (string | string[]): 説明文(description)の部分一致検索。複数ワードを指定した場合は OR 検索（いずれかに部分一致）になります。繰り返し / カンマ区切りをサポートします。
+  - `age_group` (string | string[]): 年齢層フィルタ。複数指定をサポートします。
+  - `country` (string | string[]): 国フィルタ。複数指定をサポートします。
+  - `gender` (string | string[]): 性別フィルタ (`male`, `female`, `other`)。複数指定をサポートします。
 - **Response**:
   ```json
   {
     "success": true,
     "data": [
       {
+        "companyId": "company_user_id",
         "id": "survey_id",
         "description": "...",
         "thumbnailUrl": "...", // 最初の画像または企業画像
-        "images": ["url1", "url2"], // 関連画像一覧
+        "imageUrls": ["url1", "url2"], // 関連画像一覧（フィールド名は `imageUrls`）
         "isFavorited": boolean, // ログインユーザーがお気に入りにしているか
         ...
       }
     ]
   }
   ```
+
+- **備考（ページング）**: クエリフィルタが一切指定されていない場合はサーバー側で一旦全件を取得して社別に並べ替え（同一会社が連続しないように調整）を行った後に `page`/`limit` によるスライスを適用します。フィルタが指定されている場合は DB 側で `limit`/`offset` を使って効率的に取得します。
 
 #### `GET /api/surveys/unique-per-company`
 各企業ごとの最新のアンケートを1件ずつ取得します。
