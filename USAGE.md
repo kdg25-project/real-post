@@ -196,12 +196,6 @@ await updateCompanyProfile({
 
 - **備考（ページング）**: クエリフィルタが一切指定されていない場合はサーバー側で一旦全件を取得して社別に並べ替え（同一会社が連続しないように調整）を行った後に `page`/`limit` によるスライスを適用します。フィルタが指定されている場合は DB 側で `limit`/`offset` を使って効率的に取得します。
 
-#### `GET /api/surveys/unique-per-company`
-各企業ごとの最新のアンケートを1件ずつ取得します。
-
-- **Query Params**: `GET /api/surveys` と同様
-- **Response**: `GET /api/surveys` と同様の形式
-
 #### `GET /api/surveys/[id]`
 特定のアンケートの詳細を取得します。
 
