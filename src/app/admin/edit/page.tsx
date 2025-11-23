@@ -1,11 +1,11 @@
 'use client';
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import TextForm from "@/components/layouts/TextForm";
 import ImageUpload from "@/components/layouts/ImageUpload";
 import { CategoryForm,NativeSelectOption, NativeSelectOptGroup } from "@/components/layouts/CategoryForm";
 import { companyEdit, companyEditRequest } from "@/lib/api/company-edit";
+import { UpdateGoods, UpdateGoodsRequest } from "@/lib/api/update-goods";
 
 export default function EditPage() {
     const [preview1, setPreview1] = useState<string | null>(null);
@@ -17,7 +17,13 @@ export default function EditPage() {
         imageFile: new Blob(),
     });
 
-    const router = useRouter();
+    const[goods, setGoods] = useState<UpdateGoodsRequest>({
+        name: "",
+        images: [],
+        deleteImageIds: [],
+    });
+    
+
     
 
     return (
@@ -48,6 +54,7 @@ export default function EditPage() {
                     form.imageFile = file;
                 }}
             />
+            <TextForm label="グッズ名" type="text" placeholder="例 ご飯大好き缶バッチ" value={goods.name} onChange={(e) => setGoods({...goods, name: e.target.value})} />
             <ImageUpload
                 label="グッズ画像"
                 title="画像をアップロード"
@@ -56,6 +63,7 @@ export default function EditPage() {
                     if (!file) return;
                     const url = URL.createObjectURL(file);
                     setPreview2(url);
+                    goods.images = [file];
                 }}
             />
         </div>
