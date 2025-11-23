@@ -12,6 +12,7 @@ import { getCompanyDetail } from "@/lib/api/company";
 import PrimaryButton from "@/components/elements/PrimaryButton";
 import { useSession } from "@/lib/auth-client";
 
+// TODO: レオタスク
 export default function EditPage() {
     const { data } = useSession();
     // companyのフォーム情報
@@ -19,7 +20,9 @@ export default function EditPage() {
         companyName: "",
         companyCategory: "",
         imageFile: new Blob(),
+        placeId: "",
     });
+
     // goodsのフォーム情報
     const [goods, setGoods] = useState<UpdateGoodsRequest>({
         name: "",
@@ -32,6 +35,7 @@ export default function EditPage() {
         goodsImageUrl: "",
     });
     const [goodsId, setGoodsId] = useState("");
+    const [placeId, setPlaceId] = useState("");
 
     const handleSubmit = async () => {
         try {
@@ -57,9 +61,11 @@ export default function EditPage() {
             alert(res.message);
             return;
         }
+
         setCompany({
             companyName: res.data.companyName,
             companyCategory: res.data.companyCategory,
+            // placeUrl: res.data.placeUrl,
             // ここに画像ファイルを入れる。
             imageFile: new Blob(),
         });
@@ -75,6 +81,7 @@ export default function EditPage() {
             goodsImageUrl: res.data.goods.imageUrl,
         });
         setGoodsId(res.data.goods.id);
+        setPlaceId(res.data.placeId);
     }
 
     useEffect(() => {
@@ -83,18 +90,9 @@ export default function EditPage() {
 
     return (
         <div className="flex flex-col justify-center gap-6 pb-[104px] pt-10">
-            {/* {imageUrls.companyImageUrl &&
-                <Image
-                    src={imageUrls.companyImageUrl}
-                    alt="店舗画像"
-                    width={100}
-                    height={100}
-                    className="w-full h-[100px] mx-auto"
-                />
-            } */}
             <p className="flex justify-center items-center text-2xl font-bold">編集</p>
             <TextForm label="店舗名" type="text" placeholder="例 ご飯大好きの会" value={company.companyName} onChange={(e) => setCompany({ ...company, companyName: e.target.value })} />
-            <TextForm label="住所" type="text" placeholder="例 名古屋市中村区日本橋1-1" />
+            {/* <TextForm label="住所" type="text" placeholder="例 名古屋市中村区日本橋1-1" value={company.placeUrl} onChange={(e) => setCompany({ ...company, PlaceUrl: e.target.value })} /> */}
             <CategoryForm title="カテゴリー" value={company.companyCategory} onChange={(e) => setCompany({ ...company, companyCategory: e.target.value })}>
                 <NativeSelectOptGroup label="カテゴリー">
                     <NativeSelectOption value="1">飲食</NativeSelectOption>
@@ -108,7 +106,7 @@ export default function EditPage() {
             <ImageUpload
                 label="店舗画像"
                 title="画像をアップロード"
-                preview={imageUrls.companyImageUrl ?? undefined}
+                preview={imageUrls.companyImageUrl || undefined}
                 onChange={(file) => {
                     if (!file) return;
                     const url = URL.createObjectURL(file);
@@ -116,7 +114,7 @@ export default function EditPage() {
                         ...imageUrls,
                         companyImageUrl: url
                     })
-                    company.imageFile = file;
+                    setCompany({ ...company, imageFile: file });
                 }}
             />
             <TextForm label="グッズ名" type="text" placeholder="例 ご飯大好き缶バッチ" value={goods.name} onChange={(e) => setGoods({ ...goods, name: e.target.value })} />
