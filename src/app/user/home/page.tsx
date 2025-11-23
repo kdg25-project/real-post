@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from "react";
+import { useTranslations } from "next-intl";
 import Header from "@/components/layouts/Header";
 import Spacer from "@/components/elements/Spacer";
 import Slider from "@/components/layouts/SliderArea";
@@ -10,6 +11,7 @@ import PostCard from "@/components/elements/PostCard";
 import { getSurveys } from "@/lib/api/survey";
 
 export default function HomePage() {
+    const t = useTranslations();
     const categories = ["all", "food", "culture", "activity", "shopping", "other"];
 
     const [selectedCategory, setSelectedCategory] = useState("all");
@@ -74,12 +76,12 @@ export default function HomePage() {
             <Spacer size="lg" />
             <Slider />
 
-            <Section title="Categories" className="pt-[24px] gap-0">
+            <Section title={t('home.categories')} className="pt-[24px] gap-0">
                 <div className="flex gap-[16px] pt-[16px] pb-[24px] overflow-x-auto">
                     {categories.map((cat) => (
                         <CategoryButton
                             key={cat}
-                            name={cat}
+                            name={t(`categories.${cat}`)}
                             selected={selectedCategory === cat}
                             onClick={() => setSelectedCategory(cat)}
                         />
@@ -87,12 +89,12 @@ export default function HomePage() {
                 </div>
             </Section>
 
-            <Section title="Posts" className="gap-[16px]">
+            <Section title={t('home.posts')} className="gap-[16px]">
                 <div className="flex flex-col gap-[20px] mb-[94px]">
 
                     {isLoading && (
                         <div className="text-center py-6 text-gray-500">
-                            Loading...
+                            {t('common.loading')}
                         </div>
                     )}
 
