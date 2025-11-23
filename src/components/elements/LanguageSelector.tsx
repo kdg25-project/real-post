@@ -55,12 +55,13 @@ export function LanguageSelector() {
 
 
     // ----------------------------
-    // 言語変更 → Cookie に保存
+    // 言語変更 → Cookie に保存 → ページリロード
     // ----------------------------
     const changeLang = (lang: string) => {
         setValue(lang);
         Cookies.set("lang", lang, { expires: 365 });
-        console.log("クッキーに保存されました。")
+        // Reload the page to apply new language
+        window.location.reload();
     };
 
     return (
@@ -70,7 +71,7 @@ export function LanguageSelector() {
                     <Globe size={32} />
                     {value
                         ? languages.find((l) => l.value === value)?.label
-                        : "language"}
+                        : "Language"}
                     <ChevronDown />
                 </button>
             </PopoverTrigger>

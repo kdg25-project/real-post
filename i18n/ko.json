@@ -120,6 +120,25 @@
     "emailLabel": "이메일 주소",
     "passwordLabel": "비밀번호",
     "loginButton": "로그인",
-    "noAccountMessage": "계정이 없으신가요? 새로 만들기"
+    "noAccountMessage": "계정이 없으신가요? 새로 만들기",
+    "registerTitle": "관리자 등록",
+    "registerButton": "등록",
+    "storeCreation": "매장 정보 생성",
+    "companyName": "회사명",
+    "companyCategory": "카테고리",
+    "placeUrl": "위치 URL",
+    "storeImage": "매장 이미지",
+    "uploadImage": "이미지 업로드",
+    "requiredFields": "회사명, 카테고리, 이미지는 필수입니다",
+    "goodsRegistration": "상품 등록",
+    "goodsName": "상품명",
+    "goodsImage": "상품 이미지",
+    "goodsNamePlaceholder": "예: 밥 좋아요 배지",
+    "qrIssue": "QR 코드 발행",
+    "pleaseIssueQr": "QR 코드를 발행해 주세요",
+    "qrUsageCount": "QR 코드 사용 횟수",
+    "qrUsageCountPlaceholder": "예: 1",
+    "issueQrButton": "QR 코드 발행하기",
+    "qrGenerationFailed": "QR 코드 생성 실패"
   }
 }

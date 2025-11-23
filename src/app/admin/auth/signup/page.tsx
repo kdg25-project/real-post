@@ -1,12 +1,14 @@
 'use client'
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { signUp } from "@/lib/auth-client"
 import { useRouter } from "next/navigation";
 import TextForm from "@/components/layouts/TextForm"
 import PrimaryButton from "@/components/elements/PrimaryButton"
 
 export default function SignUpPage() {
+    const t = useTranslations();
     const router = useRouter();
 
     const [email, setEmail] = useState("");

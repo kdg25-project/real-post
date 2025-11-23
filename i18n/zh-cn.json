@@ -120,6 +120,25 @@
     "emailLabel": "邮箱地址",
     "passwordLabel": "密码",
     "loginButton": "登录",
-    "noAccountMessage": "还没有账号？ 创建新账号"
+    "noAccountMessage": "还没有账号？ 创建新账号",
+    "registerTitle": "管理员注册",
+    "registerButton": "注册",
+    "storeCreation": "店铺信息创建",
+    "companyName": "公司名称",
+    "companyCategory": "分类",
+    "placeUrl": "位置URL",
+    "storeImage": "店铺图片",
+    "uploadImage": "上传图片",
+    "requiredFields": "公司名称、分类和图片为必填项",
+    "goodsRegistration": "商品登记",
+    "goodsName": "商品名称",
+    "goodsImage": "商品图片",
+    "goodsNamePlaceholder": "例如：爱米徽章",
+    "qrIssue": "二维码发行",
+    "pleaseIssueQr": "请发行二维码",
+    "qrUsageCount": "二维码使用次数",
+    "qrUsageCountPlaceholder": "例如：1",
+    "issueQrButton": "发行二维码",
+    "qrGenerationFailed": "二维码生成失败"
   }
 }

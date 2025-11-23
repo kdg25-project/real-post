@@ -120,6 +120,25 @@
     "emailLabel": "Email Address",
     "passwordLabel": "Password",
     "loginButton": "Login",
-    "noAccountMessage": "Don't have an account ? Create new"
+    "noAccountMessage": "Don't have an account ? Create new",
+    "registerTitle": "Admin Registration",
+    "registerButton": "Register",
+    "storeCreation": "Store Information Creation",
+    "companyName": "Company Name",
+    "companyCategory": "Company Category",
+    "placeUrl": "Place URL",
+    "storeImage": "Store Image",
+    "uploadImage": "Upload Image",
+    "requiredFields": "Company name, category, and image are required",
+    "goodsRegistration": "Goods Registration",
+    "goodsName": "Goods Name",
+    "goodsImage": "Goods Image",
+    "goodsNamePlaceholder": "e.g., Rice Lover Button Badge",
+    "qrIssue": "QR Code Issuance",
+    "pleaseIssueQr": "Please issue a QR code",
+    "qrUsageCount": "QR Code Usage Limit",
+    "qrUsageCountPlaceholder": "e.g., 1",
+    "issueQrButton": "Issue QR Code",
+    "qrGenerationFailed": "Failed to generate QR code"
   }
 }

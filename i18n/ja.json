@@ -120,6 +120,25 @@
     "emailLabel": "メールアドレス",
     "passwordLabel": "パスワード",
     "loginButton": "ログイン",
-    "noAccountMessage": "アカウントを持っていませんか ? 新規作成"
+    "noAccountMessage": "アカウントを持っていませんか ? 新規作成",
+    "registerTitle": "管理者登録",
+    "registerButton": "登録",
+    "storeCreation": "店舗情報作成",
+    "companyName": "会社名",
+    "companyCategory": "カテゴリー",
+    "placeUrl": "場所URL",
+    "storeImage": "店舗画像",
+    "uploadImage": "画像をアップロード",
+    "requiredFields": "会社名・カテゴリー・画像は必須です",
+    "goodsRegistration": "グッズ登録",
+    "goodsName": "グッズ名",
+    "goodsImage": "グッズ画像",
+    "goodsNamePlaceholder": "例 ご飯大好き缶バッチ",
+    "qrIssue": "QRコード発行",
+    "pleaseIssueQr": "QRコードを発行してください",
+    "qrUsageCount": "QRコードの利用可能回数",
+    "qrUsageCountPlaceholder": "例: 1",
+    "issueQrButton": "QRコードを発行する",
+    "qrGenerationFailed": "QRコードの生成に失敗しました"
   }
 }

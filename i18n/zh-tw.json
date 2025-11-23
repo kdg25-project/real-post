@@ -120,6 +120,25 @@
     "emailLabel": "電子郵件地址",
     "passwordLabel": "密碼",
     "loginButton": "登入",
-    "noAccountMessage": "還沒有帳號？ 建立新帳號"
+    "noAccountMessage": "還沒有帳號？ 建立新帳號",
+    "registerTitle": "管理員註冊",
+    "registerButton": "註冊",
+    "storeCreation": "店舖資訊建立",
+    "companyName": "公司名稱",
+    "companyCategory": "分類",
+    "placeUrl": "位置URL",
+    "storeImage": "店舖圖片",
+    "uploadImage": "上傳圖片",
+    "requiredFields": "公司名稱、分類和圖片為必填項",
+    "goodsRegistration": "商品登記",
+    "goodsName": "商品名稱",
+    "goodsImage": "商品圖片",
+    "goodsNamePlaceholder": "例如：愛米徽章",
+    "qrIssue": "QR碼發行",
+    "pleaseIssueQr": "請發行QR碼",
+    "qrUsageCount": "QR碼使用次數",
+    "qrUsageCountPlaceholder": "例如：1",
+    "issueQrButton": "發行QR碼",
+    "qrGenerationFailed": "QR碼生成失敗"
   }
 }
