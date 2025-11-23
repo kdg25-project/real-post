@@ -1,21 +1,31 @@
 import Image from "next/image"
-import PostInfo from "../layouts/PostInfo"
+import Link from "next/link"
 
-export default function GoodsCard() {
+type Props = {
+    companyId: string
+    imageUrl?: string
+}
+
+export default function GoodsCard({ companyId, imageUrl }: Props) {
     return (
-        // 店舗詳細のリンク
-        <div className="flex flex-col gap-[6px] w-fit">
-            <div className="relative w-[160px] h-[160px] bg-white rounded-[15px]">
-                <Image
-                    src={"/images/image2.png"}
-                    alt=""
-                    width={120}
-                    height={120}
-                    className="object-cover absolute top-1/2 left-1/2 -translate-1/2"
-                >
-                </Image>
+        <Link
+            href={`/user/company/${companyId}`}
+            className="flex flex-col gap-[6px] w-fit"
+        >
+            <div className="relative w-[160px] h-[160px] bg-white rounded-[15px] overflow-hidden">
+                {imageUrl ? (
+                    <Image
+                        src={imageUrl}
+                        alt=""
+                        fill
+                        className="object-cover"
+                    />
+                ) : (
+                    <div className="flex items-center justify-center w-full h-full text-gray-400">
+                        No Image
+                    </div>
+                )}
             </div>
-            {/* <PostInfo size="lg" titleOnly isCenter /> */}
-        </div>
+        </Link>
     )
 }
