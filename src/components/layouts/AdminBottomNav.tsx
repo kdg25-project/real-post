@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { SquarePen, QrCode, LogOut } from "lucide-react";
 import { usePathname } from "next/navigation";
+import { authClient } from "@/lib/auth-client";
 
 export default function AdminBottomNav() {
     const pathname = usePathname();
@@ -17,7 +18,7 @@ export default function AdminBottomNav() {
                 <QrCode size={28} className='mx-auto'></QrCode>
                 <p className='text-[12px] font-medium'>QR</p>
             </Link>
-            <Link href="/" className={`w-full text-center ${pathname === "/" ? "text-primary" : "text-gray-dark"}`}>
+            <Link href="/admin/auth/login" className="w-full text-center text-gray-dark" onClick={() => authClient.signOut() }>
                 <LogOut size={28} className='mx-auto'></LogOut>
                 <p className='text-[12px] font-medium'>ログアウト</p>
             </Link>

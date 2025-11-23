@@ -1,10 +1,10 @@
-export type companyEditRequest  = {
+export type CompanyEditRequest  = {
     companyName: string;
     companyCategory: string;
     imageFile: Blob | File;
 };
 
-export type companyEditResponse = {
+export type CompanyEditResponse = {
     success: true,
         message: string,
         data: {
@@ -22,7 +22,7 @@ export type companyEditResponse = {
         message: string,
     };
 
-export function companyEdit(req: companyEditRequest): Promise<companyEditResponse> {
+export function CompanyEdit(req: CompanyEditRequest): Promise<CompanyEditResponse> {
     const formData = new FormData();
     formData.append("companyName", req.companyName);
     formData.append("companyCategory", req.companyCategory);

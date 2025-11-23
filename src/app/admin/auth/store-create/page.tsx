@@ -61,12 +61,7 @@ export default function StoreInformationCreationPage() {
             />
             <PrimaryButton
                 text="登録"
-                onClick={async () => {
-                    const result = await companyCreate(form);
-                    if (result.success) {
-                        router.push("/admin/auth/goods-register")
-                    }
-                }}
+                onClick={handleSubmit}
             />
         </div>
     )

@@ -1,5 +1,6 @@
 export type UpdateGoodsRequest  = {
     name: string;
+    // NOTE: 1枚だけ送る様にして
     images: Array<Blob>; // バイナリ
     deleteImageIds: Array<string>;
 };
@@ -22,12 +23,12 @@ export type UpdateGoodsResponse = {
     message: string;
     };
 
-export function UpdateGoods(req: UpdateGoodsRequest): Promise<UpdateGoodsResponse> {
+export function UpdateGoods(req: UpdateGoodsRequest, id: string): Promise<UpdateGoodsResponse> {
     const formData = new FormData();
     formData.append("name", req.name);
     formData.append("images", req.images[0]);
 
-    return fetch(`/api/goods`, {
+    return fetch(`/api/goods/${id}`, {
         method: "PATCH",
         body: formData,
     })

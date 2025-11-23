@@ -1,17 +1,34 @@
 'use client';
 
 import { useState } from "react";
+import { useEffect } from "react";
+import Image from "next/image";
 import TextForm from "@/components/layouts/TextForm";
 import ImageUpload from "@/components/layouts/ImageUpload";
 import { CategoryForm,NativeSelectOption, NativeSelectOptGroup } from "@/components/layouts/CategoryForm";
-import { companyEdit, companyEditRequest } from "@/lib/api/company-edit";
+import { CompanyEdit, CompanyEditRequest ,} from "@/lib/api/company-edit";
 import { UpdateGoods, UpdateGoodsRequest } from "@/lib/api/update-goods";
+import { getCompanyDetail } from "@/lib/api/company";
+import PrimaryButton from "@/components/elements/PrimaryButton";
+import { get } from "http";
 
 export default function EditPage() {
     const [preview1, setPreview1] = useState<string | null>(null);
     const [preview2, setPreview2] = useState<string | null>(null);
 
-    const[form, setForm] = useState<companyEditRequest>({
+
+    const [companyImageUrl, setCompanyImageUrl] = useState<string | null>(null);
+
+    const [company, setCompany] = useState<getCompanyDetail>({
+        data: {
+            id: "",
+            companyName: "",
+            companyCategory: "",
+            imageUrl: "",
+        }
+    })
+
+    const[form, setForm] = useState<CompanyEditRequest>({
         companyName: "",
         companyCategory: "",
         imageFile: new Blob(),
@@ -24,13 +41,43 @@ export default function EditPage() {
     });
     
 
+    const handleSubmit = async () => {
+        try {
+            const result = await CompanyEdit(form);
+            const result2 = await UpdateGoods(goods, );
+
+            if (result.success && result2.success) {
+                alert("情報を編集しました");
+            } else {
+                alert("情報の編集に失敗しました");
+            }
+        } catch (err) {
+            console.error(err);
+            alert("通信エラーが発生しました");
+        }
+    };
+
+    const handleIndex = async() => {
+        const res = await getCompanyDetail();
+        // setFormでフォームの値に初期値を入れる
+    }
     
+    useEffect(() => {
+        handleIndex();
+    }, []);
 
     return (
         <div className="flex flex-col justify-center gap-6 pb-[104px] pt-10">
-            <div className="flex items-center justify-between w-full h-[292px]">
-                <h1>仮</h1>
-            </div>
+            {companyImageUrl && (
+                <Image
+                    src={companyImageUrl}
+                    alt="店舗画像"
+                    width={100}
+                    height={100}
+                    className="w-full h-[100px] mx-auto"
+                />
+            )}
+            <p className="flex justify-center items-center text-2xl font-bold">編集</p>
             <TextForm label="店舗名" type="text" placeholder="例 ご飯大好きの会" onChange={(e) => setForm({...form, companyName: e.target.value})} />
             <TextForm label="住所" type="text" placeholder="例 名古屋市中村区日本橋1-1" />
             <CategoryForm title="カテゴリー" onChange={(e) => setForm({...form, companyCategory: e.target.value})}>
@@ -51,6 +98,7 @@ export default function EditPage() {
                     if (!file) return;
                     const url = URL.createObjectURL(file);
                     setPreview1(url);
+                    setCompanyImageUrl(url); 
                     form.imageFile = file;
                 }}
             />
@@ -65,6 +113,10 @@ export default function EditPage() {
                     setPreview2(url);
                     goods.images = [file];
                 }}
+            />
+            <PrimaryButton
+                text="更新"
+                onClick={handleSubmit}
             />
         </div>
     )
