@@ -57,8 +57,6 @@ export default function CompanyDetailPage() {
         );
     }
 
-    console.log(data.placeUrl)
-
     return (
         <motion.div
             initial={{ x: "100%", opacity: 0 }}
@@ -100,18 +98,9 @@ export default function CompanyDetailPage() {
                 <Section title="Locate" className="px-[24px] gap-[16px]">
 
                     {(() => {
-                        const extractLatLng = (url: string) => {
-                            const match = url.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/);
-                            if (!match) return null;
-                            return `${match[1]},${match[2]}`;
-                        };
-
-                        const coords = extractLatLng(data.placeUrl);
-                        console.log("coords:", coords);
-
-                        return (
+                        return (data.placeId && process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY) && (
                             <iframe
-                                src={`https://www.google.com/maps/embed/v1/place?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY}&q=${coords ?? "Japan"}`}
+                                src={`https://www.google.com/maps/embed/v1/place?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY}&q=place_id:${data.placeId}`}
                                 style={{ border: 0 }}
                                 allowFullScreen
                                 loading="lazy"
