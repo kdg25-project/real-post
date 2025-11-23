@@ -26,9 +26,21 @@ export async function POST(request: NextRequest) {
     const companyName = formData.get("companyName");
     const companyCategory = formData.get("companyCategory");
     const imageFile = formData.get("image");
-    const placeUrl = formData.get("placeUrl");
+    const placeUrl = formData.get("placeUrl") || null;
+    let placeId = formData.get("placeId") || null;
 
-    const placeId = extractPlaceIdFromGoogleMapsUrl(String(placeUrl));
+    if (!placeId && !placeUrl) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Either placeUrl or placeId must be provided",
+          data: null,
+        },
+        { status: 400 }
+      );
+    }
+
+    placeId = placeId || await extractPlaceIdFromGoogleMapsUrl(String(placeUrl));
     if (placeUrl && !placeId) {
       return NextResponse.json(
         {
@@ -76,7 +88,7 @@ export async function POST(request: NextRequest) {
           | "shopping"
           | "other",
         imageUrl: imageUrl,
-        placeId: placeId,
+        placeId: (placeId as string) || null,
       })
       .returning();
 
