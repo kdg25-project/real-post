@@ -13,6 +13,7 @@ import {
     useJsApiLoader,
     StandaloneSearchBox,
 } from "@react-google-maps/api";
+import { useTranslations } from "next-intl";
 
 export default function StoreInformationCreationPage() {
     const t = useTranslations();

@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
     const formData = await request.formData();
     const companyName = formData.get("companyName");
     const companyCategory = formData.get("companyCategory");
-    const imageFile = formData.get("image");
+    const imageFile = formData.get("imageFile");
     const placeUrl = formData.get("placeUrl") || null;
     let placeId = formData.get("placeId") || null;
 

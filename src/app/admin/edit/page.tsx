@@ -35,7 +35,6 @@ export default function EditPage() {
         goodsImageUrl: "",
     });
     const [goodsId, setGoodsId] = useState("");
-    const [placeId, setPlaceId] = useState("");
 
     const handleSubmit = async () => {
         try {
@@ -61,13 +60,17 @@ export default function EditPage() {
             alert(res.message);
             return;
         }
-
         setCompany({
             companyName: res.data.companyName,
             companyCategory: res.data.companyCategory,
             // placeUrl: res.data.placeUrl,
             // ここに画像ファイルを入れる。
             imageFile: new Blob(),
+            placeId: res.data.placeId,
+        });
+         setImageUrls({
+            companyImageUrl: res.data.imageUrl,
+            goodsImageUrl: res.data.goods?.imageUrl || "",
         });
 
         if (!res.data.goods) return;
@@ -76,12 +79,7 @@ export default function EditPage() {
             images: [],
             deleteImageIds: [res.data.goods.id],
         });
-        setImageUrls({
-            companyImageUrl: res.data.imageUrl,
-            goodsImageUrl: res.data.goods.imageUrl,
-        });
         setGoodsId(res.data.goods.id);
-        setPlaceId(res.data.placeId);
     }
 
     useEffect(() => {
