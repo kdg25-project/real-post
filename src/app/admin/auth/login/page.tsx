@@ -1,12 +1,14 @@
 'use client'
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client"
 import TextForm from "@/components/layouts/TextForm"
 import PrimaryButton from "@/components/elements/PrimaryButton"
 
 export default function LoginPage() {
+    const t = useTranslations();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const router = useRouter();
@@ -41,7 +43,7 @@ export default function LoginPage() {
                 />
                 <button className="flex justify-start w-fit  text-[12px] text-gray-500 border-b-1 border-gray-500"
                     onClick={() => router.push("/admin/auth/signup") }>
-                    <p>アカウントを持っていませんか ? 新規作成</p>
+                    <p>{t('admin.noAccountMessage')}</p>
                 </button>
             </div>
         </div>

@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import { useParams, useRouter } from "next/navigation";
 import { getCompanyDetail } from "@/lib/api/company";
 import { getSurveysForStore } from "@/lib/api/survey";
@@ -40,6 +41,7 @@ type SurveyItem = {
 };
 
 export default function CompanyDetailPage() {
+    const t = useTranslations();
     const params = useParams();
     const [data, setData] = useState<CompanyData | null>(null);
     const [surveys, setSurveys] = useState<SurveyItem[]>([]);
@@ -78,7 +80,7 @@ export default function CompanyDetailPage() {
     if (isLoading) {
         return (
             <div className="w-full h-full flex items-center justify-center">
-                <p className="text-gray-500 text-lg">Loading...</p>
+                <p className="text-gray-500 text-lg">{t('common.loading')}</p>
             </div>
         );
     }
@@ -87,7 +89,7 @@ export default function CompanyDetailPage() {
     if (!data) {
         return (
             <div className="w-full h-full flex items-center justify-center">
-                <p className="text-gray-500 text-lg">Company not found</p>
+                <p className="text-gray-500 text-lg">{t('company.notFound')}</p>
             </div>
         );
     }
@@ -130,7 +132,7 @@ export default function CompanyDetailPage() {
             </div>
 
             {data.placeId && (
-                <Section title="Locate" className="px-[24px] gap-[16px]">
+                <Section title={t('company.locate')} className="px-[24px] gap-[16px]">
 
                     {(() => {
                         return (
@@ -146,7 +148,7 @@ export default function CompanyDetailPage() {
                 </Section>
             )}
 
-            <Section title="Goods" className="px-[24px] gap-[16px]">
+            <Section title={t('company.goods')} className="px-[24px] gap-[16px]">
                 <div className="flex flex-wrap gap-[16px]">
                     {goods.length > 0 ? (
                         goods.map((item) => (
@@ -157,12 +159,12 @@ export default function CompanyDetailPage() {
                             />
                         ))
                     ) : (
-                        <p className="text-gray-400 text-sm">No Goods</p>
+                        <p className="text-gray-400 text-sm">{t('goods.noGoods')}</p>
                     )}
                 </div>
             </Section>
 
-            <Section title="Other Posts" className="px-[24px] gap-[16px]">
+            <Section title={t('company.otherPosts')} className="px-[24px] gap-[16px]">
                 <div className="flex flex-col gap-[20px]">
                     {surveys.map((item) => (
                         <PostCard

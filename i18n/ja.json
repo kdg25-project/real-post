@@ -1,0 +1,144 @@
+{
+  "common": {
+    "loading": "読み込み中...",
+    "noData": "データがありません",
+    "welcome": "ようこそ",
+    "appName": "Real Post",
+    "language": "言語"
+  },
+  "auth": {
+    "email": "メールアドレス",
+    "password": "パスワード",
+    "country": "国",
+    "login": "ログイン",
+    "signup": "サインアップ",
+    "logout": "ログアウト",
+    "dontHaveAccount": "アカウントをお持ちでないですか？ 新規登録",
+    "alreadyHaveAccount": "既にアカウントをお持ちですか？ ログイン",
+    "adminLogin": "管理者ログイン",
+    "noAccountQuestion": "アカウントを持っていませんか ? 新規作成"
+  },
+  "profile": {
+    "title": "プロフィール",
+    "email": "メールアドレス",
+    "emailPlaceholder": "メールアドレス",
+    "cancel": "キャンセル",
+    "save": "保存"
+  },
+  "home": {
+    "categories": "カテゴリー",
+    "posts": "投稿"
+  },
+  "categories": {
+    "all": "すべて",
+    "food": "食事",
+    "culture": "文化",
+    "activity": "アクティビティ",
+    "shopping": "ショッピング",
+    "other": "その他"
+  },
+  "favorite": {
+    "title": "お気に入り投稿",
+    "noFavorites": "まだお気に入りがありません。"
+  },
+  "goods": {
+    "title": "グッズ",
+    "noGoods": "グッズがありません"
+  },
+  "company": {
+    "notFound": "店舗が見つかりません",
+    "locate": "場所",
+    "goods": "グッズ",
+    "otherPosts": "その他の投稿"
+  },
+  "survey": {
+    "invalidToken": "無効なアンケートトークン",
+    "invalidTokenMessage": "使用したアンケートリンクは無効か、期限切れです。",
+    "pleaseParticipate": "アンケートにご協力ください",
+    "postThumbnail": "投稿サムネイル",
+    "selectFile": "ファイルを選択",
+    "yourCountry": "あなたの国",
+    "yourGender": "性別",
+    "yourAge": "年齢",
+    "yourSatisfaction": "満足度",
+    "yourReview": "レビュー",
+    "agreePolicy": "プライバシーポリシーに同意します",
+    "submit": "送信"
+  },
+  "gender": {
+    "male": "男性",
+    "female": "女性",
+    "other": "その他",
+    "noAnswer": "回答しない"
+  },
+  "ageGroup": {
+    "18-24": "18-24",
+    "25-34": "25-34",
+    "35-44": "35-44",
+    "45-54": "45-54",
+    "55+": "55+",
+    "noAnswer": "回答しない"
+  },
+  "countries": {
+    "JP": "日本",
+    "KR": "韓国: 한국",
+    "US": "アメリカ: English",
+    "CN": "中国: 中国",
+    "GB": "イギリス: English",
+    "CA": "カナダ: English / Français",
+    "AU": "オーストラリア: English",
+    "FR": "フランス: Français",
+    "DE": "ドイツ: Deutsch",
+    "ES": "スペイン: Español",
+    "IT": "イタリア: Italiano",
+    "RU": "ロシア: Русский",
+    "TH": "タイ: ไทย",
+    "VN": "ベトナム: Tiếng Việt",
+    "IN": "インド: हिन्दी",
+    "ID": "インドネシア: Bahasa Indonesia",
+    "MY": "マレーシア: Bahasa Melayu",
+    "PH": "フィリピン: English / Filipino",
+    "SG": "シンガポール: English / 中文",
+    "BR": "ブラジル: Português",
+    "MX": "メキシコ: Español",
+    "AR": "アルゼンチン: Español",
+    "EG": "エジプト: العربية",
+    "SA": "サウジアラビア: العربية",
+    "TR": "トルコ: Türkçe",
+    "ZA": "南アフリカ: English",
+    "SE": "スウェーデン: Svenska",
+    "NO": "ノルウェー: Norsk",
+    "FI": "フィンランド: Suomi",
+    "DK": "デンマーク: Dansk",
+    "NL": "オランダ: Nederlands",
+    "BE": "ベルギー: Nederlands / Français",
+    "CH": "スイス: Deutsch / Français",
+    "PL": "ポーランド: Polski",
+    "UA": "ウクライナ: Українська"
+  },
+  "admin": {
+    "emailLabel": "メールアドレス",
+    "passwordLabel": "パスワード",
+    "loginButton": "ログイン",
+    "noAccountMessage": "アカウントを持っていませんか ? 新規作成",
+    "registerTitle": "管理者登録",
+    "registerButton": "登録",
+    "storeCreation": "店舗情報作成",
+    "companyName": "会社名",
+    "companyCategory": "カテゴリー",
+    "placeUrl": "場所URL",
+    "storeImage": "店舗画像",
+    "uploadImage": "画像をアップロード",
+    "requiredFields": "会社名・カテゴリー・画像は必須です",
+    "goodsRegistration": "グッズ登録",
+    "goodsName": "グッズ名",
+    "goodsImage": "グッズ画像",
+    "goodsNamePlaceholder": "例 ご飯大好き缶バッチ",
+    "qrIssue": "QRコード発行",
+    "pleaseIssueQr": "QRコードを発行してください",
+    "qrUsageCount": "QRコードの利用可能回数",
+    "qrUsageCountPlaceholder": "例: 1",
+    "issueQrButton": "QRコードを発行する",
+    "qrGenerationFailed": "QRコードの生成に失敗しました"
+  }
+}

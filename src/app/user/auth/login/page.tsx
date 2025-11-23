@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { authClient } from "@/lib/auth-client"
 import Header from "@/components/layouts/Header"
 import TextForm from "@/components/layouts/TextForm"
@@ -9,6 +10,7 @@ import Spacer from "@/components/elements/Spacer"
 import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
+    const t = useTranslations();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const router = useRouter();
@@ -18,10 +20,10 @@ export default function LoginPage() {
             <Header searchArea={false} />
             <Spacer size="sm" />
             <div className="flex flex-col gap-[24px]">
-                <TextForm label="Email" type="email" placeholder="example@gmail.com" onChange={(e) => setEmail(e.target.value)} />
-                <TextForm label="Password" type="password" placeholder="password" onChange={(e) => setPassword(e.target.value)} />
+                <TextForm label={t('auth.email')} type="email" placeholder="example@gmail.com" onChange={(e) => setEmail(e.target.value)} />
+                <TextForm label={t('auth.password')} type="password" placeholder="password" onChange={(e) => setPassword(e.target.value)} />
                 <PrimaryButton
-                    text="Login"
+                    text={t('auth.login')}
                     onClick={async () => {
                         await authClient.signIn.email({
                             email: email,

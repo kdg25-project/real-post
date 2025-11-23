@@ -1,0 +1,144 @@
+{
+  "common": {
+    "loading": "加载中...",
+    "noData": "没有数据",
+    "welcome": "欢迎来到",
+    "appName": "Real Post",
+    "language": "语言"
+  },
+  "auth": {
+    "email": "邮箱",
+    "password": "密码",
+    "country": "国家",
+    "login": "登录",
+    "signup": "注册",
+    "logout": "退出登录",
+    "dontHaveAccount": "还没有账号？ 注册",
+    "alreadyHaveAccount": "已有账号？ 登录",
+    "adminLogin": "管理员登录",
+    "noAccountQuestion": "还没有账号？ 创建新账号"
+  },
+  "profile": {
+    "title": "个人资料",
+    "email": "邮箱",
+    "emailPlaceholder": "邮箱",
+    "cancel": "取消",
+    "save": "保存"
+  },
+  "home": {
+    "categories": "分类",
+    "posts": "帖子"
+  },
+  "categories": {
+    "all": "全部",
+    "food": "美食",
+    "culture": "文化",
+    "activity": "活动",
+    "shopping": "购物",
+    "other": "其他"
+  },
+  "favorite": {
+    "title": "收藏的帖子",
+    "noFavorites": "还没有收藏。"
+  },
+  "goods": {
+    "title": "商品",
+    "noGoods": "没有商品"
+  },
+  "company": {
+    "notFound": "未找到店铺",
+    "locate": "位置",
+    "goods": "商品",
+    "otherPosts": "其他帖子"
+  },
+  "survey": {
+    "invalidToken": "无效的调查令牌",
+    "invalidTokenMessage": "您使用的调查链接无效或已过期。",
+    "pleaseParticipate": "请参与我们的调查",
+    "postThumbnail": "帖子缩略图",
+    "selectFile": "选择文件",
+    "yourCountry": "您的国家",
+    "yourGender": "您的性别",
+    "yourAge": "您的年龄",
+    "yourSatisfaction": "您的满意度",
+    "yourReview": "您的评价",
+    "agreePolicy": "我同意隐私政策",
+    "submit": "提交"
+  },
+  "gender": {
+    "male": "男性",
+    "female": "女性",
+    "other": "其他",
+    "noAnswer": "不回答"
+  },
+  "ageGroup": {
+    "18-24": "18-24",
+    "25-34": "25-34",
+    "35-44": "35-44",
+    "45-54": "45-54",
+    "55+": "55+",
+    "noAnswer": "不回答"
+  },
+  "countries": {
+    "JP": "日本",
+    "KR": "韩国: 한국",
+    "US": "美国: English",
+    "CN": "中国",
+    "GB": "英国: English",
+    "CA": "加拿大: English / Français",
+    "AU": "澳大利亚: English",
+    "FR": "法国: Français",
+    "DE": "德国: Deutsch",
+    "ES": "西班牙: Español",
+    "IT": "意大利: Italiano",
+    "RU": "俄罗斯: Русский",
+    "TH": "泰国: ไทย",
+    "VN": "越南: Tiếng Việt",
+    "IN": "印度: हिन्दी",
+    "ID": "印度尼西亚: Bahasa Indonesia",
+    "MY": "马来西亚: Bahasa Melayu",
+    "PH": "菲律宾: English / Filipino",
+    "SG": "新加坡: English / 中文",
+    "BR": "巴西: Português",
+    "MX": "墨西哥: Español",
+    "AR": "阿根廷: Español",
+    "EG": "埃及: العربية",
+    "SA": "沙特阿拉伯: العربية",
+    "TR": "土耳其: Türkçe",
+    "ZA": "南非: English",
+    "SE": "瑞典: Svenska",
+    "NO": "挪威: Norsk",
+    "FI": "芬兰: Suomi",
+    "DK": "丹麦: Dansk",
+    "NL": "荷兰: Nederlands",
+    "BE": "比利时: Nederlands / Français",
+    "CH": "瑞士: Deutsch / Français",
+    "PL": "波兰: Polski",
+    "UA": "乌克兰: Українська"
+  },
+  "admin": {
+    "emailLabel": "邮箱地址",
+    "passwordLabel": "密码",
+    "loginButton": "登录",
+    "noAccountMessage": "还没有账号？ 创建新账号",
+    "registerTitle": "管理员注册",
+    "registerButton": "注册",
+    "storeCreation": "店铺信息创建",
+    "companyName": "公司名称",
+    "companyCategory": "分类",
+    "placeUrl": "位置URL",
+    "storeImage": "店铺图片",
+    "uploadImage": "上传图片",
+    "requiredFields": "公司名称、分类和图片为必填项",
+    "goodsRegistration": "商品登记",
+    "goodsName": "商品名称",
+    "goodsImage": "商品图片",
+    "goodsNamePlaceholder": "例如：爱米徽章",
+    "qrIssue": "二维码发行",
+    "pleaseIssueQr": "请发行二维码",
+    "qrUsageCount": "二维码使用次数",
+    "qrUsageCountPlaceholder": "例如：1",
+    "issueQrButton": "发行二维码",
+    "qrGenerationFailed": "二维码生成失败"
+  }
+}
