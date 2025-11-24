@@ -8,7 +8,7 @@ interface CategoryButtonProps {
 
 export default function CategoryButton({
   name,
-  selected,
+  selected = false,
   onClick,
 }: CategoryButtonProps) {
   return (
