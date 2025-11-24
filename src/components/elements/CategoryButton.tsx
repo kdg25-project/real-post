@@ -1,23 +1,24 @@
 "use client";
 
 interface CategoryButtonProps {
-    name: string;
-    selected?: boolean;
-    onClick?: () => void;
+  name: string;
+  selected?: boolean;
+  onClick?: () => void;
 }
 
 export default function CategoryButton({
-    name,
-    selected = false,
-    onClick,
+  name,
+  selected,
+  onClick,
 }: CategoryButtonProps) {
-    return (
-        <button
-            className={`px-[14px] py-[8px] rounded-full text-[14px] font-semibold shadow-base ${selected ? "bg-primary text-white" : "bg-white text-black"
-                }`}
-            onClick={onClick}
-        >
-            {name}
-        </button>
-    );
+  return (
+    <button
+      className={`px-3.5 py-2 rounded-full text-[14px] font-semibold shadow-base ${
+        selected ? "bg-primary text-white" : "bg-white text-black"
+      }`}
+      onClick={onClick}
+    >
+      {name}
+    </button>
+  );
 }
