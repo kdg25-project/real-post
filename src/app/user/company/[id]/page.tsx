@@ -15,7 +15,7 @@ import GoodsCard from "@/components/elements/GoodsCard";
 import { getCompanyGoods } from "@/lib/api/goods";
 
 type CompanyData = {
-    image?: string | null;
+    imageUrl?: string | null;
     companyName?: string | null;
     placeUrl?: string | null;
     placeId?: string | null;
@@ -25,7 +25,7 @@ type CompanyData = {
 type GoodsItem = {
     id: string;
     companyId: string;
-    images?: Array<{ imageUrl?: string | null }>; 
+    images?: Array<{ imageUrl?: string | null }>;
     [key: string]: unknown;
 };
 
@@ -53,23 +53,24 @@ export default function CompanyDetailPage() {
         const companyId = params?.id;
         if (!companyId || Array.isArray(companyId)) return;
 
-    const fetchCompany = async () => {
-        setIsLoading(true);
+        const fetchCompany = async () => {
+            setIsLoading(true);
 
-    // 店舗詳細
-    const result = await getCompanyDetail(companyId);
-        setData(result.success ? result.data : null);
+            // 店舗詳細
+            const result = await getCompanyDetail(companyId);
+            setData(result.success ? result.data : null);
+            console.log(result)
 
-    // アンケート
-    const surveyResult = await getSurveysForStore(companyId, 1, 10);
-        if (surveyResult?.success) setSurveys(surveyResult.data);
+            // アンケート
+            const surveyResult = await getSurveysForStore(companyId, 1, 10);
+            if (surveyResult?.success) setSurveys(surveyResult.data);
 
-    // グッズ取得
-    const goodsResult = await getCompanyGoods(companyId);
-        if (goodsResult?.success) setGoods(goodsResult.data);
+            // グッズ取得
+            const goodsResult = await getCompanyGoods(companyId);
+            if (goodsResult?.success) setGoods(goodsResult.data);
 
-        setIsLoading(false);
-    };
+            setIsLoading(false);
+        };
         fetchCompany();
     }, [params?.id]);
 
@@ -113,7 +114,7 @@ export default function CompanyDetailPage() {
             {/* メイン画像 */}
             <div className="relative w-full h-[292px] flex-shrink-0">
                 <Image
-                    src={data.image ?? "/images/no-image.png"}
+                    src={data.imageUrl ?? "/images/no-image.png"}
                     alt=""
                     fill
                     className="object-cover"
