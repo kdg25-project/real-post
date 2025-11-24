@@ -203,7 +203,7 @@ export async function PATCH(
     if (imageUrl) {
       updates.imageUrl = imageUrl;
     }
-    if (placeIdValue !== undefined) {
+    if (placeId) {
       updates.placeId = placeId;
     }
 
