@@ -139,6 +139,26 @@
     "qrUsageCount": "二维码使用次数",
     "qrUsageCountPlaceholder": "例如：1",
     "issueQrButton": "发行二维码",
-    "qrGenerationFailed": "二维码生成失败"
+    "qrGenerationFailed": "二维码生成失败",
+    "editTitle": "编辑",
+    "storeName": "店铺名称",
+    "storeNamePlaceholder": "例如：爱米俱乐部",
+    "storeRegistration": "店铺登记",
+    "searchLocation": "搜索位置...",
+    "selectLocation": "请选择位置",
+    "setHere": "设置在这里",
+    "updateButton": "更新",
+    "sns": "社交媒体",
+    "snsPlaceholder": "例如：https://example.com/",
+    "editSuccess": "信息已更新",
+    "editFailed": "更新信息失败",
+    "communicationError": "发生通信错误",
+    "mapUrl": "地图URL",
+    "categoryFood": "餐饮",
+    "categoryCulture": "文化·历史",
+    "categoryWorkshop": "手工·工作坊",
+    "categoryShopping": "购物",
+    "categoryOther": "其他",
+    "countryLabel": "国家"
   }
 }

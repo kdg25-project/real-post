@@ -40,7 +40,7 @@ export default function LoginPage() {
                     className="font-[14px] font-medium underline"
                     onClick={() => router.push('/user/auth/signup')}
                 >
-                    Don’t have an account ? Sing up
+                    {t('auth.dontHaveAccount')}
                 </div>
             </div>
         </div>

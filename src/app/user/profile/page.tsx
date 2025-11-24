@@ -26,13 +26,13 @@ export default function ProfilePage() {
         fetch("/api/auth/me")
             .then(res => res.json())
             .then(data => {
-                console.log("取得データ:", data);
+                console.log("Fetched data:", data);
                 // user.email から取得
                 const fetchedProfile = { email: data.user?.email ?? "" };
                 setProfile(fetchedProfile);
                 setInitialProfile(fetchedProfile);
             })
-            .catch(err => console.error("取得エラー:", err))
+            .catch(err => console.error("Fetch error:", err))
             .finally(() => setLoading(false));
     }, []);
 
@@ -47,7 +47,7 @@ export default function ProfilePage() {
 
     const handleSave = () => {
         // 本番ではここで API PUT/PATCH リクエストを送る
-        console.log("保存データ:", profile);
+        console.log("Save data:", profile);
     };
 
     if (loading) return <p>{t('common.loading')}</p>;
@@ -68,7 +68,7 @@ export default function ProfilePage() {
                         className="w-full px-[20px] py-[15px] rounded-[14px] bg-white shadow-base focus:outline-none"
                     />
                     <CategoryForm>
-                        <NativeSelectOptGroup label="国">
+                        <NativeSelectOptGroup label={t('admin.countryLabel')}>
                             <NativeSelectOption value="Japan">Japan: 日本</NativeSelectOption>
                             <NativeSelectOption value="Korea">Korea: 한국</NativeSelectOption>
                             <NativeSelectOption value="USA">USA: English</NativeSelectOption>
@@ -116,7 +116,7 @@ export default function ProfilePage() {
                             await authClient.signOut();  // auth-client のログアウト
                             window.location.href = "/user/home"; // ログアウト後にリダイレクト
                         } catch (err) {
-                            console.error("ログアウトエラー:", err);
+                            console.error("Logout error:", err);
                         }
                     }}
                 />

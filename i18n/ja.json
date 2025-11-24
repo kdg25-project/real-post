@@ -139,6 +139,26 @@
     "qrUsageCount": "QRコードの利用可能回数",
     "qrUsageCountPlaceholder": "例: 1",
     "issueQrButton": "QRコードを発行する",
-    "qrGenerationFailed": "QRコードの生成に失敗しました"
+    "qrGenerationFailed": "QRコードの生成に失敗しました",
+    "editTitle": "編集",
+    "storeName": "店舗名",
+    "storeNamePlaceholder": "例 ご飯大好きの会",
+    "storeRegistration": "店舗登録",
+    "searchLocation": "場所を検索...",
+    "selectLocation": "場所を選択してください",
+    "setHere": "ここにする",
+    "updateButton": "更新",
+    "sns": "SNS",
+    "snsPlaceholder": "例 https://example.com/",
+    "editSuccess": "情報を編集しました",
+    "editFailed": "情報の編集に失敗しました",
+    "communicationError": "通信エラーが発生しました",
+    "mapUrl": "MapUrl",
+    "categoryFood": "飲食",
+    "categoryCulture": "文化・歴史",
+    "categoryWorkshop": "ものづくり・ワークショップ",
+    "categoryShopping": "買い物",
+    "categoryOther": "その他",
+    "countryLabel": "国"
   }
 }

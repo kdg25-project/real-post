@@ -26,10 +26,10 @@ export default function SignUpPage() {
                 <p className="text-2xl">{t('admin.registerTitle')}</p>
             </div>
             <div className="flex flex-col gap-[24px]">
-                <TextForm label="メールアドレス" type="email" placeholder="example@gmail.com" onChange={(e) => setEmail(e.target.value)} />
-                <TextForm label="パスワード" type="password" placeholder="password" onChange={(e) => setPassword(e.target.value)} />
+                <TextForm label={t('admin.emailLabel')} type="email" placeholder="example@gmail.com" onChange={(e) => setEmail(e.target.value)} />
+                <TextForm label={t('admin.passwordLabel')} type="password" placeholder="password" onChange={(e) => setPassword(e.target.value)} />
                 <PrimaryButton
-                    text="登録"
+                    text={t('admin.registerButton')}
                     onClick={async () => {
                         await signUp({
                             email: email,
