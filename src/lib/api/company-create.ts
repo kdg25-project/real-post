@@ -1,6 +1,7 @@
 export type CompanyCreateRequest = {
     companyName: string;
     companyCategory: string;
+    placeId: string;
     placeUrl: string;
     imageFile: Blob | File;
 }
@@ -28,6 +29,8 @@ export function companyCreate(req: CompanyCreateRequest): Promise<CompanyCreateR
     formData.append("companyName", req.companyName);
     formData.append("companyCategory", req.companyCategory);
     formData.append("imageFile", req.imageFile);
+    formData.append("placeUrl", req.placeUrl);
+    formData.append("placeId", req.placeId);
 
     return fetch(`/api/company`,
         {
