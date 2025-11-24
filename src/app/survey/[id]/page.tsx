@@ -10,9 +10,12 @@ import TextForm from "@/components/layouts/TextForm"
 import { CategoryForm, NativeSelectOption, NativeSelectOptGroup } from "@/components/layouts/CategoryForm"
 import { SurveyCreate, SurveyCreateRequest } from "@/lib/api/survey-create"
 import PrimaryButton from "@/components/elements/PrimaryButton"
+import { useRouter } from "next/navigation"
 import { useParams, useSearchParams } from "next/navigation"
+import { getCompanyDetail } from "@/lib/api/company";
 
 export default function Survey() {
+    const router = useRouter();
     const t = useTranslations();
     const token = useSearchParams().get("token");
     const id = useParams().id
@@ -66,7 +69,7 @@ export default function Survey() {
         <div className="flex flex-col gap-6 w-[402px] h-screen mx-auto mb-20 px-[24px] overflow-hidden overflow-y-auto">
             <Header searchArea={false} />
             <div className="flex flex-col justify-center items-center text-black pt-35">
-                <p className="text-2xl font-bold">Blue Fork Bistro</p>
+                <p className="text-2xl font-bold">{t('getCompany.companyName')}</p>
                 <p>{t('survey.pleaseParticipate')}</p>
             </div>
             <ImageUpload
@@ -138,6 +141,7 @@ export default function Survey() {
             onClick={async () => {
                 if (!isChecked) return;
                 await SurveyCreate(form, id as string, token);
+                router.push("/survey/completion")
             }} />
         </div>
     ))
