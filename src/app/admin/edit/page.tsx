@@ -206,7 +206,7 @@ export default function EditPage() {
                                 className="absolute right-4 bottom-4 bg-primary text-white py-2 px-6"
                                 onClick={() => {
                                     if (!selectedPlaceId) {
-                                        alert("場所を選択してください");
+                                        alert(t('admin.selectLocation'));
                                         return;
                                     }
                                     setCompany({
