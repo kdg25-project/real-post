@@ -26,48 +26,18 @@ export async function POST(request: NextRequest) {
     const companyName = formData.get("companyName");
     const companyCategory = formData.get("companyCategory");
     const imageFile = formData.get("imageFile");
-    const placeUrl = formData.get("placeUrl") || null;
-    let placeId = formData.get("placeId") || null;
+    let placeId = formData.get("placeId");
 
-    if (!placeId && !placeUrl) {
+    if (!placeId) {
       return NextResponse.json(
         {
           success: false,
-          message: "Either placeUrl or placeId must be provided",
+          message: "Either or placeId must be provided",
           data: null,
         },
         { status: 400 }
       );
     }
-
-    // NOTE: placeIdを送っているのでここでは不要
-    // if (!placeId && placeUrl) {
-    //   try {
-    //     const extracted = await extractPlaceIdFromGoogleMapsUrl(String(placeUrl));
-    //     placeId = extracted;
-    //   } catch (err: unknown) {
-    //     console.error("Error resolving placeId from Google Maps API:", err);
-    //     const msg = err instanceof Error ? err.message : String(err);
-    //     return NextResponse.json(
-    //       {
-    //         success: false,
-    //         message: msg || "Failed to retrieve place_id from Google Maps API",
-    //         data: null,
-    //       },
-    //       { status: 500 }
-    //     );
-    //   }
-    // if (placeUrl && !placeId) {
-    //   return NextResponse.json(
-    //     {
-    //       success: false,
-    //       message: "Invalid Google Maps URL for placeId",
-    //       data: null,
-    //     },
-    //     { status: 400 }
-    //   );
-    // }
-    // }
 
     let imageUrl: string | null = null;
     if (imageFile && imageFile instanceof File) {
@@ -204,56 +174,17 @@ export async function PATCH(
     const companyCategory = formData.get("companyCategory");
     const imageFile = formData.get("image");
 
-    const placeUrlRaw = formData.get("placeUrl");
-    const placeIdRaw = formData.get("placeId");
+    const placeId = formData.get("placeId");
 
-    let placeIdValue: string | undefined = undefined;
-    if (placeIdRaw !== null) {
-      placeIdValue = String(placeIdRaw);
-    }
-
-    if (placeUrlRaw !== null) {
-      let placeUrl = String(placeUrlRaw);
-      if (placeUrl.includes("maps.app.goo.gl")) {
-        try {
-          const response = await fetch(placeUrl, {
-            method: "HEAD",
-            redirect: "follow",
-          });
-          placeUrl = response.url;
-        } catch (err) {
-          console.error("Error resolving placeUrl redirect:", err);
-        }
-      }
-
-      if (!placeIdValue && placeUrl.length > 0) {
-        try {
-          const extractedId = await extractPlaceIdFromGoogleMapsUrl(placeUrl);
-          if (extractedId) {
-            placeIdValue = extractedId;
-          } else {
-            return NextResponse.json(
-              {
-                success: false,
-                message: "Invalid Google Maps URL",
-                data: null,
-              },
-              { status: 400 }
-            );
-          }
-        } catch (err: unknown) {
-          console.error("Error resolving placeId from Google Maps API:", err);
-          const msg = err instanceof Error ? err.message : String(err);
-          return NextResponse.json(
-            {
-              success: false,
-              message: msg || "Failed to retrieve place_id from Google Maps API",
-              data: null,
-            },
-            { status: 500 }
-          );
-        }
-      }
+    if (!placeId) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Either or placeId must be provided",
+          data: null,
+        },
+        { status: 400 }
+      );
     }
 
     let imageUrl: string | null = null;
@@ -273,7 +204,7 @@ export async function PATCH(
       updates.imageUrl = imageUrl;
     }
     if (placeIdValue !== undefined) {
-      updates.placeId = placeIdValue;
+      updates.placeId = placeId;
     }
 
     if (Object.keys(updates).length === 0) {
