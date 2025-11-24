@@ -27,7 +27,7 @@ export default function SignUpPage() {
             </div>
             <div className="flex flex-col gap-[24px]">
                 <TextForm label={t('admin.emailLabel')} type="email" placeholder="example@gmail.com" onChange={(e) => setEmail(e.target.value)} />
-                <TextForm label="パスワード" type="password" placeholder="password" onChange={(e) => setPassword(e.target.value)} />
+                <TextForm label={t('admin.passwordLabel')} type="password" placeholder="password" onChange={(e) => setPassword(e.target.value)} />
                 <PrimaryButton
                     text={t('admin.registerButton')}
                     onClick={async () => {
