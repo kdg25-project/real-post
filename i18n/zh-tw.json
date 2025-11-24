@@ -139,6 +139,26 @@
     "qrUsageCount": "QR碼使用次數",
     "qrUsageCountPlaceholder": "例如：1",
     "issueQrButton": "發行QR碼",
-    "qrGenerationFailed": "QR碼生成失敗"
+    "qrGenerationFailed": "QR碼生成失敗",
+    "editTitle": "編輯",
+    "storeName": "店舖名稱",
+    "storeNamePlaceholder": "例如：愛米俱樂部",
+    "storeRegistration": "店舖登記",
+    "searchLocation": "搜尋位置...",
+    "selectLocation": "請選擇位置",
+    "setHere": "設定在這裡",
+    "updateButton": "更新",
+    "sns": "社群媒體",
+    "snsPlaceholder": "例如：https://example.com/",
+    "editSuccess": "資訊已更新",
+    "editFailed": "更新資訊失敗",
+    "communicationError": "發生通訊錯誤",
+    "mapUrl": "地圖URL",
+    "categoryFood": "餐飲",
+    "categoryCulture": "文化·歷史",
+    "categoryWorkshop": "手工·工作坊",
+    "categoryShopping": "購物",
+    "categoryOther": "其他",
+    "countryLabel": "國家"
   }
 }

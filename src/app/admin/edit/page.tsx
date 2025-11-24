@@ -16,10 +16,12 @@ import {
     useJsApiLoader,
     StandaloneSearchBox,
 } from "@react-google-maps/api";
+import { useTranslations } from "next-intl";
 
 
 // TODO: レオタスク
 export default function EditPage() {
+    const t = useTranslations();
     const { data } = useSession();
     // companyのフォーム情報
     const [company, setCompany] = useState<CompanyEditRequest>({
@@ -48,13 +50,13 @@ export default function EditPage() {
             const result2 = await UpdateGoods(goods, goodsId);
             // nullチェック
             if (result?.success && result2?.success) {
-                alert("情報を編集しました");
+                alert(t('admin.editSuccess'));
             } else {
-                alert("情報の編集に失敗しました");
+                alert(t('admin.editFailed'));
             }
         } catch (err) {
             console.error(err);
-            alert("通信エラーが発生しました");
+            alert(t('admin.communicationError'));
         }
     };
 
@@ -132,8 +134,8 @@ export default function EditPage() {
 
     return (
         <div className="flex flex-col justify-center gap-6 pb-[104px] pt-10">
-            <p className="flex justify-center items-center text-2xl font-bold">編集</p>
-            <TextForm label="店舗名" type="text" placeholder="例 ご飯大好きの会" value={company.companyName} onChange={(e) => setCompany({ ...company, companyName: e.target.value })} />
+            <p className="flex justify-center items-center text-2xl font-bold">{t('admin.editTitle')}</p>
+            <TextForm label={t('admin.storeName')} type="text" placeholder={t('admin.storeNamePlaceholder')} value={company.companyName} onChange={(e) => setCompany({ ...company, companyName: e.target.value })} />
             {/* <TextForm label="住所" type="text" placeholder="例 名古屋市中村区日本橋1-1" value={company.placeUrl} onChange={(e) => setCompany({ ...company, PlaceUrl: e.target.value })} /> */}
             {isLoaded && (
                 <>
@@ -144,7 +146,7 @@ export default function EditPage() {
                                 placeId: ""
                             })} />
                             <TextForm
-                                label="MapUrl"
+                                label={t('admin.mapUrl')}
                                 value={`https://www.google.com/maps/place?place_id:${company.placeId}`}
                                 readOnly
                             />
@@ -179,7 +181,7 @@ export default function EditPage() {
                             >
                                 <input
                                     type="text"
-                                    placeholder="場所を検索..."
+                                    placeholder={t('admin.searchLocation')}
                                     style={{
                                         backgroundColor: "white",
                                         boxSizing: "border-box",
@@ -214,25 +216,25 @@ export default function EditPage() {
                                     });
                                 }}
                             >
-                                ここにする
+                                {t('admin.setHere')}
                             </button>
                         </GoogleMap>
                     )}
                 </>
             )}
-            <CategoryForm title="カテゴリー" value={company.companyCategory} onChange={(e) => setCompany({ ...company, companyCategory: e.target.value })}>
-                <NativeSelectOptGroup label="カテゴリー">
-                    <NativeSelectOption value="1">飲食</NativeSelectOption>
-                    <NativeSelectOption value="2">文化・歴史</NativeSelectOption>
-                    <NativeSelectOption value="3">ものづくり・ワークショップ</NativeSelectOption>
-                    <NativeSelectOption value="4">買い物</NativeSelectOption>
-                    <NativeSelectOption value="5">その他</NativeSelectOption>
+            <CategoryForm title={t('admin.companyCategory')} value={company.companyCategory} onChange={(e) => setCompany({ ...company, companyCategory: e.target.value })}>
+                <NativeSelectOptGroup label={t('admin.companyCategory')}>
+                    <NativeSelectOption value="1">{t('admin.categoryFood')}</NativeSelectOption>
+                    <NativeSelectOption value="2">{t('admin.categoryCulture')}</NativeSelectOption>
+                    <NativeSelectOption value="3">{t('admin.categoryWorkshop')}</NativeSelectOption>
+                    <NativeSelectOption value="4">{t('admin.categoryShopping')}</NativeSelectOption>
+                    <NativeSelectOption value="5">{t('admin.categoryOther')}</NativeSelectOption>
                 </NativeSelectOptGroup>
             </CategoryForm>
-            <TextForm label="SNS" type="text" placeholder="例 https://example.com/" />
+            <TextForm label={t('admin.sns')} type="text" placeholder={t('admin.snsPlaceholder')} />
             <ImageUpload
-                label="店舗画像"
-                title="画像をアップロード"
+                label={t('admin.storeImage')}
+                title={t('admin.uploadImage')}
                 preview={imageUrls.companyImageUrl || undefined}
                 onChange={(file) => {
                     if (!file) return;
@@ -244,10 +246,10 @@ export default function EditPage() {
                     setCompany({ ...company, imageFile: file });
                 }}
             />
-            <TextForm label="グッズ名" type="text" placeholder="例 ご飯大好き缶バッチ" value={goods.name} onChange={(e) => setGoods({ ...goods, name: e.target.value })} />
+            <TextForm label={t('admin.goodsName')} type="text" placeholder={t('admin.goodsNamePlaceholder')} value={goods.name} onChange={(e) => setGoods({ ...goods, name: e.target.value })} />
             <ImageUpload
-                label="グッズ画像"
-                title="画像をアップロード"
+                label={t('admin.goodsImage')}
+                title={t('admin.uploadImage')}
                 preview={imageUrls.goodsImageUrl || undefined}
                 onChange={(file) => {
                     if (!file) return;
@@ -260,7 +262,7 @@ export default function EditPage() {
                 }}
             />
             <PrimaryButton
-                text="更新"
+                text={t('admin.updateButton')}
                 onClick={handleSubmit}
             />
         </div>

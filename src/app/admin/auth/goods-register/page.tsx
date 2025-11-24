@@ -36,7 +36,7 @@ export default function GoodsRegistration() {
                 }}
             />
             <PrimaryButton
-            text="登録"
+            text={t('admin.registerButton')}
             onClick={async () => {
                 const result = await GoodsCreate(form);
                 if (result.success){

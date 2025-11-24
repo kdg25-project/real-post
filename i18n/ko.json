@@ -139,6 +139,26 @@
     "qrUsageCount": "QR 코드 사용 횟수",
     "qrUsageCountPlaceholder": "예: 1",
     "issueQrButton": "QR 코드 발행하기",
-    "qrGenerationFailed": "QR 코드 생성 실패"
+    "qrGenerationFailed": "QR 코드 생성 실패",
+    "editTitle": "편집",
+    "storeName": "매장명",
+    "storeNamePlaceholder": "예: 밥 좋아요 모임",
+    "storeRegistration": "매장 등록",
+    "searchLocation": "위치 검색...",
+    "selectLocation": "위치를 선택해 주세요",
+    "setHere": "여기로 설정",
+    "updateButton": "업데이트",
+    "sns": "SNS",
+    "snsPlaceholder": "예: https://example.com/",
+    "editSuccess": "정보가 수정되었습니다",
+    "editFailed": "정보 수정에 실패했습니다",
+    "communicationError": "통신 오류가 발생했습니다",
+    "mapUrl": "지도 URL",
+    "categoryFood": "음식점",
+    "categoryCulture": "문화·역사",
+    "categoryWorkshop": "공예·워크샵",
+    "categoryShopping": "쇼핑",
+    "categoryOther": "기타",
+    "countryLabel": "국가"
   }
 }

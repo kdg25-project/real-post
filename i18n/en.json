@@ -139,6 +139,26 @@
     "qrUsageCount": "QR Code Usage Limit",
     "qrUsageCountPlaceholder": "e.g., 1",
     "issueQrButton": "Issue QR Code",
-    "qrGenerationFailed": "Failed to generate QR code"
+    "qrGenerationFailed": "Failed to generate QR code",
+    "editTitle": "Edit",
+    "storeName": "Store Name",
+    "storeNamePlaceholder": "e.g., Rice Lover Club",
+    "storeRegistration": "Store Registration",
+    "searchLocation": "Search location...",
+    "selectLocation": "Please select a location",
+    "setHere": "Set here",
+    "updateButton": "Update",
+    "sns": "SNS",
+    "snsPlaceholder": "e.g., https://example.com/",
+    "editSuccess": "Information updated successfully",
+    "editFailed": "Failed to update information",
+    "communicationError": "A communication error occurred",
+    "mapUrl": "MapUrl",
+    "categoryFood": "Food & Dining",
+    "categoryCulture": "Culture & History",
+    "categoryWorkshop": "Crafts & Workshops",
+    "categoryShopping": "Shopping",
+    "categoryOther": "Other",
+    "countryLabel": "Country"
   }
 }

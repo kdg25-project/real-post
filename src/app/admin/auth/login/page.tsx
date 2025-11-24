@@ -22,13 +22,13 @@ export default function LoginPage() {
                         <h1 className="text-[26px] font-bold leading-tight">Real Post</h1>
                     </div>
                 </div>
-                <p className="text-2xl">管理者ログイン</p>
+                <p className="text-2xl">{t('auth.adminLogin')}</p>
             </div>
             <div className="flex flex-col gap-[24px]">
-                <TextForm label="メールアドレス" type="email" placeholder="example@gmail.com" onChange={(e) => setEmail(e.target.value)} />
+                <TextForm label={t('admin.emailLabel')} type="email" placeholder="example@gmail.com" onChange={(e) => setEmail(e.target.value)} />
                 <TextForm label="パスワード" type="password" placeholder="password" onChange={(e) => setPassword(e.target.value)} />
                 <PrimaryButton
-                    text="ログイン"
+                    text={t('admin.loginButton')}
                     onClick={async () => {
                         await authClient.signIn.email({
                             email: email,

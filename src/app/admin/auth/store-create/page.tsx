@@ -46,7 +46,7 @@ export default function StoreInformationCreationPage() {
 
     const handleSubmit = async () => {
         if (!form.companyName || !form.companyCategory || !form.imageFile) {
-            alert("会社名・カテゴリー・画像は必須です");
+            alert(t('admin.requiredFields'));
             return;
         }
 
@@ -84,16 +84,16 @@ export default function StoreInformationCreationPage() {
     return (
         <div className="flex flex-col justify-center gap-6">
 
-            <h1 className="flex justify-center font-bold text-2xl py-5">店舗登録</h1>
-            <TextForm label="店舗名" type="text" placeholder="例 ご飯大好きの会" value={form.companyName} onChange={(e) => setForm({ ...form, companyName: e.target.value })} />
+            <h1 className="flex justify-center font-bold text-2xl py-5">{t('admin.storeRegistration')}</h1>
+            <TextForm label={t('admin.storeName')} type="text" placeholder={t('admin.storeNamePlaceholder')} value={form.companyName} onChange={(e) => setForm({ ...form, companyName: e.target.value })} />
             {/* <TextForm label="住所" type="text" placeholder="例 名古屋市中村区日本橋1-1" value={form.placeUrl} onChange={(e) => setForm({ ...form, placeUrl: e.target.value })} /> */}
-            <CategoryForm title="カテゴリー" defaultValue="1" onChange={(e) => setForm({ ...form, companyCategory: e.target.value })} >
-                <NativeSelectOptGroup label="カテゴリー">
-                    <NativeSelectOption value="1">飲食</NativeSelectOption>
-                    <NativeSelectOption value="2">文化・歴史</NativeSelectOption>
-                    <NativeSelectOption value="3">ものづくり・ワークショップ</NativeSelectOption>
-                    <NativeSelectOption value="4">買い物</NativeSelectOption>
-                    <NativeSelectOption value="5">その他</NativeSelectOption>
+            <CategoryForm title={t('admin.companyCategory')} defaultValue="1" onChange={(e) => setForm({ ...form, companyCategory: e.target.value })} >
+                <NativeSelectOptGroup label={t('admin.companyCategory')}>
+                    <NativeSelectOption value="1">{t('admin.categoryFood')}</NativeSelectOption>
+                    <NativeSelectOption value="2">{t('admin.categoryCulture')}</NativeSelectOption>
+                    <NativeSelectOption value="3">{t('admin.categoryWorkshop')}</NativeSelectOption>
+                    <NativeSelectOption value="4">{t('admin.categoryShopping')}</NativeSelectOption>
+                    <NativeSelectOption value="5">{t('admin.categoryOther')}</NativeSelectOption>
                 </NativeSelectOptGroup>
             </CategoryForm>
             {isLoaded && (
@@ -105,7 +105,7 @@ export default function StoreInformationCreationPage() {
                                 placeId: ""
                             })} />
                             <TextForm
-                                label="MapUrl"
+                                label={t('admin.mapUrl')}
                                 value={form.placeUrl}
                                 readOnly
                             />
@@ -140,7 +140,7 @@ export default function StoreInformationCreationPage() {
                             >
                                 <input
                                     type="text"
-                                    placeholder="場所を検索..."
+                                    placeholder={t('admin.searchLocation')}
                                     style={{
                                         backgroundColor: "white",
                                         boxSizing: "border-box",
@@ -197,7 +197,7 @@ export default function StoreInformationCreationPage() {
                 }}
             />
             <PrimaryButton
-                text="登録"
+                text={t('admin.registerButton')}
                 onClick={handleSubmit}
             />
         </div>
