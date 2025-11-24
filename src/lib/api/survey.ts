@@ -1,23 +1,13 @@
 // ------------------------------
-// トップページ用（既存）
+// Helper function to build absolute URLs
 // ------------------------------
-export async function getSurveysForTop(page: number, limit: number) {
-  try {
-    const res = await fetch(`/api/surveys?page=${page}&limit=${limit}`, {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    });
-
-    if (!res.ok) {
-      throw new Error("Failed to fetch surveys");
-    }
-
-    const json = await res.json();
-    return json;
-  } catch (err) {
-    console.error(err);
-    return null;
+function getBaseUrl() {
+  // Server-side: use environment variable or localhost
+  if (typeof window === "undefined") {
+    return process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
   }
+  // Client-side: use window.location.origin
+  return window.location.origin;
 }
 
 // 検索・フィルタ付き一覧
@@ -29,26 +19,32 @@ export async function getSurveys(params: {
   limit: number;
   category?: string;
   query?: string;
-  ageGroup?: "18-24" | "25-34" | "35-44" | "45-54" | "55+" | null;
-  country?: string;
+  ageGroups?: string[];
+  countries?: string[];
   gender?: "male" | "female" | "other" | null;
 }) {
   try {
-    const query = new URLSearchParams();
+    const queryParams: string[] = [];
 
-    query.set("page", String(params.page));
-    query.set("limit", String(params.limit));
-    if (params.category) query.set("category", params.category);
-    if (params.query) query.set("query", params.query);
-    if (params.ageGroup) query.set("age_group", params.ageGroup);
-    if (params.country) query.set("country", params.country);
-    if (params.gender) query.set("gender", params.gender);
+    queryParams.push(`page=${params.page}`);
+    queryParams.push(`limit=${params.limit}`);
+    if (params.category) queryParams.push(`category=${params.category}`);
+    if (params.query)
+      queryParams.push(`query=${encodeURIComponent(params.query)}`);
+    if (params.ageGroups && params.ageGroups.length > 0) {
+      queryParams.push(`age_group=${params.ageGroups.join(",")}`);
+    }
+    if (params.countries && params.countries.length > 0) {
+      queryParams.push(`country=${params.countries.join(",")}`);
+    }
+    if (params.gender) queryParams.push(`gender=${params.gender}`);
 
-    const url = `/api/surveys?${query.toString()}`;
+    const url = `${getBaseUrl()}/api/surveys?${queryParams.join("&")}`;
 
     const res = await fetch(url, {
       method: "GET",
       headers: { "Content-Type": "application/json" },
+      cache: "no-store",
     });
 
     if (!res.ok) throw new Error("Failed to fetch surveys");
@@ -65,7 +61,8 @@ export async function getSurveys(params: {
 // ------------------------------
 export async function getFavoriteSurveys() {
   try {
-    const res = await fetch("/api/users/favorite", {
+    const url = `${getBaseUrl()}/api/users/favorite`;
+    const res = await fetch(url, {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     });
@@ -87,7 +84,7 @@ export async function getSurveysForStore(
   limit: number,
 ) {
   try {
-    const url = `/api/surveys/company/${companyId}?page=${page}&limit=${limit}`;
+    const url = `${getBaseUrl()}/api/surveys/company/${companyId}?page=${page}&limit=${limit}`;
 
     const res = await fetch(url, {
       method: "GET",
@@ -111,7 +108,8 @@ export async function getSurveysForStore(
 // ------------------------------
 export async function getSurveyDetail(id: string) {
   try {
-    const res = await fetch(`/api/surveys/${id}`, {
+    const url = `${getBaseUrl()}/api/surveys/${id}`;
+    const res = await fetch(url, {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     });
