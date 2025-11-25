@@ -5,13 +5,13 @@
 
 :root {
   /* === color === */
-  --color-primary: #2A8ED9;
+  --color-primary: #2a8ed9;
   --color-white: #ffffff;
   --color-black: #333333;
-  --color-gray-dark: #8E8E8E;
-  --color-gray: #C1C1C1;
-  --color-gray-light: #EAEBEB;
-  --color-gray-more-light: #F4F6F8;
+  --color-gray-dark: #8e8e8e;
+  --color-gray: #c1c1c1;
+  --color-gray-light: #eaebeb;
+  --color-gray-more-light: #f4f6f8;
 
   /* === shadcn/ui === */
   /* === シャドウ === */

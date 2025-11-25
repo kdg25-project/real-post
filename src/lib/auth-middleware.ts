@@ -28,10 +28,7 @@ export async function requireAccountType(
 
   if (!user?.accountType || !allowedTypes.includes(user.accountType as "company" | "user")) {
     return {
-      error: NextResponse.json(
-        { error: "Forbidden: Invalid account type" },
-        { status: 403 }
-      ),
+      error: NextResponse.json({ error: "Forbidden: Invalid account type" }, { status: 403 }),
       user: null,
     };
   }

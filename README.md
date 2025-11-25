@@ -25,16 +25,19 @@ This project uses [`next/font`](https://nextjs.org/docs/app/building-your-applic
 To populate the database with test data (company users and surveys):
 
 1. Make sure the development server is running:
+
 ```bash
 pnpm dev
 ```
 
 2. In a separate terminal, install dependencies if you haven't already:
+
 ```bash
 pnpm install
 ```
 
 3. Run the seeder script:
+
 ```bash
 pnpm seed
 ```

@@ -6,19 +6,17 @@ import { eq, and, sql, gt } from "drizzle-orm";
 export async function generateSurveyToken(companyId: string, maxUses: number) {
   // シンプルなランダム英数字文字列を生成（URLセーフ）
   const tokenHash = Array.from(crypto.getRandomValues(new Uint8Array(32)))
-    .map(b => b.toString(36))
-    .join('')
+    .map((b) => b.toString(36))
+    .join("")
     .substring(0, 64);
-  
+
   const tokenId = crypto.randomUUID();
-  await db
-    .insert(surveyTable)
-    .values({
-      id: tokenId,
-      companyId,
-      token: tokenHash,
-      remainingCount: maxUses,
-    });
+  await db.insert(surveyTable).values({
+    id: tokenId,
+    companyId,
+    token: tokenHash,
+    remainingCount: maxUses,
+  });
 
   console.log("Generated token hash:", tokenHash.substring(0, 20) + "...");
   console.log("Token length:", tokenHash.length);
@@ -37,7 +35,12 @@ export async function authSurveyToken(request: NextRequest, companyId: string) {
   console.log("Received token:", tokenHash.substring(0, 20) + "...");
   console.log("Token length:", tokenHash.length);
 
-  console.log("Looking for survey with companyId:", companyId, "tokenHash:", tokenHash.substring(0, 20) + "...");
+  console.log(
+    "Looking for survey with companyId:",
+    companyId,
+    "tokenHash:",
+    tokenHash.substring(0, 20) + "..."
+  );
 
   const survey = await db
     .select()
@@ -58,7 +61,7 @@ export async function authSurveyToken(request: NextRequest, companyId: string) {
     id: survey.id,
     expiredAt: survey.expiredAt,
     remainingCount: survey.remainingCount,
-    now: new Date()
+    now: new Date(),
   });
 
   if (survey.expiredAt < new Date() || survey.remainingCount <= 0) {
@@ -79,21 +82,21 @@ export async function checkSurveyTokenValidity(request: NextRequest, companyId: 
       survey: null,
     };
   }
-  
+
   const survey = await db
     .select()
     .from(surveyTable)
     .where(and(eq(surveyTable.companyId, companyId), eq(surveyTable.token, tokenHash)))
     .limit(1)
     .then((res) => res[0]);
-  
+
   if (!survey) {
     return {
       error: NextResponse.json({ error: "Unauthorized: Invalid survey token" }, { status: 401 }),
       survey: null,
     };
   }
-  
+
   const isValid = survey.expiredAt > new Date() && survey.remainingCount > 0;
   return { error: null, isValid };
 }

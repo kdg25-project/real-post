@@ -6,7 +6,7 @@ import { userProfile } from "@/db/schema";
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    
+
     const { email, password, accountType, country } = body;
 
     // バリデーションエラー
@@ -20,10 +20,7 @@ export async function POST(request: NextRequest) {
     // メールアドレスの形式チェック
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      return NextResponse.json(
-        { error: "Invalid email format" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Invalid email format" }, { status: 400 });
     }
 
     // パスワードの長さチェック
@@ -55,26 +52,21 @@ export async function POST(request: NextRequest) {
     } catch (authError) {
       // 認証関連のエラー処理
       const errorMessage = authError instanceof Error ? authError.message : String(authError);
-      if (errorMessage.includes("duplicate") || errorMessage.includes("unique") || errorMessage.includes("already exists")) {
-        return NextResponse.json(
-          { error: "Email already exists" },
-          { status: 409 }
-        );
+      if (
+        errorMessage.includes("duplicate") ||
+        errorMessage.includes("unique") ||
+        errorMessage.includes("already exists")
+      ) {
+        return NextResponse.json({ error: "Email already exists" }, { status: 409 });
       }
       if (errorMessage.includes("invalid") || errorMessage.includes("validation")) {
-        return NextResponse.json(
-          { error: errorMessage || "Invalid input data" },
-          { status: 400 }
-        );
+        return NextResponse.json({ error: errorMessage || "Invalid input data" }, { status: 400 });
       }
       throw authError;
     }
 
     if (!signUpResult || !signUpResult.user) {
-      return NextResponse.json(
-        { error: "Failed to create user" },
-        { status: 500 }
-      );
+      return NextResponse.json({ error: "Failed to create user" }, { status: 500 });
     }
 
     // 一般ユーザーの場合のみuserProfileを作成
@@ -101,19 +93,13 @@ export async function POST(request: NextRequest) {
     );
   } catch (error) {
     console.error("Signup error:", error);
-    
+
     if (error instanceof Error) {
       if (error.message.includes("duplicate") || error.message.includes("unique")) {
-        return NextResponse.json(
-          { error: "Email already exists" },
-          { status: 409 }
-        );
+        return NextResponse.json({ error: "Email already exists" }, { status: 409 });
       }
     }
 
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }

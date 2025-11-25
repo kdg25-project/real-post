@@ -72,7 +72,9 @@ export const companyProfile = pgTable("company_profile", {
   companyName: text("company_name").notNull(),
   imageUrl: text("image_url"),
   placeId: text("place_id"),
-  companyCategory: text("company_category", { enum: ["food", "culture", "activity", "shopping", "other"] }).notNull(),
+  companyCategory: text("company_category", {
+    enum: ["food", "culture", "activity", "shopping", "other"],
+  }).notNull(),
   createdAt: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
   updatedAt: timestamp("updated_at", { mode: "date" })
     .defaultNow()

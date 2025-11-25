@@ -7,10 +7,7 @@ import { uploadFileToR2 } from "@/lib/r2";
 import type { ApiResponse } from "@/types";
 
 // ================== スキーマ定義 ==================
-export const pageSchema = z.coerce
-  .number()
-  .min(1, "pageを1以上の値にしてください。")
-  .default(1);
+export const pageSchema = z.coerce.number().min(1, "pageを1以上の値にしてください。").default(1);
 export const limitSchema = z.coerce
   .number()
   .min(1, "最低1件は取得する必要があります。")
@@ -58,7 +55,7 @@ export function handleGoodsError(error: unknown, defaultMessage: string) {
         message: "Invalid parameters",
         errors: error.issues,
       },
-      { status: 400 },
+      { status: 400 }
     );
   }
   return NextResponse.json<ApiResponse<never>>(
@@ -66,6 +63,6 @@ export function handleGoodsError(error: unknown, defaultMessage: string) {
       success: false,
       message: error instanceof Error ? error.message : defaultMessage,
     },
-    { status: 500 },
+    { status: 500 }
   );
 }

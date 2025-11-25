@@ -3,12 +3,7 @@ import { goods, goodsImage } from "@/db/schema";
 import { requireCompanyAccount } from "@/lib/auth-middleware";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
-import {
-  getPaginationParams,
-  getGoodsCount,
-  handleGoodsError,
-  uploadGoodsImages,
-} from "./utils";
+import { getPaginationParams, getGoodsCount, handleGoodsError, uploadGoodsImages } from "./utils";
 import type { ApiResponse } from "@/types";
 
 export async function GET(req: NextRequest) {
@@ -18,10 +13,10 @@ export async function GET(req: NextRequest) {
 
     const [allGoods, totalCount] = await Promise.all([
       db.query.goods.findMany({
-        with: { 
+        with: {
           images: {
             orderBy: (images, { desc }) => [desc(images.createdAt)],
-          }
+          },
         },
         limit: pageSize,
         offset: (page - 1) * pageSize,
@@ -47,20 +42,11 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   const goodsFormDataSchema = z.object({
-    name: z
-      .string()
-      .min(1, "名前は必須です。")
-      .max(50, "名前は50文字までです。"),
+    name: z.string().min(1, "名前は必須です。").max(50, "名前は50文字までです。"),
     images: z
       .instanceof(Blob)
       .refine((blob) => {
-        const validTypes = [
-          "image/jpeg",
-          "image/jpg",
-          "image/png",
-          "image/webp",
-          "image/avif",
-        ];
+        const validTypes = ["image/jpeg", "image/jpg", "image/png", "image/webp", "image/avif"];
         return validTypes.includes(blob.type);
       }, "画像はJPEG、JPG、PNG、WEBP、AVIF形式である必要があります。")
       .array()
@@ -74,7 +60,7 @@ export async function POST(req: NextRequest) {
         success: false,
         message: "User is not authenticated or does not have a company account",
       },
-      { status: 401 },
+      { status: 401 }
     );
   }
 
@@ -103,9 +89,7 @@ export async function POST(req: NextRequest) {
       await tx.insert(goodsImage).values(newGoodsImages);
     });
 
-    return NextResponse.json<
-      ApiResponse<{ id: string; name: string; image_urls: string[] }>
-    >({
+    return NextResponse.json<ApiResponse<{ id: string; name: string; image_urls: string[] }>>({
       success: true,
       message: "Goods created successfully",
       data: {

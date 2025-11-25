@@ -9,79 +9,76 @@ import { toggleFavorite } from "@/lib/api/favorite";
 import { useRouter } from "next/navigation";
 
 interface PostCardProps {
-    id: string;
-    thumbnailUrl: string | null;
-    companyName: string;
-    country: string;
-    satisfactionLevel: number;
-    favoriteCount: number;
-    isFavorited: boolean;
+  id: string;
+  thumbnailUrl: string | null;
+  companyName: string;
+  country: string;
+  satisfactionLevel: number;
+  favoriteCount: number;
+  isFavorited: boolean;
 }
 
 export default function PostCard({
-    id,
-    thumbnailUrl,
-    companyName,
-    country,
-    satisfactionLevel,
-    favoriteCount,
-    isFavorited
+  id,
+  thumbnailUrl,
+  companyName,
+  country,
+  satisfactionLevel,
+  favoriteCount,
+  isFavorited,
 }: PostCardProps) {
-    const [favorited, setFavorited] = useState(isFavorited);
-    const [count, setCount] = useState(favoriteCount);
-    const router = useRouter();
+  const [favorited, setFavorited] = useState(isFavorited);
+  const [count, setCount] = useState(favoriteCount);
+  const router = useRouter();
 
-    const handleFavoriteClick = async (e: React.MouseEvent) => {
-        e.preventDefault();
+  const handleFavoriteClick = async (e: React.MouseEvent) => {
+    e.preventDefault();
 
-        const result = await toggleFavorite(id);
+    const result = await toggleFavorite(id);
 
-        if (result?.success) {
-            // 古い状態に依存せず更新
-            setFavorited(prev => !prev);
-            setCount(prev => (favorited ? prev - 1 : prev + 1));
-        }
-    };
+    if (result?.success) {
+      // 古い状態に依存せず更新
+      setFavorited((prev) => !prev);
+      setCount((prev) => (favorited ? prev - 1 : prev + 1));
+    }
+  };
 
-    return (
-        <Link href={`/user/home/${id}`} className="block">
-            <div className="flex flex-col gap-[8px] bg-white p-[16px] rounded-[15px] shadow-base">
-                <div className="relative w-full h-[140px] rounded-[5px]">
-                    <Image
-                        src={thumbnailUrl ?? "/images/no-image.png"}
-                        alt={companyName}
-                        fill
-                        className="object-cover rounded-[15px]"
-                    />
-                </div>
+  return (
+    <Link href={`/user/home/${id}`} className="block">
+      <div className="flex flex-col gap-[8px] bg-white p-[16px] rounded-[15px] shadow-base">
+        <div className="relative w-full h-[140px] rounded-[5px]">
+          <Image
+            src={thumbnailUrl ?? "/images/no-image.png"}
+            alt={companyName}
+            fill
+            className="object-cover rounded-[15px]"
+          />
+        </div>
 
-                <div className="flex items-center justify-between">
-                    <PostInfo
-                        companyName={companyName}
-                        country={country}
-                        satisfactionLevel={satisfactionLevel}
-                        favoriteCount={count}
-                    />
+        <div className="flex items-center justify-between">
+          <PostInfo
+            companyName={companyName}
+            country={country}
+            satisfactionLevel={satisfactionLevel}
+            favoriteCount={count}
+          />
 
-                    <Heart
-                        size={28}
-                        className={`${favorited
-                            ? "fill-current text-primary"
-                            : "text-gray-dark"
-                            }`}
-                        onClick={(e) => {
-                            e.preventDefault();
+          <Heart
+            size={28}
+            className={`${favorited ? "fill-current text-primary" : "text-gray-dark"}`}
+            onClick={(e) => {
+              e.preventDefault();
 
-                            if (favorited === null) {
-                                router.push("/user/auth/login");
-                                return;
-                            }
+              if (favorited === null) {
+                router.push("/user/auth/login");
+                return;
+              }
 
-                            handleFavoriteClick(e);
-                        }}
-                    />
-                </div>
-            </div>
-        </Link>
-    );
+              handleFavoriteClick(e);
+            }}
+          />
+        </div>
+      </div>
+    </Link>
+  );
 }
