@@ -1,4 +1,29 @@
-export async function getCompanyDetail(companyId: string) {
+export type GetCompanyDetail =
+  | {
+      success: true;
+      message: string;
+      data: {
+        id: string;
+        userId: string;
+        companyName: string;
+        imageUrl: string;
+        placeId: string;
+        companyCategory: "";
+        createdAt: string;
+        updatedAt: string;
+        goods: {
+          id: string;
+          name: string;
+          imageUrl: string;
+        } | null;
+      };
+    }
+  | {
+      success: false;
+      message: string;
+    };
+
+export async function getCompanyDetail(companyId: string): Promise<GetCompanyDetail> {
   try {
     const res = await fetch(`/api/company/${companyId}`, {
       method: "GET",
@@ -13,6 +38,9 @@ export async function getCompanyDetail(companyId: string) {
     return json;
   } catch (err) {
     console.error(err);
-    return null;
+    return {
+      success: false,
+      message: "取得に失敗しました。",
+    };
   }
 }

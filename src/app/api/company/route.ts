@@ -25,15 +25,14 @@ export async function POST(request: NextRequest) {
     const formData = await request.formData();
     const companyName = formData.get("companyName");
     const companyCategory = formData.get("companyCategory");
-    const imageFile = formData.get("image");
-    const placeUrl = formData.get("placeUrl");
+    const imageFile = formData.get("imageFile");
+    let placeId = formData.get("placeId");
 
-    const placeId = extractPlaceIdFromGoogleMapsUrl(String(placeUrl));
-    if (placeUrl && !placeId) {
+    if (!placeId) {
       return NextResponse.json(
         {
           success: false,
-          message: "Invalid Google Maps URL for placeId",
+          message: "Either or placeId must be provided",
           data: null,
         },
         { status: 400 }
@@ -76,7 +75,7 @@ export async function POST(request: NextRequest) {
           | "shopping"
           | "other",
         imageUrl: imageUrl,
-        placeId: placeId,
+        placeId: (placeId as string) || null,
       })
       .returning();
 
@@ -163,21 +162,21 @@ export async function PATCH(request: NextRequest) {
 
     // company_profileを更新
     const formData = await request.formData();
-    const companyName = formData.get("companyName") ?? undefined;
-    const companyCategory = formData.get("companyCategory") ?? undefined;
-    const imageFile = formData.get("image") ?? undefined;
-    let placeUrl = formData.get("placeUrl") ?? undefined;
+    const companyName = formData.get("companyName");
+    const companyCategory = formData.get("companyCategory");
+    const imageFile = formData.get("image");
 
-    if (placeUrl && typeof placeUrl === "string" && placeUrl.includes("maps.app.goo.gl")) {
-      try {
-        const response = await fetch(placeUrl, {
-          method: "HEAD",
-          redirect: "follow",
-        });
-        placeUrl = response.url;
-      } catch (err) {
-        console.error("Error resolving placeUrl redirect:", err);
-      }
+    const placeId = formData.get("placeId");
+
+    if (!placeId) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Either or placeId must be provided",
+          data: null,
+        },
+        { status: 400 }
+      );
     }
 
     let imageUrl: string | null = null;
@@ -187,17 +186,28 @@ export async function PATCH(request: NextRequest) {
     }
 
     const updates: Record<string, unknown> = {};
-    if (companyName && typeof companyName === "string") {
-      updates.companyName = companyName;
+    if (companyName !== null) {
+      updates.companyName = String(companyName);
     }
-    if (companyCategory && typeof companyCategory === "string") {
-      updates.companyCategory = companyCategory;
+    if (companyCategory !== null) {
+      updates.companyCategory = String(companyCategory);
     }
     if (imageUrl) {
       updates.imageUrl = imageUrl;
     }
-    if (placeUrl && typeof placeUrl === "string") {
-      updates.placeUrl = placeUrl;
+    if (placeId) {
+      updates.placeId = placeId;
+    }
+
+    if (Object.keys(updates).length === 0) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "No updates provided",
+          data: null,
+        },
+        { status: 400 }
+      );
     }
 
     const result = await db

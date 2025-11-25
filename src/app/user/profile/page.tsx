@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import { authClient } from "@/lib/auth-client";
 import PrimaryButton from "@/components/elements/PrimaryButton";
 import Header from "@/components/layouts/Header";
@@ -14,6 +15,7 @@ interface Profile {
 }
 
 export default function ProfilePage() {
+  const t = useTranslations();
   // 初期値を空文字にして制御コンポーネントに
   const [profile, setProfile] = useState<Profile>({ email: "" });
   const [initialProfile, setInitialProfile] = useState<Profile>({ email: "" });
@@ -23,13 +25,12 @@ export default function ProfilePage() {
     fetch("/api/auth/me")
       .then((res) => res.json())
       .then((data) => {
-        console.log("取得データ:", data);
         // user.email から取得
         const fetchedProfile = { email: data.user?.email ?? "" };
         setProfile(fetchedProfile);
         setInitialProfile(fetchedProfile);
       })
-      .catch((err) => console.error("取得エラー:", err))
+      .catch((err) => console.error("Fetch error:", err))
       .finally(() => setLoading(false));
   }, []);
 
@@ -43,48 +44,78 @@ export default function ProfilePage() {
 
   const handleSave = () => {
     // 本番ではここで API PUT/PATCH リクエストを送る
-    console.log("保存データ:", profile);
+    console.log("Save data:", profile);
   };
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <p>{t("common.loading")}</p>;
 
   return (
     <div>
       <Header />
-      <Section title="Your Profile" className="gap-[16px]">
+      <Section title={t("profile.title")} className="gap-[16px]">
         <div className="flex flex-col gap-[12px]">
           <label htmlFor="email" className="text-[16px] font-bold">
-            Email
+            {t("profile.email")}
           </label>
           <input
             id="email"
             type="email"
-            placeholder="email"
+            placeholder={t("profile.emailPlaceholder")}
             value={profile.email}
             onChange={handleChange}
             className="w-full px-[20px] py-[15px] rounded-[14px] bg-white shadow-base focus:outline-none"
           />
           <CategoryForm>
-            <NativeSelectOptGroup label="国">
+            <NativeSelectOptGroup label={t("admin.countryLabel")}>
               <NativeSelectOption value="Japan">Japan: 日本</NativeSelectOption>
               <NativeSelectOption value="Korea">Korea: 한국</NativeSelectOption>
               <NativeSelectOption value="USA">USA: English</NativeSelectOption>
               <NativeSelectOption value="China">China: 中国</NativeSelectOption>
-              <NativeSelectOption value="France">France: Français</NativeSelectOption>
-              <NativeSelectOption value="Germany">Germany: Deutsch</NativeSelectOption>
-              <NativeSelectOption value="Spain">Spain: Español</NativeSelectOption>
-              <NativeSelectOption value="Italy">Italy: Italiano</NativeSelectOption>
-              <NativeSelectOption value="Russia">Russia: Русский</NativeSelectOption>
-              <NativeSelectOption value="Thailand">Thailand: ไทย</NativeSelectOption>
-              <NativeSelectOption value="Vietnam">Vietnam: Tiếng Việt</NativeSelectOption>
-              <NativeSelectOption value="India">India: हिन्दी</NativeSelectOption>
-              <NativeSelectOption value="Brazil">Brazil: Português</NativeSelectOption>
-              <NativeSelectOption value="Egypt">Egypt: العربية</NativeSelectOption>
-              <NativeSelectOption value="SaudiArabia">Saudi Arabia: العربية</NativeSelectOption>
-              <NativeSelectOption value="Sweden">Sweden: Svenska</NativeSelectOption>
-              <NativeSelectOption value="Norway">Norway: Norsk</NativeSelectOption>
-              <NativeSelectOption value="Finland">Finland: Suomi</NativeSelectOption>
-              <NativeSelectOption value="Netherlands">Netherlands: Nederlands</NativeSelectOption>
+              <NativeSelectOption value="France">
+                France: Français
+              </NativeSelectOption>
+              <NativeSelectOption value="Germany">
+                Germany: Deutsch
+              </NativeSelectOption>
+              <NativeSelectOption value="Spain">
+                Spain: Español
+              </NativeSelectOption>
+              <NativeSelectOption value="Italy">
+                Italy: Italiano
+              </NativeSelectOption>
+              <NativeSelectOption value="Russia">
+                Russia: Русский
+              </NativeSelectOption>
+              <NativeSelectOption value="Thailand">
+                Thailand: ไทย
+              </NativeSelectOption>
+              <NativeSelectOption value="Vietnam">
+                Vietnam: Tiếng Việt
+              </NativeSelectOption>
+              <NativeSelectOption value="India">
+                India: हिन्दी
+              </NativeSelectOption>
+              <NativeSelectOption value="Brazil">
+                Brazil: Português
+              </NativeSelectOption>
+              <NativeSelectOption value="Egypt">
+                Egypt: العربية
+              </NativeSelectOption>
+              <NativeSelectOption value="SaudiArabia">
+                Saudi Arabia: العربية
+              </NativeSelectOption>
+              <NativeSelectOption value="Sweden">
+                Sweden: Svenska
+              </NativeSelectOption>
+              <NativeSelectOption value="Norway">
+                Norway: Norsk
+              </NativeSelectOption>
+              <NativeSelectOption value="Finland">
+                Finland: Suomi
+              </NativeSelectOption>
+              <NativeSelectOption value="Netherlands">
+                Netherlands: Nederlands
+              </NativeSelectOption>
               <NativeSelectOption value="Belgium">
                 Belgium: Nederlands / Français
               </NativeSelectOption>
@@ -97,26 +128,26 @@ export default function ProfilePage() {
             className="w-full bg-gray rounded-[15px] text-[20px] text-white font-medium py-[12px]"
             onClick={handleCancel}
           >
-            Cancel
+            {t("profile.cancel")}
           </button>
           <button
             className="w-full bg-primary rounded-[15px] text-[20px] text-white font-medium py-[12px]"
             onClick={handleSave}
           >
-            Save
+            {t("profile.save")}
           </button>
         </div>
       </Section>
 
       <div className="fixed bottom-[94px] left-1/2 -translate-x-1/2 w-full px-[24px]">
         <PrimaryButton
-          text="Logout"
+          text={t("auth.logout")}
           onClick={async () => {
             try {
               await authClient.signOut(); // auth-client のログアウト
               window.location.href = "/user/home"; // ログアウト後にリダイレクト
             } catch (err) {
-              console.error("ログアウトエラー:", err);
+              console.error("Logout error:", err);
             }
           }}
         />

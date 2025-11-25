@@ -54,12 +54,13 @@ export function LanguageSelector() {
   }, []);
 
   // ----------------------------
-  // 言語変更 → Cookie に保存
+  // 言語変更 → Cookie に保存 → ページリロード
   // ----------------------------
   const changeLang = (lang: string) => {
     setValue(lang);
     Cookies.set("lang", lang, { expires: 365 });
-    console.log("クッキーに保存されました。");
+    // Reload the page to apply new language
+    window.location.reload();
   };
 
   return (
@@ -67,7 +68,7 @@ export function LanguageSelector() {
       <PopoverTrigger asChild>
         <button className="flex items-center gap-[10px] px-[16px] py-[8px] bg-white rounded-full shadow-base">
           <Globe size={32} />
-          {value ? languages.find((l) => l.value === value)?.label : "language"}
+          {value ? languages.find((l) => l.value === value)?.label : "Language"}
           <ChevronDown />
         </button>
       </PopoverTrigger>

@@ -1,12 +1,11 @@
-export type CompanyCreateRequest = {
+export type CompanyEditRequest = {
   companyName: string;
   companyCategory: string;
-  placeId: string;
-  placeUrl: string;
   imageFile: Blob | File;
+  placeId?: string;
 };
 
-export type CompanyCreateResponse =
+export type CompanyEditResponse =
   | {
       success: true;
       message: string;
@@ -25,27 +24,23 @@ export type CompanyCreateResponse =
       message: string;
     };
 
-export function companyCreate(req: CompanyCreateRequest): Promise<CompanyCreateResponse> {
+export function CompanyEdit(req: CompanyEditRequest): Promise<CompanyEditResponse> {
   const formData = new FormData();
   formData.append("companyName", req.companyName);
   formData.append("companyCategory", req.companyCategory);
   formData.append("imageFile", req.imageFile);
-  formData.append("placeUrl", req.placeUrl);
-  formData.append("placeId", req.placeId);
+  // formData.append("placeUrl", req.placeUrl);
 
   return fetch(`/api/company`, {
-    method: "POST",
-    // headers: {
-    //     "Content-Type": "multipart/form-data",
-    // },
+    method: "PATCH",
     body: formData,
   })
     .then((res) => res.json())
-    .catch((err: Error) => {
+    .catch((err) => {
       console.warn(err);
       return {
         success: false,
-        message: "Failed to create company",
+        message: "Failed to edit company",
       };
     });
 }

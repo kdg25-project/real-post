@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { SquarePen, QrCode, LogOut } from "lucide-react";
 import { usePathname } from "next/navigation";
+import { authClient } from "@/lib/auth-client";
 
 export default function AdminBottomNav() {
   const pathname = usePathname();

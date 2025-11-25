@@ -6,6 +6,7 @@ interface TextFormProps {
   placeholder?: string;
   value?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  readOnly?: boolean;
 }
 
 export default function TextForm({
@@ -14,6 +15,7 @@ export default function TextForm({
   placeholder = "",
   value,
   onChange,
+  readOnly,
 }: TextFormProps) {
   return (
     <div className="flex flex-col gap-[12px] m-0">
@@ -26,6 +28,7 @@ export default function TextForm({
         value={value}
         className="w-full px-[20px] py-[15px] rounded-[14px] bg-white shadow-base focus:outline-none"
         onChange={onChange}
+        readOnly={readOnly}
       />
     </div>
   );

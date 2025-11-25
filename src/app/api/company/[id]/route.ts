@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/db";
-import { eq, asc } from "drizzle-orm";
+import { eq, desc } from "drizzle-orm";
 import { companyProfile, user, goods, goodsImage } from "@/db/schema";
 
 type Params = {
@@ -19,7 +19,7 @@ export async function GET(request: NextRequest, { params }: Params) {
         userId: companyProfile.userId,
         companyName: companyProfile.companyName,
         companyCategory: companyProfile.companyCategory,
-        image: user.image,
+        imageUrl: companyProfile.imageUrl,
         placeId: companyProfile.placeId,
         createdAt: companyProfile.createdAt,
         updatedAt: companyProfile.updatedAt,
@@ -32,7 +32,7 @@ export async function GET(request: NextRequest, { params }: Params) {
       .leftJoin(goods, eq(goods.companyId, companyProfile.userId))
       .leftJoin(goodsImage, eq(goodsImage.goodsId, goods.id))
       .where(eq(companyProfile.userId, id))
-      .orderBy(asc(goods.createdAt))
+      .orderBy(desc(goodsImage.createdAt))
       .limit(1)
       .then((res) => res);
 
@@ -54,7 +54,7 @@ export async function GET(request: NextRequest, { params }: Params) {
       userId: row.userId,
       companyName: row.companyName,
       companyCategory: row.companyCategory,
-      image: row.image,
+      imageUrl: row.imageUrl,
       placeId: row.placeId,
       createdAt: row.createdAt,
       updatedAt: row.updatedAt,

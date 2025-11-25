@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { Heart, ChevronLeft } from "lucide-react";
@@ -12,6 +13,7 @@ import PostInfo from "@/components/layouts/PostInfo";
 import PostCard from "@/components/elements/PostCard";
 
 export default function DetailPage() {
+  const t = useTranslations();
   const [data, setData] = useState<any>(null);
   const [favorited, setFavorited] = useState<boolean | null>(null);
   const [count, setCount] = useState(0);
@@ -75,7 +77,7 @@ export default function DetailPage() {
   if (isLoading) {
     return (
       <div className="w-full h-full flex items-center justify-center">
-        <p className="text-gray-500 text-lg">Loading...</p>
+        <p className="text-gray-500 text-lg">{t("common.loading")}</p>
       </div>
     );
   }
@@ -143,7 +145,7 @@ export default function DetailPage() {
       </div>
 
       {/* 他の投稿 */}
-      <Section title="Other Posts" className="px-[24px] gap-[16px]">
+      <Section title={t("company.otherPosts")} className="px-[24px] gap-[16px]">
         <div className="flex flex-col gap-[20px]">
           {otherPosts.map((item) => (
             <PostCard

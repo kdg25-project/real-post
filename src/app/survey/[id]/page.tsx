@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect } from "react";
+import { useTranslations } from "next-intl";
 import { Check } from "lucide-react";
 import { useState } from "react";
 import Header from "@/components/layouts/Header";
@@ -13,14 +14,27 @@ import {
 } from "@/components/layouts/CategoryForm";
 import { SurveyCreate, SurveyCreateRequest } from "@/lib/api/survey-create";
 import PrimaryButton from "@/components/elements/PrimaryButton";
+import { useRouter } from "next/navigation";
 import { useParams, useSearchParams } from "next/navigation";
+import { getCompanyDetail } from "@/lib/api/company";
+
+type CompanyData = {
+  imageUrl?: string | null;
+  companyName?: string | null;
+  placeUrl?: string | null;
+  placeId?: string | null;
+  [key: string]: unknown;
+};
 
 export default function Survey() {
+  const router = useRouter();
+  const t = useTranslations();
   const token = useSearchParams().get("token");
   const id = useParams().id;
   const [preview1, setPreview1] = useState<string | null>(null);
   const [isChecked, setIsChecked] = useState(false);
   const [validToken, setValidToken] = useState(true);
+  const [company, setCompany] = useState<CompanyData | null>(null);
   const [form, setForm] = useState<SurveyCreateRequest>({
     country: "",
     gender: null,
@@ -39,7 +53,12 @@ export default function Survey() {
       },
     })
       .then((response) => response.json())
-      .then((data) => {
+      .then(async (data) => {
+        const result = await getCompanyDetail(id as string);
+        if (result.success) {
+          setCompany(result.data);
+        }
+
         if (data.data.isValid) {
           setValidToken(true);
         } else {
@@ -59,20 +78,20 @@ export default function Survey() {
     <div className="flex flex-col gap-6 w-[402px] h-screen mx-auto mb-20 px-[24px] overflow-hidden overflow-y-auto">
       <Header />
       <div className="flex flex-col justify-center items-center text-black pt-35">
-        <p className="text-2xl font-bold">Invalid Survey Token</p>
-        <p className="text-center">The survey link you used is invalid or has expired.</p>
+        <p className="text-2xl font-bold">{company?.companyName ?? ""}</p>
+        <p className="text-center">{t("survey.invalidTokenMessage")}</p>
       </div>
     </div>
   ) : (
     <div className="flex flex-col gap-6 w-[402px] h-screen mx-auto mb-20 px-[24px] overflow-hidden overflow-y-auto">
       <Header />
       <div className="flex flex-col justify-center items-center text-black pt-35">
-        <p className="text-2xl font-bold">Blue Fork Bistro</p>
-        <p>Please take part in our survey</p>
+        <p className="text-2xl font-bold">{company?.companyName ?? ""}</p>
+        <p>{t("survey.pleaseParticipate")}</p>
       </div>
       <ImageUpload
-        label="Post Thumbnail"
-        title="Select File"
+        label={t("survey.postThumbnail")}
+        title={t("survey.selectFile")}
         preview={preview1 ?? undefined}
         onChange={(file) => {
           if (!file) return;
@@ -86,13 +105,13 @@ export default function Survey() {
         }}
       />
       <TextForm
-        label="Your Country"
+        label={t("survey.yourCountry")}
         placeholder="Japan"
         type="text"
         onChange={(e) => setForm({ ...form, country: e.target.value })}
       />
       <CategoryForm
-        title="Your Gender"
+        title={t("survey.yourGender")}
         defaultValue={4}
         onChange={(e) =>
           setForm({
@@ -101,15 +120,15 @@ export default function Survey() {
           })
         }
       >
-        <NativeSelectOptGroup label="Your Gender">
-          <NativeSelectOption value="male">male</NativeSelectOption>
-          <NativeSelectOption value="female">female</NativeSelectOption>
-          <NativeSelectOption value="other">Other</NativeSelectOption>
-          <NativeSelectOption value="">do not answer</NativeSelectOption>
+        <NativeSelectOptGroup label={t("survey.yourGender")}>
+          <NativeSelectOption value="male">{t("gender.male")}</NativeSelectOption>
+          <NativeSelectOption value="female">{t("gender.female")}</NativeSelectOption>
+          <NativeSelectOption value="other">{t("gender.other")}</NativeSelectOption>
+          <NativeSelectOption value="">{t("gender.noAnswer")}</NativeSelectOption>
         </NativeSelectOptGroup>
       </CategoryForm>
       <CategoryForm
-        title="Your Age"
+        title={t("survey.yourAge")}
         defaultValue={6}
         onChange={(e) =>
           setForm({
@@ -124,21 +143,21 @@ export default function Survey() {
           })
         }
       >
-        <NativeSelectOptGroup label="Your Age">
-          <NativeSelectOption value="1">18-24</NativeSelectOption>
-          <NativeSelectOption value="2">25-34</NativeSelectOption>
-          <NativeSelectOption value="3">35-44</NativeSelectOption>
-          <NativeSelectOption value="4">45-54</NativeSelectOption>
-          <NativeSelectOption value="5">55+</NativeSelectOption>
-          <NativeSelectOption value="6">do not answer</NativeSelectOption>
+        <NativeSelectOptGroup label={t("survey.yourAge")}>
+          <NativeSelectOption value="1">{t("ageGroup.18-24")}</NativeSelectOption>
+          <NativeSelectOption value="2">{t("ageGroup.25-34")}</NativeSelectOption>
+          <NativeSelectOption value="3">{t("ageGroup.35-44")}</NativeSelectOption>
+          <NativeSelectOption value="4">{t("ageGroup.45-54")}</NativeSelectOption>
+          <NativeSelectOption value="5">{t("ageGroup.55+")}</NativeSelectOption>
+          <NativeSelectOption value="6">{t("ageGroup.noAnswer")}</NativeSelectOption>
         </NativeSelectOptGroup>
       </CategoryForm>
       <CategoryForm
-        title="Your Satisfaction"
+        title={t("survey.yourSatisfaction")}
         defaultValue={5}
         onChange={(e) => setForm({ ...form, satisfactionLevel: Number(e.target.value) })}
       >
-        <NativeSelectOptGroup label="Your Satisfaction">
+        <NativeSelectOptGroup label={t("survey.yourSatisfaction")}>
           <NativeSelectOption value="1">1</NativeSelectOption>
           <NativeSelectOption value="2">2</NativeSelectOption>
           <NativeSelectOption value="3">3</NativeSelectOption>
@@ -147,10 +166,10 @@ export default function Survey() {
         </NativeSelectOptGroup>
       </CategoryForm>
       <div className="flex flex-col gap-[12px] m-0">
-        <p>Your Review</p>
+        <p>{t("survey.yourReview")}</p>
         <textarea
           className=" w-full h-40 p-5 bg-white shadow-base rounded-[14px] resize-none"
-          name="Your Review"
+          name={t("survey.yourReview")}
           id=""
           value={form.description}
           onChange={(e) => setForm({ ...form, description: e.target.value })}
@@ -173,14 +192,15 @@ export default function Survey() {
           ) : (
             <div className="w-[18px] h-[18px] border-1 border-black bg-white rounded-[5px]" />
           )}
-          <p>I agree to the privacy policy</p>
+          <p>{t("survey.agreePolicy")}</p>
         </div>
       </label>
       <PrimaryButton
-        text="submit"
+        text={t("survey.submit")}
         onClick={async () => {
           if (!isChecked) return;
           await SurveyCreate(form, id as string, token);
+          router.push("/survey/completion");
         }}
       />
     </div>

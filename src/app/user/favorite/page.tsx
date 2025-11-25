@@ -1,12 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
+import { useTranslations } from "next-intl";
 import Header from "@/components/layouts/Header";
 import Section from "@/components/layouts/Section";
 import PostCard from "@/components/elements/PostCard";
 import { getFavoriteSurveys } from "@/lib/api/survey";
 
 export default function FavoritePage() {
+  const t = useTranslations();
   const [favorites, setFavorites] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -26,12 +28,18 @@ export default function FavoritePage() {
   return (
     <div>
       <Header />
-      <Section title="Favorite Posts" className="gap-[16px]">
+      <Section title={t("favorite.title")} className="gap-[16px]">
         <div className="flex flex-col gap-[20px] mb-[94px]">
-          {isLoading && <div className="text-center py-6 text-gray-500">Loading...</div>}
+          {isLoading && (
+            <div className="text-center py-6 text-gray-500">
+              {t("common.loading")}
+            </div>
+          )}
 
           {!isLoading && favorites.length === 0 && (
-            <p className="text-center text-gray-500">No favorites yet.</p>
+            <p className="text-center text-gray-500">
+              {t("favorite.noFavorites")}
+            </p>
           )}
 
           {!isLoading &&

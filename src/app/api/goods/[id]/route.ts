@@ -12,7 +12,9 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ id:
   try {
     const goodsfromid = await db.query.goods.findFirst({
       with: {
-        images: true,
+        images: {
+          orderBy: (images, { desc }) => [desc(images.createdAt)],
+        },
       },
       where: (table, { eq }) => eq(table.id, id),
     });
@@ -123,7 +125,9 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
 
     const updatedGoods = await db.query.goods.findFirst({
       with: {
-        images: true,
+        images: {
+          orderBy: (images, { desc }) => [desc(images.createdAt)],
+        },
       },
       where: (table, { eq }) => eq(table.id, id),
     });

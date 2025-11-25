@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { signUp } from "@/lib/auth-client";
 import Header from "@/components/layouts/Header";
 import TextForm from "@/components/layouts/TextForm";
@@ -8,6 +9,7 @@ import PrimaryButton from "@/components/elements/PrimaryButton";
 import { useRouter } from "next/navigation";
 
 export default function SignUpPage() {
+  const t = useTranslations();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [country, setCountry] = useState("");
@@ -18,13 +20,13 @@ export default function SignUpPage() {
       <Header />
       <div className="flex flex-col gap-[24px]">
         <TextForm
-          label="Email"
+          label={t("auth.email")}
           type="email"
           placeholder="example@gmail.com"
           onChange={(e) => setEmail(e.target.value)}
         />
         <TextForm
-          label="Password"
+          label={t("auth.password")}
           type="password"
           placeholder="password"
           onChange={(e) => setPassword(e.target.value)}
@@ -35,45 +37,45 @@ export default function SignUpPage() {
           onChange={(e) => setCountry(e.target.value)}
           className="w-full px-[20px] py-[15px] rounded-[14px] bg-white shadow-base focus:outline-none appearance-none"
         >
-          <option value="JP">Japan: 日本</option>
-          <option value="KR">Korea: 한국</option>
-          <option value="US">USA: English</option>
-          <option value="CN">China: 中国</option>
-          <option value="GB">United Kingdom: English</option>
-          <option value="CA">Canada: English / Français</option>
-          <option value="AU">Australia: English</option>
-          <option value="FR">France: Français</option>
-          <option value="DE">Germany: Deutsch</option>
-          <option value="ES">Spain: Español</option>
-          <option value="IT">Italy: Italiano</option>
-          <option value="RU">Russia: Русский</option>
-          <option value="TH">Thailand: ไทย</option>
-          <option value="VN">Vietnam: Tiếng Việt</option>
-          <option value="IN">India: हिन्दी</option>
-          <option value="ID">Indonesia: Bahasa Indonesia</option>
-          <option value="MY">Malaysia: Bahasa Melayu</option>
-          <option value="PH">Philippines: English / Filipino</option>
-          <option value="SG">Singapore: English / 中文</option>
-          <option value="BR">Brazil: Português</option>
-          <option value="MX">Mexico: Español</option>
-          <option value="AR">Argentina: Español</option>
-          <option value="EG">Egypt: العربية</option>
-          <option value="SA">Saudi Arabia: العربية</option>
-          <option value="TR">Turkey: Türkçe</option>
-          <option value="ZA">South Africa: English</option>
-          <option value="SE">Sweden: Svenska</option>
-          <option value="NO">Norway: Norsk</option>
-          <option value="FI">Finland: Suomi</option>
-          <option value="DK">Denmark: Dansk</option>
-          <option value="NL">Netherlands: Nederlands</option>
-          <option value="BE">Belgium: Nederlands / Français</option>
-          <option value="CH">Switzerland: Deutsch / Français</option>
-          <option value="PL">Poland: Polski</option>
-          <option value="UA">Ukraine: Українська</option>
+          <option value="JP">{t("countries.JP")}</option>
+          <option value="KR">{t("countries.KR")}</option>
+          <option value="US">{t("countries.US")}</option>
+          <option value="CN">{t("countries.CN")}</option>
+          <option value="GB">{t("countries.GB")}</option>
+          <option value="CA">{t("countries.CA")}</option>
+          <option value="AU">{t("countries.AU")}</option>
+          <option value="FR">{t("countries.FR")}</option>
+          <option value="DE">{t("countries.DE")}</option>
+          <option value="ES">{t("countries.ES")}</option>
+          <option value="IT">{t("countries.IT")}</option>
+          <option value="RU">{t("countries.RU")}</option>
+          <option value="TH">{t("countries.TH")}</option>
+          <option value="VN">{t("countries.VN")}</option>
+          <option value="IN">{t("countries.IN")}</option>
+          <option value="ID">{t("countries.ID")}</option>
+          <option value="MY">{t("countries.MY")}</option>
+          <option value="PH">{t("countries.PH")}</option>
+          <option value="SG">{t("countries.SG")}</option>
+          <option value="BR">{t("countries.BR")}</option>
+          <option value="MX">{t("countries.MX")}</option>
+          <option value="AR">{t("countries.AR")}</option>
+          <option value="EG">{t("countries.EG")}</option>
+          <option value="SA">{t("countries.SA")}</option>
+          <option value="TR">{t("countries.TR")}</option>
+          <option value="ZA">{t("countries.ZA")}</option>
+          <option value="SE">{t("countries.SE")}</option>
+          <option value="NO">{t("countries.NO")}</option>
+          <option value="FI">{t("countries.FI")}</option>
+          <option value="DK">{t("countries.DK")}</option>
+          <option value="NL">{t("countries.NL")}</option>
+          <option value="BE">{t("countries.BE")}</option>
+          <option value="CH">{t("countries.CH")}</option>
+          <option value="PL">{t("countries.PL")}</option>
+          <option value="UA">{t("countries.UA")}</option>
         </select>
 
         <PrimaryButton
-          text="SignUp"
+          text={t("auth.signup")}
           onClick={async () => {
             const result = await signUp({
               email: email,
@@ -91,7 +93,7 @@ export default function SignUpPage() {
           className="font-[14px] font-medium underline"
           onClick={() => router.push("/user/auth/login")}
         >
-          Already have an account ? Login
+          {t("auth.alreadyHaveAccount")}
         </div>
       </div>
     </div>

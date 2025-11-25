@@ -4,6 +4,10 @@ import { useEffect, useState } from "react";
 import SearchArea from "@/components/layouts/SearchArea";
 import InfiniteList from "./PostCards";
 import { loadMoreSurveys } from "./loadMoreSurveys";
+import Section from "@/components/layouts/Section";
+import { useTranslations } from "next-intl";
+import CategoryButton from "@/components/elements/CategoryButton";
+import Slider from "@/components/layouts/SliderArea";
 
 interface Post {
   id: string;
@@ -20,6 +24,16 @@ interface PostsContainerProps {
 }
 
 export default function PostsContainer({ initialPosts }: PostsContainerProps) {
+  const categories = [
+    "all",
+    "food",
+    "culture",
+    "activity",
+    "shopping",
+    "other",
+  ];
+  const [selectedCategory, setSelectedCategory] = useState("all");
+  const t = useTranslations();
   const [keyword, setKeyword] = useState("");
   const [filters, setFilters] = useState<{
     ageGroups: string[];
@@ -34,7 +48,11 @@ export default function PostsContainer({ initialPosts }: PostsContainerProps) {
   // Reload posts when search params change
   useEffect(() => {
     // Skip initial render
-    if (keyword === "" && filters.ageGroups.length === 0 && filters.countries.length === 0) {
+    if (
+      keyword === "" &&
+      filters.ageGroups.length === 0 &&
+      filters.countries.length === 0
+    ) {
       return;
     }
 
@@ -57,14 +75,30 @@ export default function PostsContainer({ initialPosts }: PostsContainerProps) {
     setKeyword(searchKeyword);
   };
 
-  const handleFilterChange = (newFilters: { ageGroups: string[]; countries: string[] }) => {
+  const handleFilterChange = (newFilters: {
+    ageGroups: string[];
+    countries: string[];
+  }) => {
     setFilters(newFilters);
   };
 
   return (
-    <>
-      <div className="sticky top-5 z-10">
-        <SearchArea onSearch={handleSearch} onFilterChange={handleFilterChange} />
+    <Section title={t("home.posts")} className="gap-4 pb-24">
+      <div className="sticky top-2 z-10">
+        <div className="flex gap-[16px] py-2 overflow-x-auto">
+          {categories.map((cat) => (
+            <CategoryButton
+              key={cat}
+              name={t(`categories.${cat}`)}
+              selected={selectedCategory === cat}
+              onClick={() => setSelectedCategory(cat)}
+            />
+          ))}
+        </div>
+        <SearchArea
+          onSearch={handleSearch}
+          onFilterChange={handleFilterChange}
+        />
       </div>
       {isLoading ? (
         <div className="text-center py-10">Loading...</div>
@@ -76,6 +110,6 @@ export default function PostsContainer({ initialPosts }: PostsContainerProps) {
           filters={filters}
         />
       )}
-    </>
+    </Section>
   );
 }

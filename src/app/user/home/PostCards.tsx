@@ -22,7 +22,7 @@ interface InfiniteListProps {
     filters?: {
       ageGroups: string[];
       countries: string[];
-    }
+    },
   ) => Promise<Post[]>;
   keyword?: string;
   filters?: {
@@ -66,7 +66,9 @@ export default function InfiniteList({
         setPosts((prev) => {
           // 重複を防ぐため、既存のIDをSetで管理
           const existingIds = new Set(prev.map((post) => post.id));
-          const uniqueNewPosts = nextPosts.filter((post) => !existingIds.has(post.id));
+          const uniqueNewPosts = nextPosts.filter(
+            (post) => !existingIds.has(post.id),
+          );
           return [...prev, ...uniqueNewPosts];
         });
         setPage(nextPage);
@@ -90,7 +92,7 @@ export default function InfiniteList({
       },
       {
         rootMargin: "100px",
-      }
+      },
     );
 
     observer.observe(loaderRef.current);

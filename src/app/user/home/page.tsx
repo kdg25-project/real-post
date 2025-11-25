@@ -1,7 +1,7 @@
 import Header from "@/components/layouts/Header";
-import Section from "@/components/layouts/Section";
 import { loadMoreSurveys } from "./loadMoreSurveys";
 import PostsContainer from "./PostsContainer";
+import Slider from "@/components/layouts/SliderArea";
 
 export default async function HomePage() {
   const initialPosts = await loadMoreSurveys(1);
@@ -9,10 +9,10 @@ export default async function HomePage() {
   return (
     <div>
       <Header />
-
-      <Section title="Posts" className="gap-4 pb-24">
-        <PostsContainer initialPosts={initialPosts} />
-      </Section>
+      <div className="pt-2 pb-4">
+        <Slider />
+      </div>
+      <PostsContainer initialPosts={initialPosts} />
     </div>
   );
 }
