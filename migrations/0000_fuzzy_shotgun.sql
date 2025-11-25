@@ -75,6 +75,7 @@ CREATE TABLE "company_profile" (
 	"user_id" text NOT NULL,
 	"company_name" text NOT NULL,
 	"image_url" text,
+	"place_id" text,
 	"company_category" text NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp DEFAULT now() NOT NULL,
