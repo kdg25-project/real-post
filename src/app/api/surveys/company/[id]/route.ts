@@ -1,11 +1,11 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/db';
-import { survey, surveyImage, user, favorite, companyProfile } from '@/db/schema';
-import { eq, sql, and, inArray } from 'drizzle-orm';
-import { checkSurveyTokenValidity, decrementSurveyTokenCount } from '@/lib/survey-middleware';
-import { uploadFileToR2 } from '@/lib/r2';
-import { auth } from '@/lib/auth';
-import { headers } from 'next/headers';
+import { NextRequest, NextResponse } from "next/server";
+import { db } from "@/db";
+import { survey, surveyImage, user, favorite, companyProfile } from "@/db/schema";
+import { eq, sql, and, inArray } from "drizzle-orm";
+import { checkSurveyTokenValidity, decrementSurveyTokenCount } from "@/lib/survey-middleware";
+import { uploadFileToR2 } from "@/lib/r2";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 
 type Params = {
   params: Promise<{
@@ -13,10 +13,7 @@ type Params = {
   }>;
 };
 
-export async function GET(
-  request: NextRequest,
-  { params }: Params
-) {
+export async function GET(request: NextRequest, { params }: Params) {
   try {
     const { id } = await params;
 
@@ -26,58 +23,56 @@ export async function GET(
     });
     const userId = session?.user?.id ?? null;
 
-  const result = await db
-    .select({
-      id: survey.id,
-      companyId: survey.companyId,
-      description: survey.description,
-      thumbnailUrl: survey.thumbnailUrl,
-      gender: survey.gender,
-      ageGroup: survey.ageGroup,
-      satisfactionLevel: survey.satisfactionLevel,
-      country: survey.country,
-      createdAt: survey.createdAt,
-      updatedAt: survey.updatedAt,
-      companyImage: user.image,
-      companyName: companyProfile.companyName,
-      companyCategory: companyProfile.companyCategory,
-      favoriteCount: sql<number>`count(${favorite.id})`.mapWith(Number),
-    })
-    .from(survey)
-    .leftJoin(user, eq(user.id, survey.companyId))
-    .leftJoin(companyProfile, eq(companyProfile.userId, survey.companyId))
-    .leftJoin(favorite, eq(favorite.surveyId, survey.id))
-    .where(eq(survey.companyId, id))
-    .groupBy(survey.id, user.image, companyProfile.companyName, companyProfile.companyCategory)
-    .then((res) => res);
+    const result = await db
+      .select({
+        id: survey.id,
+        companyId: survey.companyId,
+        description: survey.description,
+        thumbnailUrl: survey.thumbnailUrl,
+        gender: survey.gender,
+        ageGroup: survey.ageGroup,
+        satisfactionLevel: survey.satisfactionLevel,
+        country: survey.country,
+        createdAt: survey.createdAt,
+        updatedAt: survey.updatedAt,
+        companyImage: user.image,
+        companyName: companyProfile.companyName,
+        companyCategory: companyProfile.companyCategory,
+        favoriteCount: sql<number>`count(${favorite.id})`.mapWith(Number),
+      })
+      .from(survey)
+      .leftJoin(user, eq(user.id, survey.companyId))
+      .leftJoin(companyProfile, eq(companyProfile.userId, survey.companyId))
+      .leftJoin(favorite, eq(favorite.surveyId, survey.id))
+      .where(eq(survey.companyId, id))
+      .groupBy(survey.id, user.image, companyProfile.companyName, companyProfile.companyCategory)
+      .then((res) => res);
 
-  // ログインユーザーのお気に入り状態を取得
-  const favoriteSet = new Set<string>();
-  if (userId && result.length > 0) {
-    const surveyIds = result.map((s) => s.id);
-    const favs = await db
-      .select({ surveyId: favorite.surveyId })
-      .from(favorite)
-      .where(and(eq(favorite.userId, userId), inArray(favorite.surveyId, surveyIds)));
-    favs.forEach((f) => favoriteSet.add(String(f.surveyId)));
-  }
+    // ログインユーザーのお気に入り状態を取得
+    const favoriteSet = new Set<string>();
+    if (userId && result.length > 0) {
+      const surveyIds = result.map((s) => s.id);
+      const favs = await db
+        .select({ surveyId: favorite.surveyId })
+        .from(favorite)
+        .where(and(eq(favorite.userId, userId), inArray(favorite.surveyId, surveyIds)));
+      favs.forEach((f) => favoriteSet.add(String(f.surveyId)));
+    }
 
-  const surveysWithFallback = result.map((s) => {
-    const { companyImage, ...rest } = s;
-    return {
-      ...rest,
-      thumbnailUrl: s.thumbnailUrl ?? companyImage ?? null,
-      isFavorited: userId ? favoriteSet.has(String(s.id)) : null,
-    };
-  });
+    const surveysWithFallback = result.map((s) => {
+      const { companyImage, ...rest } = s;
+      return {
+        ...rest,
+        thumbnailUrl: s.thumbnailUrl ?? companyImage ?? null,
+        isFavorited: userId ? favoriteSet.has(String(s.id)) : null,
+      };
+    });
 
-  return NextResponse.json(
-    {
+    return NextResponse.json({
       success: true,
       message: "Surveys fetched successfully",
       data: surveysWithFallback,
-    }
-  );
+    });
   } catch (error) {
     console.error("Error fetching surveys by company ID:", error);
     return NextResponse.json(
@@ -91,10 +86,7 @@ export async function GET(
   }
 }
 
-export async function POST(
-  request: NextRequest,
-  { params }: Params
-) {
+export async function POST(request: NextRequest, { params }: Params) {
   try {
     const authHeader = request.headers.get("Authorization");
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
@@ -124,14 +116,20 @@ export async function POST(
     }
     const { id } = await params;
     const formData = await request.formData();
-    
-    const description = formData.get('description') as string;
-    const gender = formData.get('gender') as "male" | "female" | "other" | null;
-    const ageGroup = formData.get('ageGroup') as "18-24" | "25-34" | "35-44" | "45-54" | "55+" | null;
-    const satisfactionLevel = parseInt(formData.get('satisfactionLevel') as string);
-    const country = formData.get('country') as string;
-    const thumbnail = formData.get('thumbnail') as File | null;
-    const images = formData.getAll('images') as File[];
+
+    const description = formData.get("description") as string;
+    const gender = formData.get("gender") as "male" | "female" | "other" | null;
+    const ageGroup = formData.get("ageGroup") as
+      | "18-24"
+      | "25-34"
+      | "35-44"
+      | "45-54"
+      | "55+"
+      | null;
+    const satisfactionLevel = parseInt(formData.get("satisfactionLevel") as string);
+    const country = formData.get("country") as string;
+    const thumbnail = formData.get("thumbnail") as File | null;
+    const images = formData.getAll("images") as File[];
 
     if (!description || isNaN(satisfactionLevel) || !country) {
       return NextResponse.json(
@@ -147,7 +145,7 @@ export async function POST(
     // サムネイルをR2にアップロード
     let thumbnailUrl: string | null = null;
     if (thumbnail && thumbnail.size > 0) {
-      thumbnailUrl = await uploadFileToR2(thumbnail, 'surveys/thumbnails');
+      thumbnailUrl = await uploadFileToR2(thumbnail, "surveys/thumbnails");
     }
 
     // サーベイデータを作成
@@ -167,14 +165,16 @@ export async function POST(
 
     // 追加画像をR2にアップロードしてsurveyImageテーブルに保存
     if (images && images.length > 0) {
-      const imageUploads = images.filter(img => img.size > 0).map(async (image) => {
-        const imageUrl = await uploadFileToR2(image, 'surveys/images');
-        return {
-          id: crypto.randomUUID(),
-          surveyId,
-          imageUrl,
-        };
-      });
+      const imageUploads = images
+        .filter((img) => img.size > 0)
+        .map(async (image) => {
+          const imageUrl = await uploadFileToR2(image, "surveys/images");
+          return {
+            id: crypto.randomUUID(),
+            surveyId,
+            imageUrl,
+          };
+        });
 
       const imageRecords = await Promise.all(imageUploads);
       if (imageRecords.length > 0) {

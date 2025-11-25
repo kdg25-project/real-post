@@ -19,7 +19,7 @@ type SignUpResponse = {
     createdAt: string;
     updatedAt: string;
   };
-}
+};
 
 export async function signUp(data: {
   email: string;
@@ -135,10 +135,7 @@ export async function createCompanyProfile(data: {
   return res.json();
 }
 
-export async function updateUserProfile(data: {
-  email?: string;
-  country?: string;
-}) {
+export async function updateUserProfile(data: { email?: string; country?: string }) {
   const res = await fetch("/api/auth/me", {
     method: "PATCH",
     headers: {

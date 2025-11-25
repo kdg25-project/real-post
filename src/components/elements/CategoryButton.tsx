@@ -6,11 +6,7 @@ interface CategoryButtonProps {
   onClick?: () => void;
 }
 
-export default function CategoryButton({
-  name,
-  selected = false,
-  onClick,
-}: CategoryButtonProps) {
+export default function CategoryButton({ name, selected = false, onClick }: CategoryButtonProps) {
   return (
     <button
       className={`px-3.5 py-2 rounded-full text-[14px] font-semibold shadow-base ${

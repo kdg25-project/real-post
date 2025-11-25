@@ -4,11 +4,7 @@ interface SectionProps {
   className?: string;
 }
 
-export default function Section({
-  title,
-  children,
-  className = "",
-}: SectionProps) {
+export default function Section({ title, children, className = "" }: SectionProps) {
   return (
     <section className={`flex flex-col ${className}`}>
       <h2 className="text-[24px] font-bold">{title}</h2>

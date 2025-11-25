@@ -28,9 +28,7 @@ export default function FavoritePage() {
       <Header />
       <Section title="Favorite Posts" className="gap-[16px]">
         <div className="flex flex-col gap-[20px] mb-[94px]">
-          {isLoading && (
-            <div className="text-center py-6 text-gray-500">Loading...</div>
-          )}
+          {isLoading && <div className="text-center py-6 text-gray-500">Loading...</div>}
 
           {!isLoading && favorites.length === 0 && (
             <p className="text-center text-gray-500">No favorites yet.</p>

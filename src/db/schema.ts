@@ -25,13 +25,13 @@ export const surveyToken = pgTable("survey_token", {
     .references(() => user.id, { onDelete: "cascade" }),
   token: text("token").notNull().unique(),
   remainingCount: integer("remaining_count").notNull().default(1),
-  expiredAt: timestamp("expired_at", { mode: "date" }).notNull().$default(
-    () => {
+  expiredAt: timestamp("expired_at", { mode: "date" })
+    .notNull()
+    .$default(() => {
       const date = new Date();
       date.setDate(date.getDate() + 1);
       return date;
-    }
-  ),
+    }),
   createdAt: timestamp("created_at", { mode: "date" }).notNull().defaultNow(),
   updatedAt: timestamp("updated_at", { mode: "date" }).notNull().defaultNow(),
 });
@@ -133,4 +133,4 @@ export const goodsImageRelations = relations(goodsImage, ({ one }) => ({
     fields: [goodsImage.goodsId],
     references: [goods.id],
   }),
-})); 
+}));

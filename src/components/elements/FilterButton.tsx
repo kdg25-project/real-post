@@ -13,27 +13,18 @@ import {
 import CategoryButton from "./CategoryButton";
 
 interface FilterButtonProps {
-  onApplyFilters?: (filters: {
-    ageGroups: string[];
-    countries: string[];
-  }) => void;
+  onApplyFilters?: (filters: { ageGroups: string[]; countries: string[] }) => void;
 }
 
 export function FilterButton({ onApplyFilters }: FilterButtonProps) {
   const ageGroups = ["18-24", "25-34", "35-44", "45-54", "55+"];
   const countries = ["Japan", "USA", "UK", "Korea", "China"];
 
-  const [selectedAgeGroups, setSelectedAgeGroups] =
-    useState<string[]>(ageGroups);
-  const [selectedCountries, setSelectedCountries] =
-    useState<string[]>(countries);
+  const [selectedAgeGroups, setSelectedAgeGroups] = useState<string[]>(ageGroups);
+  const [selectedCountries, setSelectedCountries] = useState<string[]>(countries);
   const [isOpen, setIsOpen] = useState(false);
 
-  function toggleSelection<T>(
-    items: T[],
-    item: T,
-    setItems: (items: T[]) => void,
-  ) {
+  function toggleSelection<T>(items: T[], item: T, setItems: (items: T[]) => void) {
     if (items.includes(item)) {
       setItems(items.filter((i) => i !== item));
     } else {
@@ -78,13 +69,7 @@ export function FilterButton({ onApplyFilters }: FilterButtonProps) {
                   key={age}
                   name={age}
                   selected={selectedAgeGroups.includes(age)}
-                  onClick={() =>
-                    toggleSelection(
-                      selectedAgeGroups,
-                      age,
-                      setSelectedAgeGroups,
-                    )
-                  }
+                  onClick={() => toggleSelection(selectedAgeGroups, age, setSelectedAgeGroups)}
                 />
               ))}
             </div>
@@ -97,9 +82,7 @@ export function FilterButton({ onApplyFilters }: FilterButtonProps) {
                   key={c}
                   name={c}
                   selected={selectedCountries.includes(c)}
-                  onClick={() =>
-                    toggleSelection(selectedCountries, c, setSelectedCountries)
-                  }
+                  onClick={() => toggleSelection(selectedCountries, c, setSelectedCountries)}
                 />
               ))}
             </div>

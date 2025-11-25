@@ -1,11 +1,5 @@
 import { db } from "@/db";
-import {
-  survey,
-  surveyImage,
-  companyProfile,
-  favorite,
-  user,
-} from "@/db/schema";
+import { survey, surveyImage, companyProfile, favorite, user } from "@/db/schema";
 import { eq, like, and, inArray, sql, or } from "drizzle-orm";
 
 type CompanyCategory = "other" | "food" | "culture" | "activity" | "shopping";
@@ -23,16 +17,7 @@ export interface GetSurveysParams {
 }
 
 export async function getSurveysFromDB(params: GetSurveysParams) {
-  const {
-    page,
-    limit,
-    category,
-    query,
-    ageGroups,
-    countries,
-    genders,
-    userId,
-  } = params;
+  const { page, limit, category, query, ageGroups, countries, genders, userId } = params;
 
   const categoryVal = category as CompanyCategory | null;
   const offset = (page - 1) * limit;
@@ -61,33 +46,22 @@ export async function getSurveysFromDB(params: GetSurveysParams) {
     .leftJoin(favorite, eq(favorite.surveyId, survey.id))
     .where(
       and(
-        categoryVal
-          ? eq(companyProfile.companyCategory, categoryVal)
-          : undefined,
+        categoryVal ? eq(companyProfile.companyCategory, categoryVal) : undefined,
         query
           ? or(
               like(survey.description, `%${query}%`),
               like(companyProfile.companyName, `%${query}%`),
-              like(survey.country, `%${query}%`),
+              like(survey.country, `%${query}%`)
             )
           : undefined,
         ageGroups && ageGroups.length > 0
           ? inArray(survey.ageGroup, ageGroups as AgeGroup[])
           : undefined,
-        countries && countries.length > 0
-          ? inArray(survey.country, countries)
-          : undefined,
-        genders && genders.length > 0
-          ? inArray(survey.gender, genders)
-          : undefined,
-      ),
+        countries && countries.length > 0 ? inArray(survey.country, countries) : undefined,
+        genders && genders.length > 0 ? inArray(survey.gender, genders) : undefined
+      )
     )
-    .groupBy(
-      survey.id,
-      companyProfile.companyCategory,
-      companyProfile.companyName,
-      user.image,
-    )
+    .groupBy(survey.id, companyProfile.companyCategory, companyProfile.companyName, user.image)
     .limit(limit)
     .offset(offset);
 
@@ -120,9 +94,7 @@ export async function getSurveysFromDB(params: GetSurveysParams) {
     const favs = await db
       .select({ surveyId: favorite.surveyId })
       .from(favorite)
-      .where(
-        and(eq(favorite.userId, userId), inArray(favorite.surveyId, surveyIds)),
-      );
+      .where(and(eq(favorite.userId, userId), inArray(favorite.surveyId, surveyIds)));
 
     favs.forEach((f) => favoriteSet.add(String(f.surveyId)));
   }

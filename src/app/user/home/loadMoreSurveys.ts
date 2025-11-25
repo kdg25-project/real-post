@@ -10,7 +10,7 @@ export async function loadMoreSurveys(
   filters?: {
     ageGroups: string[];
     countries: string[];
-  },
+  }
 ) {
   // Get session directly in Server Action
   const session = await auth.api.getSession({

@@ -64,9 +64,7 @@ export default function PostCard({
 
           <Heart
             size={28}
-            className={`${
-              favorited ? "fill-current text-primary" : "text-gray-dark"
-            }`}
+            className={`${favorited ? "fill-current text-primary" : "text-gray-dark"}`}
             onClick={(e) => {
               e.preventDefault();
 

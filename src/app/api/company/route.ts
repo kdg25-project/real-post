@@ -80,13 +80,11 @@ export async function POST(request: NextRequest) {
       })
       .returning();
 
-    return NextResponse.json(
-      {
-        success: true,
-        message: "Company profile created successfully",
-        data: result[0],
-      }
-    );
+    return NextResponse.json({
+      success: true,
+      message: "Company profile created successfully",
+      data: result[0],
+    });
   } catch (error) {
     console.error("Error creating company profile:", error);
     return NextResponse.json(
@@ -100,9 +98,7 @@ export async function POST(request: NextRequest) {
   }
 }
 
-export async function GET(
-  request: NextRequest
-) {
+export async function GET(request: NextRequest) {
   try {
     const { error, user } = await requireCompanyAccount(request);
     if (error || !user) {
@@ -133,13 +129,11 @@ export async function GET(
       );
     }
 
-    return NextResponse.json(
-      {
-        success: true,
-        message: "Company profile fetched successfully",
-        data: profile,
-      }
-    );
+    return NextResponse.json({
+      success: true,
+      message: "Company profile fetched successfully",
+      data: profile,
+    });
   } catch (error) {
     console.error("Error fetching company profile:", error);
     return NextResponse.json(
@@ -153,9 +147,7 @@ export async function GET(
   }
 }
 
-export async function PATCH(
-  request: NextRequest
-) {
+export async function PATCH(request: NextRequest) {
   try {
     const { error, user } = await requireCompanyAccount(request);
     if (error || !user) {
@@ -214,13 +206,11 @@ export async function PATCH(
       .where(eq(companyProfile.userId, user.id))
       .returning();
 
-    return NextResponse.json(
-      {
-        success: true,
-        message: "Company profile updated successfully",
-        data: result[0],
-      }
-    );
+    return NextResponse.json({
+      success: true,
+      message: "Company profile updated successfully",
+      data: result[0],
+    });
   } catch (error) {
     console.error("Error updating company profile:", error);
     return NextResponse.json(

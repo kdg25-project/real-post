@@ -32,15 +32,9 @@ export async function GET(request: NextRequest) {
     const ageGroups = ageGroupParam
       ? (ageGroupParam.split(",").map((s) => s.trim()) as AgeGroup[])
       : null;
-    const countries = countryParam
-      ? countryParam.split(",").map((s) => s.trim())
-      : null;
+    const countries = countryParam ? countryParam.split(",").map((s) => s.trim()) : null;
     const genders = genderParam
-      ? (genderParam.split(",").map((s) => s.trim()) as (
-          | "male"
-          | "female"
-          | "other"
-        )[])
+      ? (genderParam.split(",").map((s) => s.trim()) as ("male" | "female" | "other")[])
       : null;
 
     // Use shared function to get surveys
@@ -68,7 +62,7 @@ export async function GET(request: NextRequest) {
         message: "Failed to fetch surveys",
         error: error instanceof Error ? error.message : "Unknown error",
       },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }
@@ -80,17 +74,14 @@ export async function POST(request: NextRequest) {
     });
 
     if (!session?.user) {
-      return NextResponse.json(
-        { success: false, message: "Unauthorized" },
-        { status: 401 },
-      );
+      return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 });
     }
 
     // カンパニーユーザーのみがサーベイを作成可能
     if (session.user.accountType !== "company") {
       return NextResponse.json(
         { success: false, message: "Only company accounts can create surveys" },
-        { status: 403 },
+        { status: 403 }
       );
     }
 
@@ -120,9 +111,7 @@ export async function POST(request: NextRequest) {
         thumbnailUrl: thumbnailUrl,
         gender: gender ? (String(gender) as "male" | "female" | "other") : null,
         ageGroup: ageGroup ? (String(ageGroup) as AgeGroup) : null,
-        satisfactionLevel: satisfactionLevel
-          ? parseInt(String(satisfactionLevel))
-          : null,
+        satisfactionLevel: satisfactionLevel ? parseInt(String(satisfactionLevel)) : null,
         country: country ? String(country) : null,
       })
       .returning();
@@ -142,7 +131,7 @@ export async function POST(request: NextRequest) {
         message: "Survey created successfully",
         data: newSurvey[0],
       },
-      { status: 201 },
+      { status: 201 }
     );
   } catch (error) {
     console.error("Error creating survey:", error);
@@ -152,7 +141,7 @@ export async function POST(request: NextRequest) {
         message: "Failed to create survey",
         error: error instanceof Error ? error.message : "Unknown error",
       },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }

@@ -9,10 +9,7 @@ export const r2Client = new S3Client({
   },
 });
 
-export async function uploadFileToR2(
-  file: File,
-  folder: string = "surveys"
-): Promise<string> {
+export async function uploadFileToR2(file: File, folder: string = "surveys"): Promise<string> {
   const buffer = Buffer.from(await file.arrayBuffer());
   const filename = `${folder}/${crypto.randomUUID()}-${file.name}`;
 

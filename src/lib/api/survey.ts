@@ -29,8 +29,7 @@ export async function getSurveys(params: {
     queryParams.push(`page=${params.page}`);
     queryParams.push(`limit=${params.limit}`);
     if (params.category) queryParams.push(`category=${params.category}`);
-    if (params.query)
-      queryParams.push(`query=${encodeURIComponent(params.query)}`);
+    if (params.query) queryParams.push(`query=${encodeURIComponent(params.query)}`);
     if (params.ageGroups && params.ageGroups.length > 0) {
       queryParams.push(`age_group=${params.ageGroups.join(",")}`);
     }
@@ -78,11 +77,7 @@ export async function getFavoriteSurveys() {
 // ------------------------------
 // 店舗詳細専用
 // ------------------------------
-export async function getSurveysForStore(
-  companyId: string,
-  page: number,
-  limit: number,
-) {
+export async function getSurveysForStore(companyId: string, page: number, limit: number) {
   try {
     const url = `${getBaseUrl()}/api/surveys/company/${companyId}?page=${page}&limit=${limit}`;
 

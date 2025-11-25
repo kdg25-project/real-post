@@ -72,14 +72,16 @@ export async function GET(request: NextRequest) {
       .leftJoin(companyProfile, eq(companyProfile.userId, survey.companyId))
       .leftJoin(user, eq(user.id, survey.companyId))
       .leftJoin(favorite, eq(favorite.surveyId, survey.id))
-      .where(and(
-        inArray(survey.id, latestIds),
-        categoryVal ? eq(companyProfile.companyCategory, categoryVal) : undefined,
-        query ? like(survey.description, `%${query}%`) : undefined,
-        ageGroup ? eq(survey.ageGroup, ageGroup as AgeGroup) : undefined,
-        country ? eq(survey.country, country) : undefined,
-        gender ? eq(survey.gender, gender as "male" | "female" | "other") : undefined
-      ))
+      .where(
+        and(
+          inArray(survey.id, latestIds),
+          categoryVal ? eq(companyProfile.companyCategory, categoryVal) : undefined,
+          query ? like(survey.description, `%${query}%`) : undefined,
+          ageGroup ? eq(survey.ageGroup, ageGroup as AgeGroup) : undefined,
+          country ? eq(survey.country, country) : undefined,
+          gender ? eq(survey.gender, gender as "male" | "female" | "other") : undefined
+        )
+      )
       .groupBy(survey.id, companyProfile.companyCategory, companyProfile.companyName, user.image)
       .limit(limit)
       .offset(offset);
@@ -93,7 +95,7 @@ export async function GET(request: NextRequest) {
       })
       .from(surveyImage)
       .where(inArray(surveyImage.surveyId, surveyIds));
-    
+
     const imagesBySurvey = images.reduce<Record<string, string[]>>((acc, cur) => {
       const key = String(cur.surveyId);
       if (!acc[key]) {
@@ -137,14 +139,13 @@ export async function GET(request: NextRequest) {
       message: "Surveys fetched",
       data,
     });
-
   } catch (error) {
     console.error("Error fetching surveys:", error);
     return NextResponse.json(
-      { 
-        success: false, 
+      {
+        success: false,
         message: "Failed to fetch surveys",
-        error: error instanceof Error ? error.message : "Unknown error"
+        error: error instanceof Error ? error.message : "Unknown error",
       },
       { status: 500 }
     );

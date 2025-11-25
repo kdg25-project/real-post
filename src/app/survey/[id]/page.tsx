@@ -60,9 +60,7 @@ export default function Survey() {
       <Header />
       <div className="flex flex-col justify-center items-center text-black pt-35">
         <p className="text-2xl font-bold">Invalid Survey Token</p>
-        <p className="text-center">
-          The survey link you used is invalid or has expired.
-        </p>
+        <p className="text-center">The survey link you used is invalid or has expired.</p>
       </div>
     </div>
   ) : (
@@ -99,11 +97,7 @@ export default function Survey() {
         onChange={(e) =>
           setForm({
             ...form,
-            gender: (e.target.value || null) as
-              | "male"
-              | "female"
-              | "other"
-              | null,
+            gender: (e.target.value || null) as "male" | "female" | "other" | null,
           })
         }
       >
@@ -142,9 +136,7 @@ export default function Survey() {
       <CategoryForm
         title="Your Satisfaction"
         defaultValue={5}
-        onChange={(e) =>
-          setForm({ ...form, satisfactionLevel: Number(e.target.value) })
-        }
+        onChange={(e) => setForm({ ...form, satisfactionLevel: Number(e.target.value) })}
       >
         <NativeSelectOptGroup label="Your Satisfaction">
           <NativeSelectOption value="1">1</NativeSelectOption>

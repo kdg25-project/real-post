@@ -4,13 +4,17 @@ import { auth } from "@/lib/auth";
 export async function proxy(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
 
-  if (pathname.startsWith("/admin/auth") || pathname.startsWith("/user/auth") || pathname.startsWith("/user/home")) {
+  if (
+    pathname.startsWith("/admin/auth") ||
+    pathname.startsWith("/user/auth") ||
+    pathname.startsWith("/user/home")
+  ) {
     return NextResponse.next();
   }
   try {
     const session = await auth.api.getSession({
-      headers: request.headers
-    })
+      headers: request.headers,
+    });
 
     if (!session) {
       return NextResponse.redirect(new URL("/user/auth/login", request.url));
@@ -24,10 +28,5 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: [
-    '/admin',
-    '/admin/:path*',
-    '/user',
-    '/user/:path*',
-  ]
+  matcher: ["/admin", "/admin/:path*", "/user", "/user/:path*"],
 };

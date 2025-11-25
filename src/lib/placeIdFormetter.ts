@@ -13,5 +13,5 @@ export function extractPlaceIdFromGoogleMapsUrl(url: string): string | null {
   if (matchAlt && matchAlt[1]) {
     return `/g/${matchAlt[1]}`;
   }
-  return null;  // 対応するパターンがなければ取得失敗
+  return null; // 対応するパターンがなければ取得失敗
 }

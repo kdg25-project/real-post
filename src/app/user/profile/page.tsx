@@ -70,51 +70,21 @@ export default function ProfilePage() {
               <NativeSelectOption value="Korea">Korea: 한국</NativeSelectOption>
               <NativeSelectOption value="USA">USA: English</NativeSelectOption>
               <NativeSelectOption value="China">China: 中国</NativeSelectOption>
-              <NativeSelectOption value="France">
-                France: Français
-              </NativeSelectOption>
-              <NativeSelectOption value="Germany">
-                Germany: Deutsch
-              </NativeSelectOption>
-              <NativeSelectOption value="Spain">
-                Spain: Español
-              </NativeSelectOption>
-              <NativeSelectOption value="Italy">
-                Italy: Italiano
-              </NativeSelectOption>
-              <NativeSelectOption value="Russia">
-                Russia: Русский
-              </NativeSelectOption>
-              <NativeSelectOption value="Thailand">
-                Thailand: ไทย
-              </NativeSelectOption>
-              <NativeSelectOption value="Vietnam">
-                Vietnam: Tiếng Việt
-              </NativeSelectOption>
-              <NativeSelectOption value="India">
-                India: हिन्दी
-              </NativeSelectOption>
-              <NativeSelectOption value="Brazil">
-                Brazil: Português
-              </NativeSelectOption>
-              <NativeSelectOption value="Egypt">
-                Egypt: العربية
-              </NativeSelectOption>
-              <NativeSelectOption value="SaudiArabia">
-                Saudi Arabia: العربية
-              </NativeSelectOption>
-              <NativeSelectOption value="Sweden">
-                Sweden: Svenska
-              </NativeSelectOption>
-              <NativeSelectOption value="Norway">
-                Norway: Norsk
-              </NativeSelectOption>
-              <NativeSelectOption value="Finland">
-                Finland: Suomi
-              </NativeSelectOption>
-              <NativeSelectOption value="Netherlands">
-                Netherlands: Nederlands
-              </NativeSelectOption>
+              <NativeSelectOption value="France">France: Français</NativeSelectOption>
+              <NativeSelectOption value="Germany">Germany: Deutsch</NativeSelectOption>
+              <NativeSelectOption value="Spain">Spain: Español</NativeSelectOption>
+              <NativeSelectOption value="Italy">Italy: Italiano</NativeSelectOption>
+              <NativeSelectOption value="Russia">Russia: Русский</NativeSelectOption>
+              <NativeSelectOption value="Thailand">Thailand: ไทย</NativeSelectOption>
+              <NativeSelectOption value="Vietnam">Vietnam: Tiếng Việt</NativeSelectOption>
+              <NativeSelectOption value="India">India: हिन्दी</NativeSelectOption>
+              <NativeSelectOption value="Brazil">Brazil: Português</NativeSelectOption>
+              <NativeSelectOption value="Egypt">Egypt: العربية</NativeSelectOption>
+              <NativeSelectOption value="SaudiArabia">Saudi Arabia: العربية</NativeSelectOption>
+              <NativeSelectOption value="Sweden">Sweden: Svenska</NativeSelectOption>
+              <NativeSelectOption value="Norway">Norway: Norsk</NativeSelectOption>
+              <NativeSelectOption value="Finland">Finland: Suomi</NativeSelectOption>
+              <NativeSelectOption value="Netherlands">Netherlands: Nederlands</NativeSelectOption>
               <NativeSelectOption value="Belgium">
                 Belgium: Nederlands / Français
               </NativeSelectOption>

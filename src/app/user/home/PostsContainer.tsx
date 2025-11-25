@@ -34,11 +34,7 @@ export default function PostsContainer({ initialPosts }: PostsContainerProps) {
   // Reload posts when search params change
   useEffect(() => {
     // Skip initial render
-    if (
-      keyword === "" &&
-      filters.ageGroups.length === 0 &&
-      filters.countries.length === 0
-    ) {
+    if (keyword === "" && filters.ageGroups.length === 0 && filters.countries.length === 0) {
       return;
     }
 
@@ -61,20 +57,14 @@ export default function PostsContainer({ initialPosts }: PostsContainerProps) {
     setKeyword(searchKeyword);
   };
 
-  const handleFilterChange = (newFilters: {
-    ageGroups: string[];
-    countries: string[];
-  }) => {
+  const handleFilterChange = (newFilters: { ageGroups: string[]; countries: string[] }) => {
     setFilters(newFilters);
   };
 
   return (
     <>
       <div className="sticky top-5 z-10">
-        <SearchArea
-          onSearch={handleSearch}
-          onFilterChange={handleFilterChange}
-        />
+        <SearchArea onSearch={handleSearch} onFilterChange={handleFilterChange} />
       </div>
       {isLoading ? (
         <div className="text-center py-10">Loading...</div>

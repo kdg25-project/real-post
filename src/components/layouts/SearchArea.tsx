@@ -7,16 +7,10 @@ import { Search } from "lucide-react";
 interface SearchAreaProps {
   className?: string;
   onSearch?: (keyword: string) => void;
-  onFilterChange?: (filters: {
-    ageGroups: string[];
-    countries: string[];
-  }) => void;
+  onFilterChange?: (filters: { ageGroups: string[]; countries: string[] }) => void;
 }
 
-export default function SearchArea({
-  onSearch,
-  onFilterChange,
-}: SearchAreaProps) {
+export default function SearchArea({ onSearch, onFilterChange }: SearchAreaProps) {
   const [keyword, setKeyword] = useState("");
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -25,10 +19,7 @@ export default function SearchArea({
     }
   };
 
-  const handleApplyFilters = (filters: {
-    ageGroups: string[];
-    countries: string[];
-  }) => {
+  const handleApplyFilters = (filters: { ageGroups: string[]; countries: string[] }) => {
     if (onFilterChange) {
       onFilterChange(filters);
     }
@@ -37,10 +28,7 @@ export default function SearchArea({
   return (
     <div className="flex gap-[12px]">
       <div className="relative w-full">
-        <Search
-          size={24}
-          className="absolute top-1/2 -translate-y-1/2 left-[20px]"
-        />
+        <Search size={24} className="absolute top-1/2 -translate-y-1/2 left-[20px]" />
         <input
           type="text"
           value={keyword}

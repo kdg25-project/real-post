@@ -1,16 +1,9 @@
 import { db } from "@/db";
 import { NextRequest, NextResponse } from "next/server";
-import {
-  getGoodsCount,
-  getPaginationParams,
-  handleGoodsError,
-} from "../../utils";
+import { getGoodsCount, getPaginationParams, handleGoodsError } from "../../utils";
 import type { ApiResponse } from "@/types";
 
-export async function GET(
-  req: NextRequest,
-  { params }: { params: Promise<{ id: string }> },
-) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   try {
     const { searchParams } = new URL(req.url);
