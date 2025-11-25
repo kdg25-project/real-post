@@ -12,13 +12,11 @@ const inter = Inter({
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const messages = await getMessages();
-  
+
   return (
     <html lang="en">
       <body className={`${inter.variable}`}>
-        <NextIntlClientProvider messages={messages}>
-          {children}
-        </NextIntlClientProvider>
+        <NextIntlClientProvider messages={messages}>{children}</NextIntlClientProvider>
       </body>
     </html>
   );

@@ -1,5 +1,3 @@
 export default function RootPage() {
-  return (
-    <div></div>
-  );
+  return <div></div>;
 }

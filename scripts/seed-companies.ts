@@ -1,6 +1,6 @@
 /**
  * カンパニーユーザー作成 & サーベイ作成シーダースクリプト
- * 
+ *
  * 使い方:
  * 1. アプリケーションを起動: pnpm run dev
  * 2. 別ターミナルで実行: npx tsx scripts/seed-companies.ts
@@ -118,10 +118,12 @@ const surveyTemplates = [
 /**
  * カンパニーユーザーを作成
  */
-async function createCompanyUser(companyData: CompanyData): Promise<{ userId: string; token: string } | null> {
+async function createCompanyUser(
+  companyData: CompanyData
+): Promise<{ userId: string; token: string } | null> {
   try {
     console.log(`Creating company: ${companyData.companyName}...`);
-    
+
     // サインアップ (accountTypeのみ指定、プロフィールは後で作成)
     const signupResponse = await fetch(`${BASE_URL}/api/auth/signup`, {
       method: "POST",
@@ -279,7 +281,7 @@ async function main() {
 
   for (let i = 0; i < Math.min(NUM_COMPANIES, companies.length); i++) {
     const companyData = companies[i];
-    
+
     // カンパニーユーザー作成
     const result = await createCompanyUser(companyData);
     if (!result) {
@@ -295,7 +297,7 @@ async function main() {
     for (let j = 0; j < SURVEYS_PER_COMPANY; j++) {
       const surveyData = surveyTemplates[j % surveyTemplates.length];
       const success = await createSurvey(companyData.companyName, token, surveyData);
-      
+
       if (success) {
         totalSurveysCreated++;
         console.log(`  ✓ Survey ${j + 1}/${SURVEYS_PER_COMPANY} created`);

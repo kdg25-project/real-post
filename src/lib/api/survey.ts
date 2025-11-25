@@ -3,13 +3,10 @@
 // ------------------------------
 export async function getSurveysForTop(page: number, limit: number) {
   try {
-    const res = await fetch(
-      `/api/surveys/unique-per-company?page=${page}&limit=${limit}`,
-      {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-      }
-    );
+    const res = await fetch(`/api/surveys/unique-per-company?page=${page}&limit=${limit}`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    });
 
     if (!res.ok) {
       throw new Error("Failed to fetch surveys");

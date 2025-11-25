@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse} from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/db";
 import { favorite, survey, user, companyProfile } from "@/db/schema";
 import { eq, sql } from "drizzle-orm";
@@ -38,7 +38,10 @@ export async function GET(request: NextRequest) {
           updatedAt: survey.updatedAt,
           companyImage: user.image,
           companyName: companyProfile.companyName,
-          favoriteCount: sql<number>`(select count(*) from ${favorite} where ${favorite.surveyId} = ${survey.id})`.mapWith(Number),
+          favoriteCount:
+            sql<number>`(select count(*) from ${favorite} where ${favorite.surveyId} = ${survey.id})`.mapWith(
+              Number
+            ),
         },
       })
       .from(favorite)
@@ -54,29 +57,29 @@ export async function GET(request: NextRequest) {
       surveyId: f.surveyId,
       createdAt: f.createdAt,
       updatedAt: f.updatedAt,
-      survey: f.survey ? {
-        id: f.survey.id,
-        companyId: f.survey.companyId,
-        description: f.survey.description,
-        thumbnailUrl: f.survey.thumbnailUrl ?? f.survey.companyImage ?? null,
-        gender: f.survey.gender,
-        ageGroup: f.survey.ageGroup,
-        satisfactionLevel: f.survey.satisfactionLevel,
-        country: f.survey.country,
-        createdAt: f.survey.createdAt,
-        updatedAt: f.survey.updatedAt,
-        companyName: f.survey.companyName ?? "",
-        favoriteCount: f.survey.favoriteCount,
-      } : null,
+      survey: f.survey
+        ? {
+            id: f.survey.id,
+            companyId: f.survey.companyId,
+            description: f.survey.description,
+            thumbnailUrl: f.survey.thumbnailUrl ?? f.survey.companyImage ?? null,
+            gender: f.survey.gender,
+            ageGroup: f.survey.ageGroup,
+            satisfactionLevel: f.survey.satisfactionLevel,
+            country: f.survey.country,
+            createdAt: f.survey.createdAt,
+            updatedAt: f.survey.updatedAt,
+            companyName: f.survey.companyName ?? "",
+            favoriteCount: f.survey.favoriteCount,
+          }
+        : null,
     }));
 
-    return NextResponse.json(
-      {
-        success: true,
-        message: "Favorites fetched successfully",
-        data: favoritesWithFallback,
-      }
-    );
+    return NextResponse.json({
+      success: true,
+      message: "Favorites fetched successfully",
+      data: favoritesWithFallback,
+    });
   } catch (error) {
     console.error("Error fetching favorites:", error);
     return NextResponse.json(

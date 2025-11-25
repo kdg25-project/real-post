@@ -1,26 +1,27 @@
-export type GetCompanyDetail = {
-  "success": true;
-  "message": string;
-  "data": {
-    "id": string;
-    "userId": string;
-    "companyName": string;
-    "imageUrl": string;
-    "placeId": string;
-    "companyCategory": "";
-    "createdAt": string;
-    "updatedAt": string;
-    "goods": {
-      "id": string;
-      "name": string;
-      "imageUrl": string;
-    } | null;
-  }
-}
+export type GetCompanyDetail =
   | {
-    "success": false;
-    "message": string;
-  }
+      success: true;
+      message: string;
+      data: {
+        id: string;
+        userId: string;
+        companyName: string;
+        imageUrl: string;
+        placeId: string;
+        companyCategory: "";
+        createdAt: string;
+        updatedAt: string;
+        goods: {
+          id: string;
+          name: string;
+          imageUrl: string;
+        } | null;
+      };
+    }
+  | {
+      success: false;
+      message: string;
+    };
 
 export async function getCompanyDetail(companyId: string): Promise<GetCompanyDetail> {
   try {
@@ -40,6 +41,6 @@ export async function getCompanyDetail(companyId: string): Promise<GetCompanyDet
     return {
       success: false,
       message: "取得に失敗しました。",
-    }
+    };
   }
 }

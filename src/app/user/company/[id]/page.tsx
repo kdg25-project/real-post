@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
@@ -15,171 +15,160 @@ import GoodsCard from "@/components/elements/GoodsCard";
 import { getCompanyGoods } from "@/lib/api/goods";
 
 type CompanyData = {
-    imageUrl?: string | null;
-    companyName?: string | null;
-    placeUrl?: string | null;
-    placeId?: string | null;
-    [key: string]: unknown;
+  imageUrl?: string | null;
+  companyName?: string | null;
+  placeUrl?: string | null;
+  placeId?: string | null;
+  [key: string]: unknown;
 };
 
 type GoodsItem = {
-    id: string;
-    companyId: string;
-    images?: Array<{ imageUrl?: string | null }>;
-    [key: string]: unknown;
+  id: string;
+  companyId: string;
+  images?: Array<{ imageUrl?: string | null }>;
+  [key: string]: unknown;
 };
 
 type SurveyItem = {
-    id: string;
-    thumbnailUrl?: string | null;
-    companyName: string;
-    country: string;
-    satisfactionLevel: number;
-    favoriteCount: number;
-    isFavorited: boolean;
-    [key: string]: unknown;
+  id: string;
+  thumbnailUrl?: string | null;
+  companyName: string;
+  country: string;
+  satisfactionLevel: number;
+  favoriteCount: number;
+  isFavorited: boolean;
+  [key: string]: unknown;
 };
 
 export default function CompanyDetailPage() {
-    const t = useTranslations();
-    const params = useParams();
-    const [data, setData] = useState<CompanyData | null>(null);
-    const [surveys, setSurveys] = useState<SurveyItem[]>([]);
-    const [goods, setGoods] = useState<GoodsItem[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
-    const router = useRouter();
+  const t = useTranslations();
+  const params = useParams();
+  const [data, setData] = useState<CompanyData | null>(null);
+  const [surveys, setSurveys] = useState<SurveyItem[]>([]);
+  const [goods, setGoods] = useState<GoodsItem[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const router = useRouter();
 
-    useEffect(() => {
-        const companyId = params?.id;
-        if (!companyId || Array.isArray(companyId)) return;
+  useEffect(() => {
+    const companyId = params?.id;
+    if (!companyId || Array.isArray(companyId)) return;
 
-        const fetchCompany = async () => {
-            setIsLoading(true);
+    const fetchCompany = async () => {
+      setIsLoading(true);
 
-            // 店舗詳細
-            const result = await getCompanyDetail(companyId);
-            setData(result.success ? result.data : null);
-            console.log(result)
+      // 店舗詳細
+      const result = await getCompanyDetail(companyId);
+      setData(result.success ? result.data : null);
+      console.log(result);
 
-            // アンケート
-            const surveyResult = await getSurveysForStore(companyId, 1, 10);
-            if (surveyResult?.success) setSurveys(surveyResult.data);
+      // アンケート
+      const surveyResult = await getSurveysForStore(companyId, 1, 10);
+      if (surveyResult?.success) setSurveys(surveyResult.data);
 
-            // グッズ取得
-            const goodsResult = await getCompanyGoods(companyId);
-            if (goodsResult?.success) setGoods(goodsResult.data);
+      // グッズ取得
+      const goodsResult = await getCompanyGoods(companyId);
+      if (goodsResult?.success) setGoods(goodsResult.data);
 
-            setIsLoading(false);
-        };
-        fetchCompany();
-    }, [params?.id]);
+      setIsLoading(false);
+    };
+    fetchCompany();
+  }, [params?.id]);
 
-    // -----------------------------
-    // ローディング表示
-    // -----------------------------
-    if (isLoading) {
-        return (
-            <div className="w-full h-full flex items-center justify-center">
-                <p className="text-gray-500 text-lg">{t('common.loading')}</p>
-            </div>
-        );
-    }
-
-    // データが存在しない場合は表示しない（404的な扱い）
-    if (!data) {
-        return (
-            <div className="w-full h-full flex items-center justify-center">
-                <p className="text-gray-500 text-lg">{t('company.notFound')}</p>
-            </div>
-        );
-    }
-
+  // -----------------------------
+  // ローディング表示
+  // -----------------------------
+  if (isLoading) {
     return (
-        <motion.div
-            initial={{ x: "100%", opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            transition={{ duration: 0.4, ease: "easeOut" }}
-            className="fixed top-0 right-0 w-full h-full flex flex-col gap-[24px] pb-[94px] overflow-x-auto"
-        >
-            {/* ヘッダー */}
-            <div className="fixed top-[36px] left-1/2 -translate-x-1/2 flex items-center justify-between w-full px-[24px] z-[10]">
-                <div
-                    className="flex items-center justify-center w-[52px] h-[52px] bg-white rounded-full shadow-base"
-                    onClick={router.back}
-                >
-                    <ChevronLeft size={24} />
-                </div>
-            </div>
-
-            {/* メイン画像 */}
-            <div className="relative w-full h-[292px] flex-shrink-0">
-                <Image
-                    src={data.imageUrl ?? "/images/no-image.png"}
-                    alt=""
-                    fill
-                    className="object-cover"
-                />
-            </div>
-
-            {/* 投稿情報 */}
-            <div className="px-[24px]">
-                <PostInfo
-                    size="lg"
-                    titleOnly
-                    notLink
-                    companyName={String(data.companyName ?? "")}
-                />
-            </div>
-
-            {data.placeId && (
-                <Section title={t('company.locate')} className="px-[24px] gap-[16px]">
-
-                    {(() => {
-                        return (
-                            <iframe
-                                src={`https://www.google.com/maps/embed/v1/place?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY}&q=place_id:${data.placeId}`}
-                                style={{ border: 0 }}
-                                allowFullScreen
-                                loading="lazy"
-                                referrerPolicy="no-referrer-when-downgrade"
-                            />
-                        );
-                    })()}
-                </Section>
-            )}
-
-            <Section title={t('company.goods')} className="px-[24px] gap-[16px]">
-                <div className="flex flex-wrap gap-[16px]">
-                    {goods.length > 0 ? (
-                        goods.map((item) => (
-                            <GoodsCard
-                                key={item.id}
-                                companyId={item.companyId}
-                                imageUrl={item.images?.[0]?.imageUrl ?? undefined}
-                            />
-                        ))
-                    ) : (
-                        <p className="text-gray-400 text-sm">{t('goods.noGoods')}</p>
-                    )}
-                </div>
-            </Section>
-
-            <Section title={t('company.otherPosts')} className="px-[24px] gap-[16px]">
-                <div className="flex flex-col gap-[20px]">
-                    {surveys.map((item) => (
-                        <PostCard
-                            key={item.id}
-                            id={item.id}
-                            thumbnailUrl={item.thumbnailUrl ?? null}
-                            companyName={item.companyName}
-                            country={item.country}
-                            satisfactionLevel={item.satisfactionLevel}
-                            favoriteCount={item.favoriteCount}
-                            isFavorited={item.isFavorited}
-                        />
-                    ))}
-                </div>
-            </Section>
-        </motion.div>
+      <div className="w-full h-full flex items-center justify-center">
+        <p className="text-gray-500 text-lg">{t("common.loading")}</p>
+      </div>
     );
+  }
+
+  // データが存在しない場合は表示しない（404的な扱い）
+  if (!data) {
+    return (
+      <div className="w-full h-full flex items-center justify-center">
+        <p className="text-gray-500 text-lg">{t("company.notFound")}</p>
+      </div>
+    );
+  }
+
+  return (
+    <motion.div
+      initial={{ x: "100%", opacity: 0 }}
+      animate={{ x: 0, opacity: 1 }}
+      transition={{ duration: 0.4, ease: "easeOut" }}
+      className="fixed top-0 right-0 w-full h-full flex flex-col gap-[24px] pb-[94px] overflow-x-auto"
+    >
+      {/* ヘッダー */}
+      <div className="fixed top-[36px] left-1/2 -translate-x-1/2 flex items-center justify-between w-full px-[24px] z-[10]">
+        <div
+          className="flex items-center justify-center w-[52px] h-[52px] bg-white rounded-full shadow-base"
+          onClick={router.back}
+        >
+          <ChevronLeft size={24} />
+        </div>
+      </div>
+
+      {/* メイン画像 */}
+      <div className="relative w-full h-[292px] flex-shrink-0">
+        <Image src={data.imageUrl ?? "/images/no-image.png"} alt="" fill className="object-cover" />
+      </div>
+
+      {/* 投稿情報 */}
+      <div className="px-[24px]">
+        <PostInfo size="lg" titleOnly notLink companyName={String(data.companyName ?? "")} />
+      </div>
+
+      {data.placeId && (
+        <Section title={t("company.locate")} className="px-[24px] gap-[16px]">
+          {(() => {
+            return (
+              <iframe
+                src={`https://www.google.com/maps/embed/v1/place?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY}&q=place_id:${data.placeId}`}
+                style={{ border: 0 }}
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              />
+            );
+          })()}
+        </Section>
+      )}
+
+      <Section title={t("company.goods")} className="px-[24px] gap-[16px]">
+        <div className="flex flex-wrap gap-[16px]">
+          {goods.length > 0 ? (
+            goods.map((item) => (
+              <GoodsCard
+                key={item.id}
+                companyId={item.companyId}
+                imageUrl={item.images?.[0]?.imageUrl ?? undefined}
+              />
+            ))
+          ) : (
+            <p className="text-gray-400 text-sm">{t("goods.noGoods")}</p>
+          )}
+        </div>
+      </Section>
+
+      <Section title={t("company.otherPosts")} className="px-[24px] gap-[16px]">
+        <div className="flex flex-col gap-[20px]">
+          {surveys.map((item) => (
+            <PostCard
+              key={item.id}
+              id={item.id}
+              thumbnailUrl={item.thumbnailUrl ?? null}
+              companyName={item.companyName}
+              country={item.country}
+              satisfactionLevel={item.satisfactionLevel}
+              favoriteCount={item.favoriteCount}
+              isFavorited={item.isFavorited}
+            />
+          ))}
+        </div>
+      </Section>
+    </motion.div>
+  );
 }

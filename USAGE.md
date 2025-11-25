@@ -26,13 +26,17 @@ import { authClient, signUp, getSessionWithProfile, updateCompanyProfile } from 
 ### メソッド
 
 #### `useSession`
+
 現在のセッション情報を取得するフックです。
+
 ```typescript
 const { data: session, isPending, error } = authClient.useSession();
 ```
 
 #### `signIn`
+
 サインインを行います。
+
 ```typescript
 await authClient.signIn.email({
   email: "user@example.com",
@@ -41,13 +45,17 @@ await authClient.signIn.email({
 ```
 
 #### `signOut`
+
 サインアウトを行います。
+
 ```typescript
 await authClient.signOut();
 ```
 
 #### `signUp`
+
 新規ユーザー登録を行います。
+
 ```typescript
 await signUp({
   email: "user@example.com",
@@ -58,13 +66,17 @@ await signUp({
 ```
 
 #### `getSessionWithProfile`
+
 プロフィール情報を含むセッション情報を取得します。
+
 ```typescript
 const sessionWithProfile = await getSessionWithProfile();
 ```
 
 #### `updateCompanyProfile`
+
 企業プロフィールを更新します。
+
 ```typescript
 await updateCompanyProfile({
   companyName: "New Company Name",
@@ -81,6 +93,7 @@ await updateCompanyProfile({
 ### 認証 (Auth)
 
 #### `POST /api/auth/signup`
+
 新規ユーザーを作成します。
 
 - **Content-Type**: `multipart/form-data`
@@ -94,6 +107,7 @@ await updateCompanyProfile({
     - 値: `"food"`, `"culture"`, `"activity"`, `"shopping"`, `"other"`
 
 #### `GET /api/auth/me`
+
 現在のユーザーセッションとプロフィール情報を取得します。
 
 - **Headers**: Cookie (セッション)
@@ -107,6 +121,7 @@ await updateCompanyProfile({
   ```
 
 #### `PATCH /api/auth/me`
+
 現在のユーザーまたは企業のプロフィールを更新します。
 
 - **Headers**: Cookie (セッション)
@@ -122,6 +137,7 @@ await updateCompanyProfile({
 ### ユーザー (Users)
 
 #### `GET /api/users/favorite`
+
 ログイン中のユーザーのお気に入りアンケート一覧を取得します。
 
 - **Headers**: Cookie (ユーザーアカウント必須)
@@ -144,6 +160,7 @@ await updateCompanyProfile({
 ### 企業 (Company)
 
 #### `GET /api/company/[id]`
+
 指定したIDの企業プロフィールを取得します。
 
 - **Params**: `id` (User ID of the company)
@@ -166,6 +183,7 @@ await updateCompanyProfile({
 ### アンケート (Surveys)
 
 #### `GET /api/surveys`
+
 アンケート一覧を取得します。フィルタリングとページネーションが可能です。
 
 - **Query Params**:
@@ -177,6 +195,7 @@ await updateCompanyProfile({
   - `country` (string | string[]): 国フィルタ。複数指定をサポートします。
   - `gender` (string | string[]): 性別フィルタ (`male`, `female`, `other`)。複数指定をサポートします。
 - **Response**:
+
   ```json
   {
     "success": true,
@@ -197,6 +216,7 @@ await updateCompanyProfile({
 - **備考（ページング）**: クエリフィルタが一切指定されていない場合はサーバー側で一旦全件を取得して社別に並べ替え（同一会社が連続しないように調整）を行った後に `page`/`limit` によるスライスを適用します。フィルタが指定されている場合は DB 側で `limit`/`offset` を使って効率的に取得します。
 
 #### `GET /api/surveys/[id]`
+
 特定のアンケートの詳細を取得します。
 
 - **Params**: `id` (Survey ID)
@@ -212,6 +232,7 @@ await updateCompanyProfile({
   ```
 
 #### `GET /api/surveys/company/[id]`
+
 特定の企業のアンケート一覧を取得します。
 
 - **Params**: `id` (Company User ID)
@@ -224,6 +245,7 @@ await updateCompanyProfile({
   ```
 
 #### `POST /api/surveys/company/[id]`
+
 新規アンケートを作成します（トークン認証が必要）。
 
 - **Params**: `id` (Company User ID)
@@ -245,6 +267,7 @@ await updateCompanyProfile({
   ```
 
 #### `POST /api/surveys/token`
+
 アンケート回答用のトークンを発行します（企業アカウントのみ）。
 
 - **Headers**: Cookie (企業アカウント必須)
@@ -265,6 +288,7 @@ await updateCompanyProfile({
   ```
 
 #### `GET /api/surveys/token`
+
 トークンの有効性を検証します。
 
 - **Headers**: `Authorization: Bearer <token>`
@@ -278,6 +302,7 @@ await updateCompanyProfile({
   ```
 
 #### `GET /api/surveys/[id]/favorite`
+
 特定のアンケートに対するお気に入り情報を取得します。
 
 - **Params**: `id` (Survey ID)
@@ -290,6 +315,7 @@ await updateCompanyProfile({
   ```
 
 #### `PATCH /api/surveys/[id]/favorite`
+
 アンケートのお気に入り状態を切り替えます（トグル）。
 
 - **Params**: `id` (Survey ID)

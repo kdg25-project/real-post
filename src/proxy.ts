@@ -6,12 +6,16 @@ export async function proxy(request: NextRequest) {
 
   // Get locale from cookie
   const locale = request.cookies.get("lang")?.value || "en";
-  
+
   // Clone the request headers and add the locale
   const requestHeaders = new Headers(request.headers);
   requestHeaders.set("x-locale", locale);
 
-  if (pathname.startsWith("/admin/auth") || pathname.startsWith("/user/auth") || pathname.startsWith("/user/home")) {
+  if (
+    pathname.startsWith("/admin/auth") ||
+    pathname.startsWith("/user/auth") ||
+    pathname.startsWith("/user/home")
+  ) {
     return NextResponse.next({
       request: {
         headers: requestHeaders,
@@ -20,8 +24,8 @@ export async function proxy(request: NextRequest) {
   }
   try {
     const session = await auth.api.getSession({
-      headers: request.headers
-    })
+      headers: request.headers,
+    });
 
     if (!session) {
       return NextResponse.redirect(new URL("/user/auth/login", request.url));
@@ -39,11 +43,5 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: [
-    '/admin',
-    '/admin/:path*',
-    '/user',
-    '/user/:path*',
-    '/survey/:path*',
-  ]
+  matcher: ["/admin", "/admin/:path*", "/user", "/user/:path*", "/survey/:path*"],
 };

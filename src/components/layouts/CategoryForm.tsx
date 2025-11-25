@@ -1,13 +1,13 @@
-import * as React from "react"
-import { ChevronDownIcon } from "lucide-react"
+import * as React from "react";
+import { ChevronDownIcon } from "lucide-react";
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils";
 
 type title = {
-  title: string
-}
+  title: string;
+};
 
-function CategoryForm({title, className, ...props }: React.ComponentProps<"select">) {
+function CategoryForm({ title, className, ...props }: React.ComponentProps<"select">) {
   return (
     <div
       className="flex flex-col gap-3 group/native-select  has-[select:disabled]:opacity-50"
@@ -32,24 +32,15 @@ function CategoryForm({title, className, ...props }: React.ComponentProps<"selec
         />
       </div>
     </div>
-  )
+  );
 }
 
 function NativeSelectOption({ ...props }: React.ComponentProps<"option">) {
-  return <option data-slot="native-select-option" {...props} />
+  return <option data-slot="native-select-option" {...props} />;
 }
 
-function NativeSelectOptGroup({
-  className,
-  ...props
-}: React.ComponentProps<"optgroup">) {
-  return (
-    <optgroup
-      data-slot="native-select-optgroup"
-      className={cn(className)}
-      {...props}
-    />
-  )
+function NativeSelectOptGroup({ className, ...props }: React.ComponentProps<"optgroup">) {
+  return <optgroup data-slot="native-select-optgroup" className={cn(className)} {...props} />;
 }
 
-export { CategoryForm, NativeSelectOptGroup, NativeSelectOption }
+export { CategoryForm, NativeSelectOptGroup, NativeSelectOption };

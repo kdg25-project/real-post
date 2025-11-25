@@ -9,7 +9,7 @@ export default getRequestConfig(async () => {
   // Get locale from header (set by middleware) or cookie
   const headersList = await headers();
   let locale = headersList.get("x-locale");
-  
+
   if (!locale) {
     const cookieStore = await cookies();
     locale = cookieStore.get("lang")?.value || "en";
@@ -25,4 +25,3 @@ export default getRequestConfig(async () => {
     messages: (await import(`../../i18n/${locale}.json`)).default,
   };
 });
-

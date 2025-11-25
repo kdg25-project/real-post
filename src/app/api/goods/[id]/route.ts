@@ -7,10 +7,7 @@ import { eq } from "drizzle-orm";
 import { z } from "zod";
 import { handleGoodsError, uploadGoodsImages } from "../utils";
 
-export async function GET(
-  _req: NextRequest,
-  { params }: { params: Promise<{ id: string }> },
-) {
+export async function GET(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   try {
     const goodsfromid = await db.query.goods.findFirst({
@@ -27,7 +24,7 @@ export async function GET(
           success: false,
           message: "Goods Not Found",
         },
-        { status: 404 },
+        { status: 404 }
       );
     }
     return NextResponse.json<ApiResponse<typeof goodsfromid>>({
@@ -40,10 +37,7 @@ export async function GET(
   }
 }
 
-export async function PATCH(
-  req: NextRequest,
-  { params }: { params: Promise<{ id: string }> },
-) {
+export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params;
     const goodsFormDataSchema = z.object({
@@ -51,13 +45,7 @@ export async function PATCH(
       images: z
         .instanceof(Blob)
         .refine((blob) => {
-          const validTypes = [
-            "image/jpeg",
-            "image/jpg",
-            "image/png",
-            "image/webp",
-            "image/avif",
-          ];
+          const validTypes = ["image/jpeg", "image/jpg", "image/png", "image/webp", "image/avif"];
           return validTypes.includes(blob.type);
         }, "画像はJPEG、JPG、PNG、WEBP、AVIF形式である必要があります。")
         .array()
@@ -73,10 +61,9 @@ export async function PATCH(
       return NextResponse.json<ApiResponse<never>>(
         {
           success: false,
-          message:
-            "User is not authenticated or does not have a company account",
+          message: "User is not authenticated or does not have a company account",
         },
-        { status: 401 },
+        { status: 401 }
       );
     } else if (existingGoods?.companyId !== user.id) {
       return NextResponse.json<ApiResponse<never>>(
@@ -84,7 +71,7 @@ export async function PATCH(
           success: false,
           message: "You do not have permission to update this goods",
         },
-        { status: 403 },
+        { status: 403 }
       );
     }
 
@@ -101,7 +88,7 @@ export async function PATCH(
           success: false,
           message: "Goods Not Found",
         },
-        { status: 404 },
+        { status: 404 }
       );
     }
 
@@ -122,8 +109,8 @@ export async function PATCH(
       if (validatedData.deleteImageIds) {
         await Promise.all(
           validatedData.deleteImageIds.map((imageId) =>
-            tx.delete(goodsImage).where(eq(goodsImage.id, imageId)),
-          ),
+            tx.delete(goodsImage).where(eq(goodsImage.id, imageId))
+          )
         );
       }
       if (imageUrls.length > 0) {

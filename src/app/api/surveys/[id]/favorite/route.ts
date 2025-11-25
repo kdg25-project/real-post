@@ -22,13 +22,11 @@ export async function GET(request: NextRequest, { params }: Params) {
       .where(eq(favorite.surveyId, id))
       .then((res) => res);
 
-    return NextResponse.json(
-      {
-        success: true,
-        message: "Favorites fetched successfully",
-        data: result,
-      }
-    );
+    return NextResponse.json({
+      success: true,
+      message: "Favorites fetched successfully",
+      data: result,
+    });
   } catch (error) {
     console.error("Error fetching favorites by survey ID:", error);
     return NextResponse.json(
@@ -74,31 +72,27 @@ export async function PATCH(request: NextRequest, { params }: Params) {
     const { isFavorited } = body;
     let result;
 
-    if(isFavorited !== undefined) {
+    if (isFavorited !== undefined) {
       if (isFavorited) {
-        result = await db.insert(favorite).values({
-          id: crypto.randomUUID(),
-          userId,
-          surveyId: id,
-        })
-        .then((res) => res);
+        result = await db
+          .insert(favorite)
+          .values({
+            id: crypto.randomUUID(),
+            userId,
+            surveyId: id,
+          })
+          .then((res) => res);
       } else {
         result = await db
           .delete(favorite)
-          .where(and(
-            eq(favorite.userId, userId),
-            eq(favorite.surveyId, id)
-          ))
+          .where(and(eq(favorite.userId, userId), eq(favorite.surveyId, id)))
           .then((res) => res);
       }
     } else {
       const result1 = await db
         .select()
         .from(favorite)
-        .where(and(
-          eq(favorite.userId, userId),
-          eq(favorite.surveyId, id)
-        ))
+        .where(and(eq(favorite.userId, userId), eq(favorite.surveyId, id)))
         .then((res) => res);
       if (result1.length > 0) {
         result = await db
@@ -107,7 +101,8 @@ export async function PATCH(request: NextRequest, { params }: Params) {
           .then((res) => res);
       } else {
         result = await db
-          .insert(favorite).values({
+          .insert(favorite)
+          .values({
             id: crypto.randomUUID(),
             userId,
             surveyId: id,
@@ -115,15 +110,12 @@ export async function PATCH(request: NextRequest, { params }: Params) {
           .then((res) => res);
       }
     }
-    return NextResponse.json(
-      {
-        success: true,
-        message: "Favorite status toggled successfully",
-        data: result,
-      }
-    );
-
-} catch (error) {
+    return NextResponse.json({
+      success: true,
+      message: "Favorite status toggled successfully",
+      data: result,
+    });
+  } catch (error) {
     console.error("Error toggling favorite status:", error);
     return NextResponse.json(
       {

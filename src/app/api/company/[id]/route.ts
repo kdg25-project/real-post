@@ -9,10 +9,7 @@ type Params = {
   }>;
 };
 
-export async function GET(
-  request: NextRequest,
-  { params }: Params
-) {
+export async function GET(request: NextRequest, { params }: Params) {
   try {
     const { id } = await params;
 
@@ -70,13 +67,11 @@ export async function GET(
         : null,
     };
 
-    return NextResponse.json(
-      {
-        success: true,
-        message: "Company profile fetched successfully",
-        data: companyData,
-      }
-    );
+    return NextResponse.json({
+      success: true,
+      message: "Company profile fetched successfully",
+      data: companyData,
+    });
   } catch (error) {
     console.error("Error fetching company profile by ID:", error);
     return NextResponse.json(
