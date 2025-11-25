@@ -7,7 +7,6 @@ import { loadMoreSurveys } from "./loadMoreSurveys";
 import Section from "@/components/layouts/Section";
 import { useTranslations } from "next-intl";
 import CategoryButton from "@/components/elements/CategoryButton";
-import Slider from "@/components/layouts/SliderArea";
 
 interface Post {
   id: string;
@@ -24,14 +23,7 @@ interface PostsContainerProps {
 }
 
 export default function PostsContainer({ initialPosts }: PostsContainerProps) {
-  const categories = [
-    "all",
-    "food",
-    "culture",
-    "activity",
-    "shopping",
-    "other",
-  ];
+  const categories = ["all", "food", "culture", "activity", "shopping", "other"];
   const [selectedCategory, setSelectedCategory] = useState("all");
   const t = useTranslations();
   const [keyword, setKeyword] = useState("");
@@ -48,11 +40,7 @@ export default function PostsContainer({ initialPosts }: PostsContainerProps) {
   // Reload posts when search params change
   useEffect(() => {
     // Skip initial render
-    if (
-      keyword === "" &&
-      filters.ageGroups.length === 0 &&
-      filters.countries.length === 0
-    ) {
+    if (keyword === "" && filters.ageGroups.length === 0 && filters.countries.length === 0) {
       return;
     }
 
@@ -75,10 +63,7 @@ export default function PostsContainer({ initialPosts }: PostsContainerProps) {
     setKeyword(searchKeyword);
   };
 
-  const handleFilterChange = (newFilters: {
-    ageGroups: string[];
-    countries: string[];
-  }) => {
+  const handleFilterChange = (newFilters: { ageGroups: string[]; countries: string[] }) => {
     setFilters(newFilters);
   };
 
@@ -95,10 +80,7 @@ export default function PostsContainer({ initialPosts }: PostsContainerProps) {
             />
           ))}
         </div>
-        <SearchArea
-          onSearch={handleSearch}
-          onFilterChange={handleFilterChange}
-        />
+        <SearchArea onSearch={handleSearch} onFilterChange={handleFilterChange} />
       </div>
       {isLoading ? (
         <div className="text-center py-10">Loading...</div>
