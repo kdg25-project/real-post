@@ -1,0 +1,136 @@
+export * from "./auth-schema";
+import { pgTable, text, varchar, integer, timestamp } from "drizzle-orm/pg-core";
+import { relations } from "drizzle-orm";
+import { user } from "./auth-schema";
+
+export const survey = pgTable("survey", {
+  id: text("id").primaryKey(),
+  companyId: text("company_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  description: text("description"),
+  thumbnailUrl: text("thumbnail_url"),
+  gender: text("gender", { enum: ["male", "female", "other"] }),
+  ageGroup: text("age_group", { enum: ["18-24", "25-34", "35-44", "45-54", "55+"] }),
+  satisfactionLevel: integer("satisfaction_level"),
+  country: varchar("country", { length: 100 }),
+  createdAt: timestamp("created_at", { mode: "date" }).notNull().defaultNow(),
+  updatedAt: timestamp("updated_at", { mode: "date" }).notNull().defaultNow(),
+});
+
+export const surveyToken = pgTable("survey_token", {
+  id: text("id").primaryKey(),
+  companyId: text("company_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  token: text("token").notNull().unique(),
+  remainingCount: integer("remaining_count").notNull().default(1),
+  expiredAt: timestamp("expired_at", { mode: "date" }).notNull().$default(
+    () => {
+      const date = new Date();
+      date.setDate(date.getDate() + 1);
+      return date;
+    }
+  ),
+  createdAt: timestamp("created_at", { mode: "date" }).notNull().defaultNow(),
+  updatedAt: timestamp("updated_at", { mode: "date" }).notNull().defaultNow(),
+});
+
+export const surveyImage = pgTable("survey_image", {
+  id: text("id").primaryKey(),
+  surveyId: text("survey_id")
+    .notNull()
+    .references(() => survey.id, { onDelete: "cascade" }),
+  imageUrl: text("image_url").notNull(),
+  createdAt: timestamp("created_at", { mode: "date" }).notNull().defaultNow(),
+  updatedAt: timestamp("updated_at", { mode: "date" }).notNull().defaultNow(),
+});
+
+export const favorite = pgTable("favorite", {
+  id: text("id").primaryKey(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  surveyId: text("survey_id")
+    .notNull()
+    .references(() => survey.id, { onDelete: "cascade" }),
+  createdAt: timestamp("created_at", { mode: "date" }).notNull().defaultNow(),
+  updatedAt: timestamp("updated_at", { mode: "date" }).notNull().defaultNow(),
+});
+
+export const goods = pgTable("goods", {
+  id: text("id").primaryKey(),
+  companyId: text("company_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  name: varchar("name", { length: 255 }).notNull(),
+  createdAt: timestamp("created_at", { mode: "date" }).notNull().defaultNow(),
+  updatedAt: timestamp("updated_at", { mode: "date" }).notNull().defaultNow(),
+});
+
+export const goodsImage = pgTable("goods_image", {
+  id: text("id").primaryKey(),
+  goodsId: text("goods_id")
+    .notNull()
+    .references(() => goods.id, { onDelete: "cascade" }),
+  imageUrl: text("image_url").notNull(),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+});
+
+// Relations
+export const userRelations = relations(user, ({ many }) => ({
+  surveys: many(survey),
+  surveyTokens: many(surveyToken),
+  favorites: many(favorite),
+  goods: many(goods),
+}));
+
+export const surveyRelations = relations(survey, ({ one, many }) => ({
+  company: one(user, {
+    fields: [survey.companyId],
+    references: [user.id],
+  }),
+  images: many(surveyImage),
+  favorites: many(favorite),
+}));
+
+export const surveyTokenRelations = relations(surveyToken, ({ one }) => ({
+  company: one(user, {
+    fields: [surveyToken.companyId],
+    references: [user.id],
+  }),
+}));
+
+export const surveyImageRelations = relations(surveyImage, ({ one }) => ({
+  survey: one(survey, {
+    fields: [surveyImage.surveyId],
+    references: [survey.id],
+  }),
+}));
+
+export const favoriteRelations = relations(favorite, ({ one }) => ({
+  user: one(user, {
+    fields: [favorite.userId],
+    references: [user.id],
+  }),
+  survey: one(survey, {
+    fields: [favorite.surveyId],
+    references: [survey.id],
+  }),
+}));
+
+export const goodsRelations = relations(goods, ({ one, many }) => ({
+  company: one(user, {
+    fields: [goods.companyId],
+    references: [user.id],
+  }),
+  images: many(goodsImage),
+}));
+
+export const goodsImageRelations = relations(goodsImage, ({ one }) => ({
+  goods: one(goods, {
+    fields: [goodsImage.goodsId],
+    references: [goods.id],
+  }),
+})); 
